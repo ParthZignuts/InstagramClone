@@ -1,8 +1,8 @@
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_clone/resources/storage_mthods.dart';
+import '../model/user.dart' as model;
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -16,29 +16,55 @@ class AuthMethods {
     required String bio,
     required Uint8List file,
   }) async {
-    String res = 'You Got Some Error';
+    String res = 'Please Fill All The Form Field!!';
     try {
       if (email.isNotEmpty && password.isNotEmpty && userName.isNotEmpty && bio.isNotEmpty && file != null) {
         ///register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
-        /// add user to our database
         String photoUrl = await StorageMthods().uploadImageToStorage('profilePics', file, false);
-        await _firestore.collection('users').doc(cred.user!.uid).set({
-          'userName': userName,
-          'uid': cred.user!.uid,
-          'email': email,
-          'bio': bio,
-          'followers': [],
-          'following': [],
-          'photoUrl': photoUrl
-        });
+
+      ///use User Model to store data
+        model.User user = model.User(
+            bio: bio, email: email, followers: [], following: [], photoUrl: photoUrl, uid: cred.user!.uid, userName: userName);
+
+        /// add user to our database
+        await _firestore.collection('users').doc(cred.user!.uid).set(  user.toJason());
         res = 'Success';
       }
-    } catch (err) {
-      res = err.toString();
+    } on FirebaseAuthException catch (err) {
+      if (err.code.isEmpty) {
+        res = 'Success';
+      } else {
+        res = err.message.toString();
+      }
       return res;
     }
     return res;
+  }
+
+  ///Logging User
+  Future<String> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    String isValid = 'Invalid User!';
+
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(email: email, password: password);
+        isValid = 'Login Successfully';
+      } else {
+        isValid = 'Please Enter All The Field';
+      }
+    } on FirebaseAuthException catch (err) {
+      if (err.code.isEmpty) {
+        isValid = 'Login Successfully';
+      } else {
+        isValid = err.message.toString();
+      }
+      return isValid;
+    }
+    return isValid;
   }
 }

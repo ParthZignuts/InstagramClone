@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/view/screens/home/home_screen.dart';
 import 'package:instagram_clone/view/screens/signup/signup_screen.dart';
 import 'package:instagram_clone/view/widget/text_field_input.dart';
+import '../../../utils/utils.dart';
+import '../../responsive/mobile_screen_layout.dart';
+import '../../responsive/responsive_layout.dart';
+import '../../responsive/web_screen_layout.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -14,12 +20,43 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
     passController.dispose();
+  }
+
+  ///On Login Button Press
+  void login() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String result = await AuthMethods().loginUser(email: emailController.text, password: passController.text);
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (result != 'Login Successfully') {
+      showSnackbar(result, context);
+    } else {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => const ResponsiveLayout(
+          mobileScreenLayout: MobileScreenLayout(),
+          webScreenLayout: WebScreenLayout(),
+        ),
+      ));
+      showSnackbar('SignIn Successfully ', context);
+    }
+  }
+
+  /// on signup button press
+  void navigateToSignUp() {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => const SignUpScreen(),
+    ));
   }
 
   @override
@@ -57,19 +94,30 @@ class _LoginScreenState extends State<LoginScreen> {
               ///login button
               Padding(
                 padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                child: InkWell(
+                  onTap: () => login(),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    decoration: const ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                      ),
+                      color: blueColor,
                     ),
-                    color: blueColor,
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    child: _isLoading
+                        ? const Center(
+                            child: SizedBox(
+                                height: 18,
+                                width: 18,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                )))
+                        : const Text(
+                            'Login',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
                   ),
                 ),
               ),
@@ -84,11 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignUpScreen(),
-                        )),
+                    onTap: () => navigateToSignUp(),
                     child: const Text(
                       'Sign Up',
                       style: TextStyle(fontWeight: FontWeight.bold, color: blueColor, fontSize: 20),
