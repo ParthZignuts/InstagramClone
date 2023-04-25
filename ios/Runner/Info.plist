@@ -8,6 +8,12 @@
 	<string>Instagram Clone</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Select photos from gallery to set as profile picture</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Select photos from gallery to set as profile picture</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Select photos from gallery to set as profile picture</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
