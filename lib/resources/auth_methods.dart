@@ -8,6 +8,13 @@ class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  ///get the Currentuser details
+  Future<model.User> getUserDetail() async {
+    User currentUser = await _auth.currentUser!;
+    DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
+    return model.User.fromSnap(snap);
+  }
+
   ///signUpUser Method
   Future<String> signUpUser({
     required String email,
@@ -24,12 +31,12 @@ class AuthMethods {
 
         String photoUrl = await StorageMthods().uploadImageToStorage('profilePics', file, false);
 
-      ///use User Model to store data
+        ///use User Model to store data
         model.User user = model.User(
             bio: bio, email: email, followers: [], following: [], photoUrl: photoUrl, uid: cred.user!.uid, userName: userName);
 
         /// add user to our database
-        await _firestore.collection('users').doc(cred.user!.uid).set(  user.toJason());
+        await _firestore.collection('users').doc(cred.user!.uid).set(user.toJason());
         res = 'Success';
       }
     } on FirebaseAuthException catch (err) {

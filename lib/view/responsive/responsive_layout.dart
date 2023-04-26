@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/proiders/user_provider.dart';
 import 'package:instagram_clone/utils/dimensions.dart';
+import 'package:provider/provider.dart';
 
 class ResponsiveLayout extends StatefulWidget {
   const ResponsiveLayout({Key? key,required this.mobileScreenLayout,required this.webScreenLayout}) : super(key: key);
@@ -11,6 +14,16 @@ class ResponsiveLayout extends StatefulWidget {
 }
 
 class _ResponsiveLayoutState extends State<ResponsiveLayout> {
+  @override
+  void initState() {
+    addData();
+    super.initState();
+  }
+
+  addData() async{
+    UserProvider _userProvider=Provider.of(context,listen: false);
+    await _userProvider.refreshUser();
+  }
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
