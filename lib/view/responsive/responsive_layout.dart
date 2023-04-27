@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/proiders/user_provider.dart';
 import 'package:instagram_clone/utils/dimensions.dart';
@@ -21,8 +21,8 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
   }
 
   addData() async{
-    UserProvider _userProvider=Provider.of(context,listen: false);
-    await _userProvider.refreshUser();
+    UserProvider userProvider=Provider.of(context,listen: false);
+    await userProvider.refreshUser();
   }
   @override
   Widget build(BuildContext context) {

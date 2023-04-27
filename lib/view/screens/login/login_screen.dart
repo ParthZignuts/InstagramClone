@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/utils/colors.dart';
-import 'package:instagram_clone/view/screens/home/home_screen.dart';
 import 'package:instagram_clone/view/screens/signup/signup_screen.dart';
 import 'package:instagram_clone/view/widget/text_field_input.dart';
 import '../../../utils/utils.dart';
@@ -40,14 +39,17 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     if (result != 'Login Successfully') {
+      // ignore: use_build_context_synchronously
       showSnackbar(result, context);
     } else {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => const ResponsiveLayout(
           mobileScreenLayout: MobileScreenLayout(),
           webScreenLayout: WebScreenLayout(),
         ),
       ));
+      // ignore: use_build_context_synchronously
       showSnackbar('SignIn Successfully ', context);
     }
   }

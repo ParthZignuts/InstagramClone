@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/utils/utils.dart';
-import 'package:instagram_clone/view/screens/home/home_screen.dart';
 import 'package:instagram_clone/view/screens/login/login_screen.dart';
 import '../../../utils/colors.dart';
 import '../../responsive/mobile_screen_layout.dart';
@@ -20,6 +19,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  ///decalre texteditcontroller or local variable
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController bioController = TextEditingController();
@@ -37,7 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   ///to pick image from gallery
-  void selestImage() async {
+  void selectImage() async {
     Uint8List im = await pickImage(ImageSource.gallery);
     setState(() {
       imgFile = im;
@@ -61,18 +61,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
 
     if (result != 'Success') {
+      // ignore: use_build_context_synchronously
       showSnackbar(result, context);
     } else {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => const ResponsiveLayout(
           mobileScreenLayout: MobileScreenLayout(),
           webScreenLayout: WebScreenLayout(),
         ),
       ));
+      // ignore: use_build_context_synchronously
       showSnackbar('SignUp Successfully', context);
     }
   }
 
+  ///navigate to loginpage
   void navigateToLoginPage() {
     Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) => const LoginScreen(),
@@ -112,7 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Positioned(
                         bottom: -10,
                         left: 80,
-                        child: IconButton(onPressed: () => selestImage(), icon: const Icon(Icons.add_a_photo)))
+                        child: IconButton(onPressed: () => selectImage(), icon: const Icon(Icons.add_a_photo)))
                   ],
                 ),
               ),
