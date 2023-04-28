@@ -25,7 +25,7 @@ class PostModel {
   Map<String, dynamic> toJason() => {
         'caption': caption,
         'postId': postId,
-        'username': userName,
+        'userName': userName,
         'uid': uid,
         'photoUrl': postUrl,
         'profImage': profImage,

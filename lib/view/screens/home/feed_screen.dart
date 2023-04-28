@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../widget/widget.dart';
@@ -26,16 +27,14 @@ class FeedScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: const [
-                    UserStory(),
-                    PostCard(),
-                  ],
-                ),
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: const [
+                  UserStoryStreamBuilder(),
+                  PostStreamBuilder(),
+                ],
               ),
             ),
           ],

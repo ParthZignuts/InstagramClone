@@ -179,21 +179,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const Spacer(),
 
               /// to show already have an account
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'I have an account? ',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  GestureDetector(
-                    onTap: () => navigateToLoginPage(),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: blueColor, fontSize: 20),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'I have an account? ',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
-                  ),
-                ],
+                    GestureDetector(
+                      onTap: () => navigateToLoginPage(),
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(fontWeight: FontWeight.bold, color: blueColor, fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

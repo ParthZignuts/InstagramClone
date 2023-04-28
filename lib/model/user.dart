@@ -20,7 +20,7 @@ class User {
 
   Map<String, dynamic> toJason() => {
         'email': email,
-        'username': userName,
+        'userName': userName,
         'bio': bio,
         'uid': uid,
         'photoUrl': photoUrl,
