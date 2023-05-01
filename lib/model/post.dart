@@ -35,7 +35,6 @@ class PostModel {
 
   static PostModel fromSnap(DocumentSnapshot snapshot) {
     var snap = snapshot.data() as Map<String, dynamic>;
-
     return PostModel(
       caption: snap['caption'],
       postId: snap['postId'],

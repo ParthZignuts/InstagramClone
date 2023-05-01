@@ -1,14 +1,51 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/view/screens/login/login_screen.dart';
 import 'package:instagram_clone/view/widget/widget.dart';
 
-class PersonalScreen extends StatelessWidget {
+class PersonalScreen extends StatefulWidget {
   const PersonalScreen({Key? key}) : super(key: key);
+  static final FirebaseAuth auth = FirebaseAuth.instance;
+
+  @override
+  State<PersonalScreen> createState() => _PersonalScreenState();
+}
+
+class _PersonalScreenState extends State<PersonalScreen>with SingleTickerProviderStateMixin {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final User? _user = PersonalScreen.auth.currentUser;
+   String _userName ='' ;
+   String _photoUrl ='';
+   String _bio='' ;
+
+  ///fetch all details of current user
+  void getCurrentUserDetails() {
+    if (_user != null) {
+      String uid = _user!.uid;
+      DocumentReference userDocRef = _firestore.collection('users').doc(uid);
+      userDocRef.get().then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          setState(() {
+            _userName = documentSnapshot.get('userName');
+            _photoUrl = documentSnapshot.get('photoUrl');
+            _bio = documentSnapshot.get('bio');
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUserDetails();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    const String userName = 'jenny_111';
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -18,13 +55,13 @@ class PersonalScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: Row(
                 children: [
-                  const Text(
-                    userName,
-                    style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 25),
+                  Text(
+                    _userName,
+                    style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 25),
                   ),
                   const Spacer(),
                   IconButton(onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+                  IconButton(onPressed: () => onMenuPress(context), icon: const Icon(Icons.menu)),
                 ],
               ),
             ),
@@ -33,54 +70,126 @@ class PersonalScreen extends StatelessWidget {
             ///Post, followers, following count
             Padding(
               padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 8.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: const [
-                CircleAvatar(backgroundImage: AssetImage('assets/images/user.png'), maxRadius: 40),
-                PostFolloweFollowingStatus(title: 'Posts', values: '1756'),
-                PostFolloweFollowingStatus(title: 'Followers', values: '2.2M'),
-                PostFolloweFollowingStatus(title: 'Following', values: '2056'),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                CircleAvatar(backgroundImage: NetworkImage(_photoUrl), maxRadius: 40),
+                const PostFolloweFollowingStatus(title: 'Posts', values: '1756'),
+                const PostFolloweFollowingStatus(title: 'Followers', values: '2.2M'),
+                const PostFolloweFollowingStatus(title: 'Following', values: '2056'),
               ]),
             ),
 
             ///Bio
-            const Text(
-              'Travelling Lover\n ........ \n .........\n .........',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                '$_bio  \n........\n.......\n........\n........\n........',
+                style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
+              ),
             ),
 
             ///edit profile or share profile
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                EditShareProfileButton(
-                  onPressed: () {},
-                  btnTitle: 'Edit Profile',
-                ),
-                EditShareProfileButton(
-                  onPressed: () {},
-                  btnTitle: 'Share Profile',
-                ),
-                Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: darkGray,
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.add_reaction_outlined),
-                    )),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(left: 4.0,right: 4.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  EditShareProfileButton(
+                    onPressed: () {},
+                    btnTitle: 'Edit Profile',
+                  ),
+                  EditShareProfileButton(
+                    onPressed: () {},
+                    btnTitle: 'Share Profile',
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5.0),
+                    child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: darkGray,
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.add_reaction_outlined),
+                        )),
+                  ),
+                ],
+              ),
             ),
 
             /// User stories
             const UserStoryStreamBuilder(),
 
+
             /// Tabs
 
+            DefaultTabController(
+              length: 3,
+              child: Column(
+
+                children: [
+                  TabBar(
+                    tabs: [
+                      Tab(
+                        icon: Image.asset('assets/images/post.png',color: primaryColor,width: 24),
+                      ),
+                      Tab(
+                        icon: Image.asset('assets/images/reel.png',color: primaryColor,width: 24),
+                      ),
+                      Tab(
+                        icon: Image.asset('assets/images/tagpeople.png',color: primaryColor,width: 24),
+                      ),
+                    ],
+                    indicatorSize: TabBarIndicatorSize.tab,
+                  ),
+                  Column(
+                    children: const [
+                      SizedBox(
+                        height: 255,
+                        child: TabBarView(
+                          children: [
+                            PersonalPostTab(),
+                            MyReelsTab(),
+                            TagedMeTab(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  onMenuPress(BuildContext context) {
+    showBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 250,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+          ),
+          child: Center(
+            child: TextButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ));
+                },
+                child: const Text('Logout')),
+          ),
+        );
+      },
     );
   }
 }

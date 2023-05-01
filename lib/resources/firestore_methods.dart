@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instagram_clone/post/post.dart';
+import 'package:instagram_clone/model/post.dart';
 import 'package:instagram_clone/resources/storage_mthods.dart';
 import 'package:uuid/uuid.dart';
 
@@ -33,5 +33,23 @@ class FireStoreMethods {
       result=error.toString();
     }
     return result;
+  }
+
+  Future<void> likePost(String postId, String uid, List likes, bool keepLike)async{
+    try{
+      if(likes.contains(uid) && !keepLike){
+       await _firestore.collection('posts').doc(postId).update({
+          'likes': FieldValue.arrayRemove([uid]),
+        });
+      }
+      else{
+        await _firestore.collection('posts').doc(postId).update({
+        'likes': FieldValue.arrayUnion([uid]),
+        });
+      }
+    }
+        catch(e){
+      print(e.toString());
+        }
   }
 }

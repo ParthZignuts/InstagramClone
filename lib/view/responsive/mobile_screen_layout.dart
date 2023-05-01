@@ -43,7 +43,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         physics: const NeverScrollableScrollPhysics(),
           onPageChanged: (value) => onPageChanged(value),
         controller: pageController,
-        children: const [
+        children:  const [
           FeedScreen(),
           SearchScreen(),
           AddPostScreen(),

@@ -16,15 +16,18 @@ class EditShareProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 165,
-      child: ElevatedButton(
-          style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(darkGray),
-          ),
-          onPressed: onPressed,
-          child: Text(
-            btnTitle,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-          )),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 5.0,right: 5.0),
+        child: ElevatedButton(
+            style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(darkGray),
+            ),
+            onPressed: onPressed,
+            child: Text(
+              btnTitle,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            )),
+      ),
     );
   }
 }
