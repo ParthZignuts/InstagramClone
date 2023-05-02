@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/proiders/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
-import 'package:instagram_clone/resources/storage_mthods.dart';
 import 'package:instagram_clone/view/widget/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

@@ -19,6 +19,7 @@ class FeedScreen extends StatelessWidget {
                   SvgPicture.asset(
                     'assets/images/ic_instagram.svg',
                     color: primaryColor,
+                    height: 40,
                   ),
                   const Spacer(),
                   IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
@@ -33,7 +34,7 @@ class FeedScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.14, child: const UserStoryStreamBuilder()),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.13, child: const UserStoryStreamBuilder()),
                     const PostStreamBuilder(),
                   ],
                 ),

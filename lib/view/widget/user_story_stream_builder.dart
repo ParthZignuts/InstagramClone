@@ -14,45 +14,43 @@ class UserStoryStreamBuilder extends StatelessWidget {
    static Map<String, dynamic>? currentUserStory;
    @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: FirebaseFirestore.instance.collection('users').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (!snapshot.hasData || snapshot.data == null) {
-              // check for null here
-              return const Center(
-                child: Text('No data available.'),
-              );
-            } else {
-               userStories = snapshot.data!.docs;
-               currentUserIndex = userStories!.indexWhere((doc) => doc.id == _user);
-               currentUserStory = userStories![currentUserIndex!].data();
-              userStories!.removeAt(currentUserIndex!);
-              userStories!.insert(0, snapshot.data!.docs[currentUserIndex!]);
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (!snapshot.hasData || snapshot.data == null) {
+            // check for null here
+            return const Center(
+              child: Text('No data available.'),
+            );
+          } else {
+             userStories = snapshot.data!.docs;
+             currentUserIndex = userStories!.indexWhere((doc) => doc.id == _user);
+             currentUserStory = userStories![currentUserIndex!].data();
+            userStories!.removeAt(currentUserIndex!);
+            userStories!.insert(0, snapshot.data!.docs[currentUserIndex!]);
 
-              return ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                itemCount: userStories!.length,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return UserStory(snap: currentUserStory);
-                  } else {
-                    return UserStory(snap: userStories![index].data());
-                  }
-                },
-              );
-            }
-          },
-        ),
+            return ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemCount: userStories!.length,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return UserStory(snap: currentUserStory);
+                } else {
+                  return UserStory(snap: userStories![index].data());
+                }
+              },
+            );
+          }
+        },
       ),
     );
   }

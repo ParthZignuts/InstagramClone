@@ -14,9 +14,9 @@ class PersonalPostTab extends StatelessWidget {
               padding: const EdgeInsets.all(1.0),
               child: Image.network('https://picsum.photos/250?image=$index'),
             ),
-            itemCount: 10,
+            itemCount: 50,
           )
-        )
+        ),
       ],
     );
   }
