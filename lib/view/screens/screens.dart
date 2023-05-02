@@ -5,3 +5,6 @@ export './notification/notification_screen.dart';
 export './personal/personal_screen.dart';
 export './search/search_screen.dart';
 export './signup/signup_screen.dart';
+export './personal/PersonalScreenPersistentHeader.dart';
+export './splash/splash_creen.dart';
+export './main/main_screen.dart';

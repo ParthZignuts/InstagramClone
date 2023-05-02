@@ -74,92 +74,89 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            _userName,
-                            style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 25),
+                    Text(
+                      _userName,
+                      style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 25),
+                    ),
+                    const Spacer(),
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
+                    IconButton(onPressed: () => onMenuPress(context), icon: const Icon(Icons.menu)),
+                  ],
+                ),
+              ),
+              const Divider(color: secondaryColor),
+
+              ///Post, followers, following count
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 8.0),
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  CircleAvatar(backgroundImage: NetworkImage(_photoUrl), maxRadius: 40),
+                  const PostFolloweFollowingStatus(title: 'Posts', values: '1756'),
+                  const PostFolloweFollowingStatus(title: 'Followers', values: '2.2M'),
+                  const PostFolloweFollowingStatus(title: 'Following', values: '2056'),
+                ]),
+              ),
+
+              ///Bio
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  '$_bio  \n........\n.......\n........\n........\n........',
+                  style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
+                ),
+              ),
+
+              ///edit profile or share profile
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  EditShareProfileButton(
+                    onPressed: () {},
+                    btnTitle: 'Edit Profile',
+                  ),
+                  EditShareProfileButton(
+                    onPressed: () {},
+                    btnTitle: 'Share Profile',
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Container(
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: darkGray,
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.add_reaction_outlined,
+                            size: 20,
                           ),
-                          const Spacer(),
-                          IconButton(onPressed: () {}, icon: const Icon(Icons.add_box_outlined)),
-                          IconButton(onPressed: () => onMenuPress(context), icon: const Icon(Icons.menu)),
-                        ],
-                      ),
-                    ),
-                    const Divider(color: secondaryColor),
+                        )),
+                  ),
+                ],
+              ),
 
-                    ///Post, followers, following count
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 8.0),
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        CircleAvatar(backgroundImage: NetworkImage(_photoUrl), maxRadius: 40),
-                        const PostFolloweFollowingStatus(title: 'Posts', values: '1756'),
-                        const PostFolloweFollowingStatus(title: 'Followers', values: '2.2M'),
-                        const PostFolloweFollowingStatus(title: 'Following', values: '2056'),
-                      ]),
-                    ),
-
-                    ///Bio
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        '$_bio  \n........\n.......\n........\n........\n........',
-                        style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
-                      ),
-                    ),
-
-                    ///edit profile or share profile
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        EditShareProfileButton(
-                          onPressed: () {},
-                          btnTitle: 'Edit Profile',
-                        ),
-                        EditShareProfileButton(
-                          onPressed: () {},
-                          btnTitle: 'Share Profile',
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                              height: 35,
-                              decoration: BoxDecoration(
-                                color: darkGray,
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.add_reaction_outlined,
-                                  size: 20,
-                                ),
-                              )),
-                        ),
-                      ],
-                    ),
-
-                    /// User stories
-                    Row(
-                      children: [
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.12,
-                            width: MediaQuery.of(context).size.width * 1,
-                            child: const Expanded(child: UserStoryStreamBuilder())),
-                      ],
-                    ),
+              /// User stories
+              Row(
+                children: [
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.12,
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: const UserStoryStreamBuilder()),
+                ],
+              ),
 
                     /// Tabs
 
@@ -181,28 +178,24 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
                             ],
                             indicatorSize: TabBarIndicatorSize.tab,
                           ),
-                          Column(
-                            children: const [
-                              SizedBox(
-                                height: 260,
-                                child: TabBarView(
-                                  children: [
-                                    PersonalPostTab(),
-                                    MyReelsTab(),
-                                    TagedMeTab(),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          const SizedBox(
+                            height: 260,
+                            child: TabBarView(
+                              children: [
+                                PersonalPostTab(),
+                                MyReelsTab(),
+                                TagedMeTab(),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ],
                 ),
-              ),
-            ),
-          ],
+              // ),
+            // ),
+          // ],
         ),
       ),
     );

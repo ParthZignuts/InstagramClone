@@ -5,19 +5,13 @@ class PersonalPostTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-            itemBuilder: (_, index) =>  Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: Image.network('https://picsum.photos/250?image=$index'),
-            ),
-            itemCount: 50,
-          )
-        ),
-      ],
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      itemBuilder: (_, index) =>  Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: Image.network('https://picsum.photos/250?image=$index'),
+      ),
+      itemCount: 50,
     );
   }
 }
