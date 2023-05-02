@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/view/screens/login/login_screen.dart';
 import 'package:instagram_clone/view/widget/widget.dart';
+import '../../../model/user.dart' as model;
+import '../../../resources/resources.dart';
 
 class PersonalScreen extends StatefulWidget {
   const PersonalScreen({Key? key}) : super(key: key);
@@ -14,27 +16,18 @@ class PersonalScreen extends StatefulWidget {
 }
 
 class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProviderStateMixin {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final User? _user = PersonalScreen.auth.currentUser;
-  String _userName = '';
+  String _userName = "";
   String _photoUrl = '';
   String _bio = '';
 
   ///fetch all details of current user
-  void getCurrentUserDetails() {
-    if (_user != null) {
-      String uid = _user!.uid;
-      DocumentReference userDocRef = _firestore.collection('users').doc(uid);
-      userDocRef.get().then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          setState(() {
-            _userName = documentSnapshot.get('userName');
-            _photoUrl = documentSnapshot.get('photoUrl');
-            _bio = documentSnapshot.get('bio');
-          });
-        }
-      });
-    }
+  void getCurrentUserDetails() async {
+    model.User? currentUser = await AuthMethods().getUserDetail();
+    setState(() {
+      _userName = currentUser.userName;
+      _photoUrl = currentUser.photoUrl;
+      _bio = currentUser.bio;
+    });
   }
 
   /// when menu button  press then this method will be call
@@ -111,7 +104,7 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  '$_bio  \n........\n.......\n........\n........\n........',
+                  '${_bio}  \n........\n.......\n........\n........\n........',
                   style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
                 ),
               ),
@@ -158,43 +151,43 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
                 ],
               ),
 
-                    /// Tabs
+              /// Tabs
 
-                    DefaultTabController(
-                      length: 3,
-                      child: Column(
+              DefaultTabController(
+                length: 3,
+                child: Column(
+                  children: [
+                    TabBar(
+                      tabs: [
+                        Tab(
+                          icon: Image.asset('assets/images/post.png', color: primaryColor, width: 24),
+                        ),
+                        Tab(
+                          icon: Image.asset('assets/images/reel.png', color: primaryColor, width: 24),
+                        ),
+                        Tab(
+                          icon: Image.asset('assets/images/tagpeople.png', color: primaryColor, width: 24),
+                        ),
+                      ],
+                      indicatorSize: TabBarIndicatorSize.tab,
+                    ),
+                    const SizedBox(
+                      height: 260,
+                      child: TabBarView(
                         children: [
-                          TabBar(
-                            tabs: [
-                              Tab(
-                                icon: Image.asset('assets/images/post.png', color: primaryColor, width: 24),
-                              ),
-                              Tab(
-                                icon: Image.asset('assets/images/reel.png', color: primaryColor, width: 24),
-                              ),
-                              Tab(
-                                icon: Image.asset('assets/images/tagpeople.png', color: primaryColor, width: 24),
-                              ),
-                            ],
-                            indicatorSize: TabBarIndicatorSize.tab,
-                          ),
-                          const SizedBox(
-                            height: 260,
-                            child: TabBarView(
-                              children: [
-                                PersonalPostTab(),
-                                MyReelsTab(),
-                                TagedMeTab(),
-                              ],
-                            ),
-                          ),
+                          PersonalPostTab(),
+                          MyReelsTab(),
+                          TagedMeTab(),
                         ],
                       ),
                     ),
                   ],
                 ),
-              // ),
-            // ),
+              ),
+            ],
+          ),
+          // ),
+          // ),
           // ],
         ),
       ),

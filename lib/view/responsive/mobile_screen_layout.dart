@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/view/screens/screens.dart';
+import '../../model/user.dart' as model;
+import '../../resources/auth_methods.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -13,11 +15,19 @@ class MobileScreenLayout extends StatefulWidget {
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   late PageController pageController;
   int _page = 0;
+  String _photoUrl='';
+  void getCurrentUserDetails() async {
+    model.User? currentUser = await AuthMethods().getUserDetail();
+    setState(() {
+      _photoUrl = currentUser.photoUrl;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     pageController = PageController();
+    getCurrentUserDetails();
   }
 
   @override
@@ -76,7 +86,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             backgroundColor: primaryColor,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: _page == 4 ? primaryColor : secondaryColor),
+            icon: CircleAvatar(backgroundImage: NetworkImage(_photoUrl),radius: 16),
             backgroundColor: primaryColor,
           ),
         ],

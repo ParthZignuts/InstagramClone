@@ -38,9 +38,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: splashBg,
+      backgroundColor: Colors.white,
       body: Center(
-        child: Image.asset('assets/images/instalogo.jpg', alignment: Alignment.center),
+        child: Image.asset('assets/images/instalogo.png', alignment: Alignment.center,height: 130),
       ),
     );
   }
