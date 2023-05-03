@@ -8,3 +8,6 @@ const primaryColor = Colors.white;
 const secondaryColor = Colors.grey;
  const darkGray = Color(0xFF262626);
  const splashBg = Color(0xFF1E032D);
+ const purpleLinear1 = Color(0xFFEE504A);
+ const purpleLinear2 = Color(0xFFC72C9D);
+ const purpleLinear3 = Color(0xFF851E92);

@@ -1,34 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/proiders/user_provider.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/view/screens/login/login_screen.dart';
 import 'package:instagram_clone/view/widget/widget.dart';
+import 'package:provider/provider.dart';
 import '../../../model/user.dart' as model;
-import '../../../resources/resources.dart';
 
-class PersonalScreen extends StatefulWidget {
+class PersonalScreen extends StatelessWidget {
   const PersonalScreen({Key? key}) : super(key: key);
-  static final FirebaseAuth auth = FirebaseAuth.instance;
-
-  @override
-  State<PersonalScreen> createState() => _PersonalScreenState();
-}
-
-class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProviderStateMixin {
-  String _userName = "";
-  String _photoUrl = '';
-  String _bio = '';
-
-  ///fetch all details of current user
-  void getCurrentUserDetails() async {
-    model.User? currentUser = await AuthMethods().getUserDetail();
-    setState(() {
-      _userName = currentUser.userName;
-      _photoUrl = currentUser.photoUrl;
-      _bio = currentUser.bio;
-    });
-  }
 
   /// when menu button  press then this method will be call
   onMenuPress(BuildContext context) {
@@ -58,13 +38,8 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
   }
 
   @override
-  void initState() {
-    super.initState();
-    getCurrentUserDetails(); // getting the current user data
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final model.User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -78,7 +53,7 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
                 child: Row(
                   children: [
                     Text(
-                      _userName,
+                      user.userName,
                       style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 25),
                     ),
                     const Spacer(),
@@ -93,7 +68,7 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
               Padding(
                 padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 8.0),
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  CircleAvatar(backgroundImage: NetworkImage(_photoUrl), maxRadius: 40),
+                  CircleAvatar(backgroundImage: NetworkImage(user.photoUrl), maxRadius: 40),
                   const PostFolloweFollowingStatus(title: 'Posts', values: '1756'),
                   const PostFolloweFollowingStatus(title: 'Followers', values: '2.2M'),
                   const PostFolloweFollowingStatus(title: 'Following', values: '2056'),
@@ -104,27 +79,27 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  '${_bio}  \n........\n.......\n........\n........\n........',
+                  '${user.bio}  \n........\n.......\n........\n........\n........',
                   style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
                 ),
               ),
 
               ///edit profile or share profile
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  EditShareProfileButton(
-                    onPressed: () {},
-                    btnTitle: 'Edit Profile',
-                  ),
-                  EditShareProfileButton(
-                    onPressed: () {},
-                    btnTitle: 'Share Profile',
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Container(
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    EditShareProfileButton(
+                      onPressed: () {},
+                      btnTitle: 'Edit Profile',
+                    ),
+                    EditShareProfileButton(
+                      onPressed: () {},
+                      btnTitle: 'Share Profile',
+                    ),
+                    Container(
                         height: 35,
                         decoration: BoxDecoration(
                           color: darkGray,
@@ -137,8 +112,8 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
                             size: 20,
                           ),
                         )),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
               /// User stories
@@ -172,7 +147,7 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
                       indicatorSize: TabBarIndicatorSize.tab,
                     ),
                     const SizedBox(
-                      height: 260,
+                      height: 300,
                       child: TabBarView(
                         children: [
                           PersonalPostTab(),
@@ -186,9 +161,6 @@ class _PersonalScreenState extends State<PersonalScreen> with SingleTickerProvid
               ),
             ],
           ),
-          // ),
-          // ),
-          // ],
         ),
       ),
     );

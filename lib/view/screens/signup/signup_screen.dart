@@ -186,13 +186,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     const Text(
                       'I have an account? ',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     GestureDetector(
                       onTap: () => navigateToLoginPage(),
                       child: const Text(
                         'Login',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: blueColor, fontSize: 20),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: blueColor, fontSize: 16),
                       ),
                     ),
                   ],

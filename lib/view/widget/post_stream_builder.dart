@@ -29,7 +29,7 @@ class PostStreamBuilder extends StatelessWidget {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               // final shuffledPost = shufflePost(snapshot);
-              return PostCard(snap: snapshot.data!.docs[index].data());
+              return PostCard(snap: snapshot.data!.docs[index].data(),);
             },
           );
         }

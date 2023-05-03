@@ -7,7 +7,9 @@ class PersonalPostTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      physics: const BouncingScrollPhysics(),
       itemBuilder: (_, index) =>  Padding(
+
         padding: const EdgeInsets.all(1.0),
         child: Image.network('https://picsum.photos/250?image=$index'),
       ),

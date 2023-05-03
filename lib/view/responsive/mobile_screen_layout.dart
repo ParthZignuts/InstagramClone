@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/model/user.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/view/screens/screens.dart';
+import 'package:provider/provider.dart';
 import '../../model/user.dart' as model;
+import '../../proiders/user_provider.dart';
 import '../../resources/auth_methods.dart';
 
 class MobileScreenLayout extends StatefulWidget {
@@ -15,19 +18,12 @@ class MobileScreenLayout extends StatefulWidget {
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   late PageController pageController;
   int _page = 0;
-  String _photoUrl='';
-  void getCurrentUserDetails() async {
-    model.User? currentUser = await AuthMethods().getUserDetail();
-    setState(() {
-      _photoUrl = currentUser.photoUrl;
-    });
-  }
+
 
   @override
   void initState() {
     super.initState();
     pageController = PageController();
-    getCurrentUserDetails();
   }
 
   @override
@@ -48,6 +44,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -86,12 +83,13 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             backgroundColor: primaryColor,
           ),
           BottomNavigationBarItem(
-            icon: CircleAvatar(backgroundImage: NetworkImage(_photoUrl),radius: 16),
+            icon: CircleAvatar(backgroundImage: NetworkImage(user.photoUrl),radius: 16),
             backgroundColor: primaryColor,
           ),
         ],
         backgroundColor: Colors.transparent,
         onTap: navigationTapped,
+        height: 60,
       ),
     );
   }

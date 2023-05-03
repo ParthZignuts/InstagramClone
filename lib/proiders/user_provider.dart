@@ -10,8 +10,14 @@ class UserProvider extends ChangeNotifier {
   User get getUser => _user!;
 
   Future<void> refreshUser() async {
-    User user = await _authMethods.getUserDetail();
-    _user = user;
-    notifyListeners();
+    try{
+      User user = await _authMethods.getUserDetail();
+      _user = user;
+      notifyListeners();
+    }
+    catch(e){
+      print(e.toString());
+    }
+
   }
 }
