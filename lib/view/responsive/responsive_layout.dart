@@ -1,9 +1,7 @@
 
-import 'package:flutter/material.dart';
-import 'package:instagram_clone/proiders/user_provider.dart';
-import 'package:instagram_clone/utils/dimensions.dart';
-import 'package:provider/provider.dart';
 
+import '../view.dart';
+import '../../core/core.dart';
 class ResponsiveLayout extends StatefulWidget {
   const ResponsiveLayout({Key? key,required this.mobileScreenLayout,required this.webScreenLayout}) : super(key: key);
   final Widget mobileScreenLayout;
@@ -22,7 +20,7 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
 
   addData() async{
     UserProvider userProvider=Provider.of(context,listen: false);
-    await userProvider.refreshUser();
+    await userProvider.fetchUserData();
   }
   @override
   Widget build(BuildContext context) {

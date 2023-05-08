@@ -1,12 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:instagram_clone/model/user.dart';
-import 'package:instagram_clone/utils/colors.dart';
-import 'package:instagram_clone/view/screens/screens.dart';
-import 'package:provider/provider.dart';
-import '../../model/user.dart' as model;
-import '../../proiders/user_provider.dart';
-import '../../resources/auth_methods.dart';
+import '../view.dart';
+import '../../core/core.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -18,7 +12,6 @@ class MobileScreenLayout extends StatefulWidget {
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   late PageController pageController;
   int _page = 0;
-
 
   @override
   void initState() {
@@ -44,53 +37,58 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<UserProvider>(context).getUser;
-    return Scaffold(
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-          onPageChanged: (value) => onPageChanged(value),
-        controller: pageController,
-        children:  const [
-          FeedScreen(),
-          SearchScreen(),
-          AddPostScreen(),
-          NotificationScreen(),
-          PersonalScreen(),
-        ],
-      ),
-      bottomNavigationBar: CupertinoTabBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: _page == 0 ? primaryColor : secondaryColor,
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    User? user = userProvider.getUser;
+    return (user == null)
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            body: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (value) => onPageChanged(value),
+              controller: pageController,
+              children: [
+                const FeedScreen(),
+                const SearchScreen(),
+                const AddPostScreen(),
+                const ReelsScreen(),
+                ProfileScreen(uid: user.uid),
+              ],
             ),
-            backgroundColor: primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.search,
-              color: _page == 1 ? primaryColor : secondaryColor,
+            bottomNavigationBar: CupertinoTabBar(
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.home,
+                    color: _page == 0 ? primaryColor : secondaryColor,
+                  ),
+                  backgroundColor: primaryColor,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.search,
+                    color: _page == 1 ? primaryColor : secondaryColor,
+                  ),
+                  backgroundColor: primaryColor,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.add_circle, color: _page == 2 ? primaryColor : secondaryColor),
+                  backgroundColor: primaryColor,
+                ),
+                BottomNavigationBarItem(
+                  icon: Image.asset('assets/images/reel.png', color: _page == 3 ? primaryColor : secondaryColor, width: 24),
+                  backgroundColor: primaryColor,
+                ),
+                BottomNavigationBarItem(
+                  icon: CircleAvatar(backgroundImage: NetworkImage(user.photoUrl), radius: 16),
+                  backgroundColor: primaryColor,
+                ),
+              ],
+              backgroundColor: Colors.transparent,
+              onTap: navigationTapped,
+              height: 60,
             ),
-            backgroundColor: primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle, color: _page == 2 ? primaryColor : secondaryColor),
-            backgroundColor: primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite, color: _page == 3 ? primaryColor : secondaryColor),
-            backgroundColor: primaryColor,
-          ),
-          BottomNavigationBarItem(
-            icon: CircleAvatar(backgroundImage: NetworkImage(user.photoUrl),radius: 16),
-            backgroundColor: primaryColor,
-          ),
-        ],
-        backgroundColor: Colors.transparent,
-        onTap: navigationTapped,
-        height: 60,
-      ),
-    );
+          );
   }
 }

@@ -1,13 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram_clone/resources/auth_methods.dart';
-import 'package:instagram_clone/utils/colors.dart';
-import 'package:instagram_clone/view/screens/signup/signup_screen.dart';
-import 'package:instagram_clone/view/widget/text_field_input.dart';
-import '../../../utils/utils.dart';
-import '../../responsive/mobile_screen_layout.dart';
-import '../../responsive/responsive_layout.dart';
-import '../../responsive/web_screen_layout.dart';
+import '../../view.dart';
+import '../../../core/core.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -66,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,12 +120,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
               ///to show don't have an account
               Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
+                padding: const EdgeInsets.only(bottom: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Don\'t have an account?',
+                      'Don\'t have an account? ',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     GestureDetector(
@@ -142,7 +135,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(fontWeight: FontWeight.bold, color: blueColor, fontSize: 16),
                       ),
                     ),
-
                   ],
                 ),
               ),

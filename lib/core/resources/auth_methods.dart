@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:instagram_clone/resources/storage_mthods.dart';
+import 'package:instagram_clone/core/resources/storage_mthods.dart';
 import '../model/user.dart' as model;
 
 class AuthMethods {

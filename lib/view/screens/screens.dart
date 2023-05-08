@@ -1,10 +1,10 @@
 export './addpost/add_post_screen.dart';
 export './feed/feed_screen.dart';
 export './login/login_screen.dart';
-export './notification/notification_screen.dart';
-export './personal/personal_screen.dart';
+export './reels/reels_screen.dart';
+export './profile/profile_screen.dart';
 export './search/search_screen.dart';
 export './signup/signup_screen.dart';
-export './personal/PersonalScreenPersistentHeader.dart';
 export './splash/splash_creen.dart';
 export './main/main_screen.dart';
+export 'package:instagram_clone/view/screens/comments/comments_screen.dart';

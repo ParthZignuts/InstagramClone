@@ -1,12 +1,6 @@
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:instagram_clone/resources/firestore_methods.dart';
-import 'package:instagram_clone/utils/colors.dart';
-import 'package:instagram_clone/utils/utils.dart';
-import 'package:provider/provider.dart';
-import '../../../proiders/user_provider.dart';
-import '../../widget/widget.dart';
+import '../../../core/core.dart';
+import '../../view.dart';
 
 class AddPostScreen extends StatefulWidget {
   const AddPostScreen({Key? key}) : super(key: key);
@@ -123,7 +117,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               actions: [
                 TextButton(
                   onPressed: () =>
-                      postImage(userProvider.getUser.uid, userProvider.getUser.userName, userProvider.getUser.photoUrl),
+                      postImage(userProvider.getUser!.uid, userProvider.getUser!.userName, userProvider.getUser!.photoUrl),
                   child: const Text(
                     'Post',
                     style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 16),
