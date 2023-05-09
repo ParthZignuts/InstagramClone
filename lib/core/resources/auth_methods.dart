@@ -8,7 +8,7 @@ class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  ///get the Currentuser details
+  ///get the CurrentUser details
   Future<model.User> getUserDetail() async {
     User currentUser = _auth.currentUser!;
     DocumentSnapshot snap = await _firestore.collection('users').doc(currentUser.uid).get();
@@ -74,4 +74,8 @@ class AuthMethods {
     }
     return isValid;
   }
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
+
 }

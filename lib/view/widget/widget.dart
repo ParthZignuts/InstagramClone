@@ -11,3 +11,5 @@ export './my_reels_tab.dart';
 export './taged_me_tab.dart';
 export './comments_card.dart';
 export 'package:instagram_clone/view/widget/like_animation.dart';
+export './follow_button.dart';
+export './my_expandable_text.dart';

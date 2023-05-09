@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:instagram_clone/view/screens/search/searched_user_profillescreen.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import '../../view.dart';
@@ -69,7 +70,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     return InkWell(
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ProfileScreen(
+                          builder: (context) => SearchedUserProfileScreen(
                             uid: (snapshot.data! as dynamic).docs[index]['uid'],
                           ),
                         ),

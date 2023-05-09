@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import '../view.dart';
 import '../../core/core.dart';
+import '../../core/model/user.dart' as model;
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -38,7 +40,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    User? user = userProvider.getUser;
+    model.User? user = userProvider.getUser;
     return (user == null)
         ? const Center(
             child: CircularProgressIndicator(),
@@ -53,7 +55,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 const SearchScreen(),
                 const AddPostScreen(),
                 const ReelsScreen(),
-                ProfileScreen(uid: user.uid),
+                ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid,),
               ],
             ),
             bottomNavigationBar: CupertinoTabBar(

@@ -1,7 +1,9 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
+import 'package:readmore/readmore.dart';
 import '../view.dart';
 import '../../core/core.dart';
 
@@ -21,7 +23,7 @@ class _PostCardState extends State<PostCard> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool isAnimating = false;
   User? user;
-  int commnetLength=0;
+  int commnetLength = 0;
 
   @override
   void initState() {
@@ -30,12 +32,12 @@ class _PostCardState extends State<PostCard> {
   }
 
   ///to get the length of comments on particular post
-  void getComments()async{
-  QuerySnapshot snap=  await _firestore.collection('posts').doc(widget._snap['postId']).collection('comments').get();
+  void getComments() async {
+    QuerySnapshot snap = await _firestore.collection('posts').doc(widget._snap['postId']).collection('comments').get();
 
-  setState(() {
-    commnetLength=snap.docs.length;
-  });
+    setState(() {
+      commnetLength = snap.docs.length;
+    });
   }
 
   /// to delete the post
@@ -87,44 +89,39 @@ class _PostCardState extends State<PostCard> {
                       const Spacer(),
                       widget._snap['uid'].toString() == user!.uid
                           ? IconButton(
-                        onPressed: () {
-                          showDialog(
-                            useRootNavigator: false,
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                child: ListView(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical:8),
-                                    shrinkWrap: true,
-                                    children: [
-                                      'Delete Post',
-                                    ]
-                                        .map(
-                                          (e) => InkWell(
-                                          child: Container(
-                                            padding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 8,
-                                                horizontal: 16),
-                                            child: Text(e),
-                                          ),
-                                          onTap: () {
-                                            deletePost(
-                                              widget._snap['postId']
-                                                  .toString(),
-                                            );
-                                            // remove the dialog box
-                                            Navigator.of(context).pop();
-                                          }),
-                                    )
-                                        .toList()),
-                              );
-                            },
-                          );
-                        },
-                        icon: const Icon(Icons.more_vert),
-                      )
+                              onPressed: () {
+                                showDialog(
+                                  useRootNavigator: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      child: ListView(
+                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          shrinkWrap: true,
+                                          children: [
+                                            'Delete Post',
+                                          ]
+                                              .map(
+                                                (e) => InkWell(
+                                                    child: Container(
+                                                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                                      child: Text(e),
+                                                    ),
+                                                    onTap: () {
+                                                      deletePost(
+                                                        widget._snap['postId'].toString(),
+                                                      );
+                                                      // remove the dialog box
+                                                      Navigator.of(context).pop();
+                                                    }),
+                                              )
+                                              .toList()),
+                                    );
+                                  },
+                                );
+                              },
+                              icon: const Icon(Icons.more_vert),
+                            )
                           : Container()
                     ],
                   ),
@@ -207,31 +204,29 @@ class _PostCardState extends State<PostCard> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              '${widget._snap['userName']}',
-                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                            ),
-                            const SizedBox(
-                              width: 5.0,
-                            ),
-                            Text(
-                              '${widget._snap['caption']}',
-                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                            ),
-                          ],
+                        child: ReadMoreText(
+                          '${widget._snap['userName']}'+'  '+ widget._snap['caption'],
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          trimLines: 2,
+                          colorClickableText: secondaryColor,
+                          trimMode: TrimMode.Line,
+                          trimCollapsedText: 'Show more',
+                          trimExpandedText: 'Show less',
+                          moreStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: secondaryColor),
                         ),
                       ),
-                       Padding(
-                         padding: const EdgeInsets.only(bottom: 3.0),
-                         child: InkWell(
-                           onTap: ()=> Get.to(CommentsScreen(postId:widget._snap['postId'] )),
-                           child:  Text( 'view all $commnetLength comments',
-                             style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),
-                           ),
-                           ),
-                       ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 3.0),
+                        child: InkWell(
+                          onTap: () => Get.to(CommentsScreen(postId: widget._snap['postId'])),
+                          child: Text(
+                            'view all $commnetLength comments',
+                            style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),
+                          ),
+                        ),
+                      ),
+
                       Text(
                         DateFormat.yMMMd().format(widget._snap['datePublished'].toDate()),
                         style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),

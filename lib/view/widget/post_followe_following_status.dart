@@ -8,7 +8,7 @@ class PostFolloweFollowingStatus extends StatelessWidget {
     super.key,
   });
 
-  final String values;
+  final int values;
   final String title;
 
   @override
@@ -16,7 +16,7 @@ class PostFolloweFollowingStatus extends StatelessWidget {
     return Column(
       children: [
         Text(
-          values,
+          values.toString(),
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         Text(

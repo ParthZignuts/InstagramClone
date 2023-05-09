@@ -1,18 +1,58 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class PersonalPostTab extends StatelessWidget {
-  const PersonalPostTab({Key? key}) : super(key: key);
+  final String uid;
+  final int postLen;
+
+  const PersonalPostTab({Key? key, required this.uid, required this.postLen}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (_, index) => Padding(
-        padding: const EdgeInsets.all(1.0),
-        child: Image.network('https://picsum.photos/350?image=$index'),
-      ),
-      itemCount: 50,
-    );
+    return (postLen > 0)
+        ? FutureBuilder(
+            future: FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: uid).get(),
+            builder: (context, snapshot) {
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return GridView.builder(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: (snapshot.data! as dynamic).docs.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 1.5,
+                  childAspectRatio: 1,
+                ),
+                itemBuilder: (context, index) {
+                  DocumentSnapshot snap = (snapshot.data! as dynamic).docs[index];
+
+                  return Image(
+                    image: NetworkImage(snap['photoUrl']),
+                    fit: BoxFit.cover,
+                  );
+                },
+              );
+            },
+          )
+        : Center(
+            child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Lottie.asset(
+                'assets/animation/nophotosuploaded.json',
+              ),
+              const Text(
+                'No post yet',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              )
+            ],
+          ));
   }
 }
