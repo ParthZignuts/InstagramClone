@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 import '../view.dart';
@@ -34,7 +33,6 @@ class _PostCardState extends State<PostCard> {
   ///to get the length of comments on particular post
   void getComments() async {
     QuerySnapshot snap = await _firestore.collection('posts').doc(widget._snap['postId']).collection('comments').get();
-
     setState(() {
       commnetLength = snap.docs.length;
     });
@@ -95,27 +93,18 @@ class _PostCardState extends State<PostCard> {
                                   context: context,
                                   builder: (context) {
                                     return Dialog(
-                                      child: ListView(
-                                          padding: const EdgeInsets.symmetric(vertical: 8),
-                                          shrinkWrap: true,
-                                          children: [
-                                            'Delete Post',
-                                          ]
-                                              .map(
-                                                (e) => InkWell(
-                                                    child: Container(
-                                                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                                                      child: Text(e),
-                                                    ),
-                                                    onTap: () {
-                                                      deletePost(
-                                                        widget._snap['postId'].toString(),
-                                                      );
-                                                      // remove the dialog box
-                                                      Navigator.of(context).pop();
-                                                    }),
-                                              )
-                                              .toList()),
+                                      child: InkWell(
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
+                                            child: const Text('Delete Post'),
+                                          ),
+                                          onTap: () {
+                                            deletePost(
+                                              widget._snap['postId'].toString(),
+                                            );
+                                            // remove the dialog box
+                                            Navigator.of(context).pop();
+                                          }),
                                     );
                                   },
                                 );
@@ -203,30 +192,30 @@ class _PostCardState extends State<PostCard> {
                         style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                        padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, right: 8.0),
                         child: ReadMoreText(
-                          '${widget._snap['userName']}'+'  '+ widget._snap['caption'],
+                          '${widget._snap['userName']}' + '  ' + widget._snap['caption'],
                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                           trimLines: 2,
                           colorClickableText: secondaryColor,
                           trimMode: TrimMode.Line,
                           trimCollapsedText: 'Show more',
                           trimExpandedText: 'Show less',
-                          moreStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: secondaryColor),
+                          moreStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: secondaryColor),
                         ),
                       ),
-
                       Padding(
                         padding: const EdgeInsets.only(bottom: 3.0),
                         child: InkWell(
-                          onTap: () => Get.to(CommentsScreen(postId: widget._snap['postId'])),
+                          onTap: () {
+                            Get.to(CommentsScreen(postId: widget._snap['postId']));
+                          },
                           child: Text(
                             'view all $commnetLength comments',
                             style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),
                           ),
                         ),
                       ),
-
                       Text(
                         DateFormat.yMMMd().format(widget._snap['datePublished'].toDate()),
                         style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),

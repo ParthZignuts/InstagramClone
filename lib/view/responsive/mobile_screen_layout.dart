@@ -46,18 +46,21 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
             child: CircularProgressIndicator(),
           )
         : Scaffold(
-            body: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (value) => onPageChanged(value),
-              controller: pageController,
-              children: [
-                const FeedScreen(),
-                const SearchScreen(),
-                const AddPostScreen(),
-                const ReelsScreen(),
-                ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid,),
-              ],
-            ),
+            body:
+      PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        onPageChanged: (value) => onPageChanged(value),
+        children: [
+          const FeedScreen(),
+          const SearchScreen(),
+          const AddPostScreen(),
+          const ReelsScreen(),
+          ProfileScreen(
+            uid: FirebaseAuth.instance.currentUser!.uid,
+          ),
+        ],
+      ),
             bottomNavigationBar: CupertinoTabBar(
               items: [
                 BottomNavigationBarItem(

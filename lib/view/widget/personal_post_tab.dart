@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:instagram_clone/view/screens/profile/post_detailed_view.dart';
 import 'package:lottie/lottie.dart';
 
 class PersonalPostTab extends StatelessWidget {
@@ -33,9 +36,12 @@ class PersonalPostTab extends StatelessWidget {
                 itemBuilder: (context, index) {
                   DocumentSnapshot snap = (snapshot.data! as dynamic).docs[index];
 
-                  return Image(
-                    image: NetworkImage(snap['photoUrl']),
-                    fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: ()=> Get.to( PostDetailedView(postId: snap['postId'])),
+                    child: Image(
+                      image: NetworkImage(snap['photoUrl']),
+                      fit: BoxFit.cover,
+                    ),
                   );
                 },
               );

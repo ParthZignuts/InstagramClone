@@ -85,6 +85,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 90),
             child: Container(
+              padding: MediaQuery.of(context).size.width > webScreenSize
+                  ? EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 3)
+                  : const EdgeInsets.symmetric(horizontal: 32),
+              width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

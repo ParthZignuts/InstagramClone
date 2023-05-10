@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
 
@@ -48,6 +49,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
     print('delete method call');
   }
 
+  ///comments stream
+  Stream<QuerySnapshot<Map<String, dynamic>>> commentsStream() => FirebaseFirestore.instance
+      .collection('posts')
+      .doc(widget.postId)
+      .collection('comments')
+      .orderBy('datePublished', descending: true)
+      .snapshots();
+
   @override
   Widget build(BuildContext context) {
     final User? user = Provider.of<UserProvider>(context).getUser;
@@ -58,17 +67,19 @@ class _CommentsScreenState extends State<CommentsScreen> {
           'Comments',
         ),
         centerTitle: false,
+        leading: IconButton(
+          onPressed: () {
+            // Get.offAll(const MobileScreenLayout());
+            Navigator.pop(context);
+          },
+          icon: const Icon(CupertinoIcons.left_chevron),
+        ),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('posts')
-            .doc(widget.postId)
-            .collection('comments')
-            .orderBy('datePublished', descending: true)
-            .snapshots(),
+        stream: commentsStream(),
         builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (!_hasBuiltOnce) {
-            if (snapshot.connectionState == ConnectionState.waiting ) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
@@ -78,7 +89,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
           return (snapshot.data!.docs.isNotEmpty)
               ? GestureDetector(
-                  // behavior: HitTestBehavior.opaque,
                   onPanDown: (_) {
                     FocusScope.of(context).requestFocus(FocusNode());
                   },

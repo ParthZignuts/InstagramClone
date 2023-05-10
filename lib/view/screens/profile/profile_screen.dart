@@ -19,12 +19,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isFollowing = false;
   bool isLoading = false;
 
+
   @override
   void initState() {
     super.initState();
     getData();
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+  }
   getData() async {
     setState(() {
       isLoading = true;
@@ -64,11 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Center(
             child: TextButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
-                    ),
-                  );
+                  Get.offAll(const LoginScreen());
                 },
                 child: const Text('Logout')),
           ),

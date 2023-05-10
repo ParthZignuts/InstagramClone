@@ -36,8 +36,4 @@ class PostStreamBuilder extends StatelessWidget {
       },
     );
   }
-  shufflePost(AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot){
-    final shuffledPost = List.from(snapshot.data!.docs)..shuffle();
-    return shuffledPost;
-  }
 }
