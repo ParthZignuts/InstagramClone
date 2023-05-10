@@ -8,3 +8,5 @@ export './signup/signup_screen.dart';
 export './splash/splash_creen.dart';
 export './main/main_screen.dart';
 export 'package:instagram_clone/view/screens/comments/comments_screen.dart';
+export './chat/chat_screen.dart';
+export './chat/personal_chat_screen.dart';

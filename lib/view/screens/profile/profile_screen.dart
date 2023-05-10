@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instagram_clone/core/core.dart';
 import '../../view.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -19,16 +20,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isFollowing = false;
   bool isLoading = false;
 
-
   @override
   void initState() {
     super.initState();
     getData();
   }
+
   @override
   void dispose() {
     super.dispose();
   }
+
   getData() async {
     setState(() {
       isLoading = true;
@@ -56,25 +58,101 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   /// when menu button  press then this method will be call
-  onMenuPress(BuildContext context) {
-    showBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          height: 250,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+  onMneuPress(){
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          // <-- SEE HERE
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
           ),
-          child: Center(
-            child: TextButton(
-                onPressed: () {
-                  Get.offAll(const LoginScreen());
-                },
-                child: const Text('Logout')),
+        ),
+        builder: (context) {
+          return SizedBox(
+            height: 200,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    height: 2,
+                    width: 50,
+                    decoration:  const BoxDecoration(color: primaryColor,borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 12.0,bottom: 8.0),
+                    child: Text(
+                      'Create',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    onTap: (){
+                      AuthMethods().signOut();
+                      Get.offAll(const LoginScreen());
+                    },
+                    leading:const Icon(Icons.logout,color: primaryColor,),
+                    title: const Text('SignOut'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  ///to show bottomSheet that include option to upload socialMedia  activities
+  showBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          // <-- SEE HERE
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
           ),
-        );
-      },
-    );
+        ),
+        builder: (context) {
+          return SizedBox(
+            height: 200,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    height: 2,
+                    width: 50,
+                    decoration:  const BoxDecoration(color: primaryColor,borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 12.0,bottom: 8.0),
+                    child: Text(
+                      'Create',
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    onTap: () => (){},
+                    leading: Image.asset('assets/images/reel.png', height: 30, color: primaryColor),
+                    title: const Text('Reel'),
+                  ),
+                  ListTile(
+                    onTap: () {},
+                    leading: Image.asset('assets/images/post.png', height: 30, color: primaryColor),
+                    title: const Text('Post'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -94,7 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       expandedHeight: 325,
                       flexibleSpace: FlexibleSpaceBar(
                         background: Padding(
-                          padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+                          padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -105,15 +183,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 25),
                                   ),
                                   const Spacer(),
-                                  IconButton(onPressed: () => () {}, icon: const Icon(Icons.add_box_outlined)),
-                                  IconButton(onPressed: () => onMenuPress(context), icon: const Icon(Icons.menu)),
+                                  IconButton(onPressed: () => showBottomSheet(), icon: const Icon(Icons.add_box_outlined)),
+                                  IconButton(onPressed: () => onMneuPress(), icon: const Icon(Icons.menu)),
                                 ],
                               ),
                               const Divider(color: secondaryColor),
 
                               ///Post, followers, following count
                               Padding(
-                                padding: const EdgeInsets.only( bottom: 8.0),
+                                padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                   CircleAvatar(backgroundImage: NetworkImage(userData['photoUrl']), maxRadius: 40),
                                   PostFolloweFollowingStatus(title: 'Posts', values: postLen),

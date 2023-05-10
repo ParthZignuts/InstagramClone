@@ -104,9 +104,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   crossAxisCount: 3,
                   physics: const BouncingScrollPhysics(),
                   itemCount: (snapshot.data! as dynamic).docs.length,
-                  itemBuilder: (context, index) => Image.network(
-                    (snapshot.data! as dynamic).docs[index]['photoUrl'],
-                    fit: BoxFit.cover,
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap:() => Get.to(PostDetailedView(postId: (snapshot.data! as dynamic).docs[index]['postId'], )),
+                    child: Image.network(
+                      
+                      (snapshot.data! as dynamic).docs[index]['photoUrl'],
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   staggeredTileBuilder: (index) => MediaQuery.of(context)
                       .size

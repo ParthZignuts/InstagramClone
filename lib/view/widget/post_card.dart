@@ -193,6 +193,7 @@ class _PostCardState extends State<PostCard> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, right: 8.0),
+
                         child: ReadMoreText(
                           '${widget._snap['userName']}' + '  ' + widget._snap['caption'],
                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
