@@ -1,4 +1,5 @@
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
 
@@ -36,12 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       showSnackbar(result, context);
     } else {
       // ignore: use_build_context_synchronously
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => const ResponsiveLayout(
-          mobileScreenLayout: MobileScreenLayout(),
-          webScreenLayout: WebScreenLayout(),
-        ),
-      ));
+      context.go('/MainScreen');
       // ignore: use_build_context_synchronously
       showSnackbar('SignIn Successfully ', context);
     }
@@ -49,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// on signup button press
   void navigateToSignUp() {
-   Get.offAll(const SignUpScreen());
+  context.go('/SignUpScreen');
   }
 
   @override

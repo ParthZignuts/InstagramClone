@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instagram_clone/view/screens/search/searched_user_profillescreen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import '../../view.dart';
@@ -68,13 +68,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemCount: (snapshot.data! as dynamic).docs.length,
                   itemBuilder: (context, index) {
                     return InkWell(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SearchedUserProfileScreen(
-                            uid: (snapshot.data! as dynamic).docs[index]['uid'],
-                          ),
-                        ),
-                      ),
+                      onTap: () => context.push('/SearchedUser/${(snapshot.data! as dynamic).docs[index]['uid']}'),
                       child: ListTile(
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(
@@ -105,7 +99,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   physics: const BouncingScrollPhysics(),
                   itemCount: (snapshot.data! as dynamic).docs.length,
                   itemBuilder: (context, index) => GestureDetector(
-                    onTap:() => Get.to(PostDetailedView(postId: (snapshot.data! as dynamic).docs[index]['postId'], )),
+                    onTap:() => context.push('/PostDetailedView/${(snapshot.data! as dynamic).docs[index]['postId']}'),
                     child: Image.network(
                       
                       (snapshot.data! as dynamic).docs[index]['photoUrl'],

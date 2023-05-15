@@ -14,9 +14,12 @@ class MainScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
-            return const ResponsiveLayout(
-              mobileScreenLayout: MobileScreenLayout(),
-              webScreenLayout: WebScreenLayout(),
+            return WillPopScope(
+              onWillPop: () => _onWillPop(context),
+              child: const ResponsiveLayout(
+                mobileScreenLayout: MobileScreenLayout(),
+                webScreenLayout: WebScreenLayout(),
+              ),
             );
           } else if (snapshot.hasError) {
             return Center(
@@ -36,4 +39,25 @@ class MainScreen extends StatelessWidget {
       },
     );
   }
+}
+Future<bool> _onWillPop(BuildContext context) async {
+  return (await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: primaryColor,
+      title: const Text('Are you sure?',style: TextStyle(color: Colors.black),),
+      content: const Text('Do you want to exit the app?',style: TextStyle(color: Colors.black),),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('No'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Yes'),
+        ),
+      ],
+    ),
+  )) ??
+      false;
 }

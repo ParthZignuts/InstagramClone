@@ -52,7 +52,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         controller: pageController,
         onPageChanged: (value) => onPageChanged(value),
         children: [
-          const FeedScreen(),
+          const FeedScreenPageView(),
           const SearchScreen(),
           const AddPostScreen(),
           const ReelsScreen(),

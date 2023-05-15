@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 import '../view.dart';
@@ -63,56 +64,59 @@ class _PostCardState extends State<PostCard> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(widget._snap['profImage']),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget._snap['userName'],
-                              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-                            ),
-                            const Text(
-                              'Gandhinagar Gujrat',
-                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-                            ),
-                          ],
+                  child: GestureDetector(
+                    onTap: ()=>  context.push('/SearchedUser/${ widget._snap['uid']}'),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(widget._snap['profImage']),
                         ),
-                      ),
-                      const Spacer(),
-                      widget._snap['uid'].toString() == user!.uid
-                          ? IconButton(
-                              onPressed: () {
-                                showDialog(
-                                  useRootNavigator: false,
-                                  context: context,
-                                  builder: (context) {
-                                    return Dialog(
-                                      child: InkWell(
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
-                                            child: const Text('Delete Post'),
-                                          ),
-                                          onTap: () {
-                                            deletePost(
-                                              widget._snap['postId'].toString(),
-                                            );
-                                            // remove the dialog box
-                                            Navigator.of(context).pop();
-                                          }),
-                                    );
-                                  },
-                                );
-                              },
-                              icon: const Icon(Icons.more_vert),
-                            )
-                          : Container()
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget._snap['userName'],
+                                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                              ),
+                              const Text(
+                                'Gandhinagar Gujrat',
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                        widget._snap['uid'].toString() == user!.uid
+                            ? IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    useRootNavigator: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        child: InkWell(
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
+                                              child: const Text('Delete Post'),
+                                            ),
+                                            onTap: () {
+                                              deletePost(
+                                                widget._snap['postId'].toString(),
+                                              );
+                                              // remove the dialog box
+                                              Navigator.of(context).pop();
+                                            }),
+                                      );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(Icons.more_vert),
+                              )
+                            : Container()
+                      ],
+                    ),
                   ),
                 ),
                 GestureDetector(
@@ -165,7 +169,7 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
                     IconButton(
-                        onPressed: () => Get.to(CommentsScreen(postId: widget._snap['postId'])),
+                        onPressed: () => context.push('/CommentScreen/${widget._snap['postId']}'),
                         icon: const Icon(CupertinoIcons.bubble_right)),
                     Transform.rotate(
                       angle: 610 * pi / 330,
@@ -193,7 +197,6 @@ class _PostCardState extends State<PostCard> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, right: 8.0),
-
                         child: ReadMoreText(
                           '${widget._snap['userName']}' + '  ' + widget._snap['caption'],
                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
@@ -208,9 +211,7 @@ class _PostCardState extends State<PostCard> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 3.0),
                         child: InkWell(
-                          onTap: () {
-                            Get.to(CommentsScreen(postId: widget._snap['postId']));
-                          },
+                          onTap: () => context.push('/CommentScreen/${widget._snap['postId']}'),
                           child: Text(
                             'view all $commnetLength comments',
                             style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),

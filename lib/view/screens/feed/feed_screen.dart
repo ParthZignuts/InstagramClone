@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:go_router/go_router.dart';
 import 'package:instagram_clone/view/screens/chat/chat_screen.dart';
 import '../../widget/widget.dart';
 import 'package:instagram_clone/utils/colors.dart';
@@ -26,7 +27,7 @@ class FeedScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
-                  IconButton(onPressed: () => Get.to(const ChatScreen()), icon: const Icon(Icons.message)),
+                  IconButton(onPressed: () =>context.push('/ChatScreen'), icon: const Icon(Icons.message)),
                 ],
               ),
             ),

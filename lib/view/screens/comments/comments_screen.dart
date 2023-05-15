@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
 
@@ -69,7 +70,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
         centerTitle: false,
         leading: IconButton(
           onPressed: () {
-            // Get.offAll(const MobileScreenLayout());
             Navigator.pop(context);
           },
           icon: const Icon(CupertinoIcons.left_chevron),

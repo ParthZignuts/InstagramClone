@@ -21,9 +21,7 @@ class _PostDetailedViewState extends State<PostDetailedView> {
         ),
         centerTitle: false,
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () =>Navigator.of(context).pop(),
           icon: const Icon(CupertinoIcons.left_chevron),
         ),
       ),

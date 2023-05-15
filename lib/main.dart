@@ -1,6 +1,6 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:instagram_clone/routes/routes.dart';
 import './view/view.dart';
 import './core/core.dart';
 
@@ -31,12 +31,13 @@ class MyApp extends StatelessWidget {
           create: (context) => UserProvider(),
         ),
       ],
-      child: GetMaterialApp(
+      child: MaterialApp.router(
+        routerConfig: router,
         debugShowCheckedModeBanner: false,
         title: 'Instagram',
         theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
-        home: const SplashScreen(),
       ),
     );
   }
 }
+

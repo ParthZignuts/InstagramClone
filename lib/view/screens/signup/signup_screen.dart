@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../view.dart';
 import '../../../core/core.dart';
@@ -58,12 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       showSnackbar(result, context);
     } else {
       // ignore: use_build_context_synchronously
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => const ResponsiveLayout(
-          mobileScreenLayout: MobileScreenLayout(),
-          webScreenLayout: WebScreenLayout(),
-        ),
-      ));
+    context.go('/MainScreen');
       // ignore: use_build_context_synchronously
       showSnackbar('SignUp Successfully', context);
     }
@@ -71,9 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   ///navigate to loginpage
   void navigateToLoginPage() {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => const LoginScreen(),
-    ));
+  context.go('/LoginScreen');
   }
 
   @override
@@ -83,7 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 90),
+            padding: const EdgeInsets.symmetric( vertical: 90),
             child: Container(
               padding: MediaQuery.of(context).size.width > webScreenSize
                   ? EdgeInsets.symmetric(

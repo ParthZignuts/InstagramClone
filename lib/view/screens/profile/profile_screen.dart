@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import 'package:instagram_clone/core/core.dart';
 import '../../view.dart';
 
@@ -58,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   /// when menu button  press then this method will be call
-  onMneuPress(){
+  onMenuPress() {
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -79,10 +80,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Container(
                     height: 2,
                     width: 50,
-                    decoration:  const BoxDecoration(color: primaryColor,borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    decoration: const BoxDecoration(color: primaryColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   ),
                   const Padding(
-                    padding: EdgeInsets.only(top: 12.0,bottom: 8.0),
+                    padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
                     child: Text(
                       'Create',
                       style: TextStyle(fontSize: 20),
@@ -91,11 +92,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const Divider(),
                   ListTile(
-                    onTap: (){
+                    onTap: () {
                       AuthMethods().signOut();
-                      Get.offAll(const LoginScreen());
+                      context.go('/LoginScreen');
                     },
-                    leading:const Icon(Icons.logout,color: primaryColor,),
+                    leading: const Icon(
+                      Icons.logout,
+                      color: primaryColor,
+                    ),
                     title: const Text('SignOut'),
                   ),
                 ],
@@ -127,10 +131,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Container(
                     height: 2,
                     width: 50,
-                    decoration:  const BoxDecoration(color: primaryColor,borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    decoration: const BoxDecoration(color: primaryColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   ),
                   const Padding(
-                    padding: EdgeInsets.only(top: 12.0,bottom: 8.0),
+                    padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
                     child: Text(
                       'Create',
                       style: TextStyle(fontSize: 20),
@@ -139,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const Divider(),
                   ListTile(
-                    onTap: () => (){},
+                    onTap: () => () {},
                     leading: Image.asset('assets/images/reel.png', height: 30, color: primaryColor),
                     title: const Text('Reel'),
                   ),
@@ -184,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   const Spacer(),
                                   IconButton(onPressed: () => showBottomSheet(), icon: const Icon(Icons.add_box_outlined)),
-                                  IconButton(onPressed: () => onMneuPress(), icon: const Icon(Icons.menu)),
+                                  IconButton(onPressed: () => onMenuPress(), icon: const Icon(Icons.menu)),
                                 ],
                               ),
                               const Divider(color: secondaryColor),
@@ -194,9 +198,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                   CircleAvatar(backgroundImage: NetworkImage(userData['photoUrl']), maxRadius: 40),
-                                  PostFolloweFollowingStatus(title: 'Posts', values: postLen),
-                                  PostFolloweFollowingStatus(title: 'Followers', values: followers),
-                                  PostFolloweFollowingStatus(title: 'Following', values: following),
+                                  PostFolloweFollowingStatus(title: 'Posts', values: postLen,onPressed:()=> context.push('/ListOfFollowing')),
+                                  PostFolloweFollowingStatus(title: 'Followers', values: followers,onPressed:()=> context.push('/ListOfFollowing')),
+                                  PostFolloweFollowingStatus(title: 'Following', values: following,onPressed:()=> context.push('/ListOfFollowing')),
                                 ]),
                               ),
 

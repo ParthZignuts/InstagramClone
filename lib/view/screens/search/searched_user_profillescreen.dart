@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/resources/auth_methods.dart';
 import '../../../core/resources/firestore_methods.dart';
 import '../../../view/view.dart';
@@ -74,6 +75,8 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                       backgroundColor: mobileBackgroundColor,
                       expandedHeight: 352,
                       centerTitle: false,
+                      leading:
+                          IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(CupertinoIcons.left_chevron)),
                       title: Text(
                         userData['userName'],
                         style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 25),
@@ -96,9 +99,9 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                     CircleAvatar(backgroundImage: NetworkImage(userData['photoUrl']), maxRadius: 40),
-                                    PostFolloweFollowingStatus(title: 'Posts', values: postLen),
-                                    PostFolloweFollowingStatus(title: 'Followers', values: followers),
-                                    PostFolloweFollowingStatus(title: 'Following', values: following),
+                                    PostFolloweFollowingStatus(title: 'Posts', values: postLen,onPressed:()=> context.push('/ListOfFollowing')),
+                                    PostFolloweFollowingStatus(title: 'Followers', values: followers,onPressed:()=> context.push('/ListOfFollowing')),
+                                    PostFolloweFollowingStatus(title: 'Following', values: following,onPressed:()=> context.push('/ListOfFollowing')),
                                   ]),
                                 ),
 

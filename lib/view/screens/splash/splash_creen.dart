@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
 
@@ -24,11 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
         AuthMethods().getUserDetail();
         FirebaseAuth.instance.authStateChanges();
         // Navigate to the next screen
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainScreen(),
-            ));
+        context.go('/MainScreen');
       });
     } catch (e) {
       print(e);

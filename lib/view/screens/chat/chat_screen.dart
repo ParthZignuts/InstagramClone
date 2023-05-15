@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import 'package:instagram_clone/view/view.dart';
 import '../../../core/core.dart';
 import '../../../core/model/user.dart' as model;
@@ -12,10 +12,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  static Map<String, dynamic>? currentUserStory;
-
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
@@ -48,18 +44,20 @@ class _ChatScreenState extends State<ChatScreen> {
             itemBuilder: (context, index) {
               final userName = documents[index]['userName'] ?? '';
               final photoUrl = documents[index]['photoUrl'] ?? '';
+              final uid = documents[index]['uid'] ?? '';
 
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
-                  onTap: () => Get.to(PersonalChatScreen(
-                    userName: userName,
-                    profUrl: photoUrl,
-                  )),
+                  onTap: () => context.pushNamed('PersonalChat', queryParameters: {
+                    'userName': userName,
+                    'photoUrl': photoUrl,
+                    'uid': uid,
+                  }),
                   child: ListTile(
                     title: Text(
                       userName,
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                     leading: CircleAvatar(
                       maxRadius: 28,
