@@ -5,18 +5,18 @@ class FeedScreenPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PageController _pageController = PageController();
+    PageController pageController = PageController();
     int tabIndex = 0;
     return Scaffold(
       body: PageView(
-          controller: _pageController,
+          controller: pageController,
           children: const <Widget>[
             FeedScreen(),
             ChatScreen(),
           ],
           onPageChanged: (int index) => {
                 tabIndex = index,
-                _pageController.animateToPage(tabIndex, duration: const Duration(milliseconds: 450), curve: Curves.easeIn),
+                pageController.animateToPage(tabIndex, duration: const Duration(milliseconds: 450), curve: Curves.easeIn),
               }),
     );
   }

@@ -1,11 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
-import 'package:instagram_clone/view/screens/chat/chat_screen.dart';
-import '../../widget/widget.dart';
-import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/view/view.dart';
 
 class FeedScreen extends StatelessWidget {
   const FeedScreen({Key? key}) : super(key: key);
@@ -17,7 +12,7 @@ class FeedScreen extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 2.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
               child: Row(
                 children: [
                   SvgPicture.asset(
@@ -27,7 +22,7 @@ class FeedScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
-                  IconButton(onPressed: () =>context.push('/ChatScreen'), icon: const Icon(Icons.message)),
+                  IconButton(onPressed: () => context.push('/ChatScreen'), icon: const Icon(Icons.message)),
                 ],
               ),
             ),

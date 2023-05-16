@@ -19,6 +19,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   void initState() {
     super.initState();
     pageController = PageController();
+
   }
 
   @override
@@ -40,27 +41,27 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     model.User? user = userProvider.getUser;
     return (user == null)
         ? const Center(
             child: CircularProgressIndicator(),
           )
         : Scaffold(
-            body:
-      PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: pageController,
-        onPageChanged: (value) => onPageChanged(value),
-        children: [
-          const FeedScreenPageView(),
-          const SearchScreen(),
-          const AddPostScreen(),
-          const ReelsScreen(),
-          ProfileScreen(
-            uid: FirebaseAuth.instance.currentUser!.uid,
-          ),
-        ],
-      ),
+            body: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: pageController,
+              onPageChanged: (value) => onPageChanged(value),
+              children: [
+                const FeedScreenPageView(),
+                const SearchScreen(),
+                const AddPostScreen(),
+                const ReelsScreen(),
+                ProfileScreen(
+                  uid: FirebaseAuth.instance.currentUser!.uid,
+                ),
+              ],
+            ),
             bottomNavigationBar: CupertinoTabBar(
               items: [
                 BottomNavigationBarItem(

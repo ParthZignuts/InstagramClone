@@ -12,6 +12,6 @@ export './taged_me_tab.dart';
 export './comments_card.dart';
 export 'package:instagram_clone/view/widget/like_animation.dart';
 export './follow_button.dart';
-export './my_expandable_text.dart';
 export './list_of_followers.dart';
 export './list_of_following.dart';
+export 'package:lottie/lottie.dart';

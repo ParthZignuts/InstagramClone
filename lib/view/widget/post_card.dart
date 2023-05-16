@@ -13,6 +13,7 @@ class PostCard extends StatefulWidget {
     super.key,
   }) : _snap = snap;
 
+  // ignore: prefer_typing_uninitialized_variables
   final _snap;
 
   @override
@@ -20,10 +21,10 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   bool isAnimating = false;
   User? user;
-  int commnetLength = 0;
+  int commentLength = 0;
 
   @override
   void initState() {
@@ -33,9 +34,9 @@ class _PostCardState extends State<PostCard> {
 
   ///to get the length of comments on particular post
   void getComments() async {
-    QuerySnapshot snap = await _firestore.collection('posts').doc(widget._snap['postId']).collection('comments').get();
+    QuerySnapshot snap = await _fireStore.collection('posts').doc(widget._snap['postId']).collection('comments').get();
     setState(() {
-      commnetLength = snap.docs.length;
+      commentLength = snap.docs.length;
     });
   }
 
@@ -65,7 +66,7 @@ class _PostCardState extends State<PostCard> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
-                    onTap: ()=>  context.push('/SearchedUser/${ widget._snap['uid']}'),
+                    onTap: () => context.push('/SearchedUser/${widget._snap['uid']}'),
                     child: Row(
                       children: [
                         CircleAvatar(
@@ -198,14 +199,14 @@ class _PostCardState extends State<PostCard> {
                       Padding(
                         padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, right: 8.0),
                         child: ReadMoreText(
-                          '${widget._snap['userName']}' + '  ' + widget._snap['caption'],
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          '${widget._snap['userName']} ${' '} ${widget._snap['caption']}',
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                           trimLines: 2,
                           colorClickableText: secondaryColor,
                           trimMode: TrimMode.Line,
                           trimCollapsedText: 'Show more',
                           trimExpandedText: 'Show less',
-                          moreStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: secondaryColor),
+                          moreStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: secondaryColor),
                         ),
                       ),
                       Padding(
@@ -213,7 +214,7 @@ class _PostCardState extends State<PostCard> {
                         child: InkWell(
                           onTap: () => context.push('/CommentScreen/${widget._snap['postId']}'),
                           child: Text(
-                            'view all $commnetLength comments',
+                            'view all $commentLength comments',
                             style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),
                           ),
                         ),

@@ -7,7 +7,6 @@ import '../model/model.dart';
 class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-
   ///to upload post
   Future<String> uploadPost(String caption, String uid, String userName, Uint8List file, String profImage) async {
     String result = 'Can\'t post now ';
@@ -49,7 +48,6 @@ class FireStoreMethods {
     }
   }
 
-
   ///to do comments on post
   Future<String> postComment(String postId, String text, String uid, String name, String profilePic) async {
     String res = "Some error occurred";
@@ -76,7 +74,7 @@ class FireStoreMethods {
   }
 
   /// for deleting comments on post
-  Future<String> deleteComments(String postId,String commentId) async {
+  Future<String> deleteComments(String postId, String commentId) async {
     String res = "Some error occurred";
     try {
       await _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).delete();
@@ -99,17 +97,13 @@ class FireStoreMethods {
     return res;
   }
 
-
   ///to manage followers
-  Future<void> followUser(
-      String uid,
-      String followId
-      ) async {
+  Future<void> followUser(String uid, String followId) async {
     try {
       DocumentSnapshot snap = await _firestore.collection('users').doc(uid).get();
       List following = (snap.data()! as dynamic)['following'];
 
-      if(following.contains(followId)) {
+      if (following.contains(followId)) {
         await _firestore.collection('users').doc(followId).update({
           'followers': FieldValue.arrayRemove([uid])
         });
@@ -126,8 +120,7 @@ class FireStoreMethods {
           'following': FieldValue.arrayUnion([followId])
         });
       }
-
-    } catch(e) {
+    } catch (e) {
       print(e.toString());
     }
   }

@@ -22,5 +22,3 @@ class StorageMthods {
     return downloadUrl;
   }
 }
-
-

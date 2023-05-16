@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// on signup button press
   void navigateToSignUp() {
-  context.go('/SignUpScreen');
+    context.go('/SignUpScreen');
   }
 
   @override
@@ -54,8 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Container(
           padding: MediaQuery.of(context).size.width > webScreenSize
-              ? EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width / 3)
+              ? EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 3)
               : const EdgeInsets.symmetric(horizontal: 32),
           width: double.infinity,
           child: Column(

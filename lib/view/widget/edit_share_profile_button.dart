@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utils/colors.dart';
 
@@ -15,12 +14,11 @@ class EditShareProfileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery .of(context).size.width*0.35,
+      width: MediaQuery.of(context).size.width * 0.35,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-           primary: darkGray,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
+            primary: darkGray,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           ),
           onPressed: onPressed,
           child: Text(

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:go_router/go_router.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
 
@@ -86,7 +85,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
             }
             _hasBuiltOnce = true;
           }
-
           return (snapshot.data!.docs.isNotEmpty)
               ? GestureDetector(
                   onPanDown: (_) {

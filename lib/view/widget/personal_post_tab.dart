@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
+import 'package:instagram_clone/view/view.dart';
 
 class PersonalPostTab extends StatelessWidget {
   final String uid;
@@ -15,7 +14,6 @@ class PersonalPostTab extends StatelessWidget {
         ? FutureBuilder(
             future: FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: uid).get(),
             builder: (context, snapshot) {
-
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -35,7 +33,7 @@ class PersonalPostTab extends StatelessWidget {
                   DocumentSnapshot snap = (snapshot.data! as dynamic).docs[index];
 
                   return GestureDetector(
-                    onTap: ()=> context.push('/PostDetailedView/${snap['postId']}'),
+                    onTap: () => context.push('/PostDetailedView/${snap['postId']}'),
                     child: Image(
                       image: NetworkImage(snap['photoUrl']),
                       fit: BoxFit.cover,
@@ -47,16 +45,17 @@ class PersonalPostTab extends StatelessWidget {
           )
         : Center(
             child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Lottie.asset(
-                'assets/animation/nophotosuploaded.json',
-              ),
-              const Text(
-                'No post yet',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              )
-            ],
-          ));
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset(
+                  'assets/animation/nophotosuploaded.json',
+                ),
+                const Text(
+                  'No post yet',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                )
+              ],
+            ),
+          );
   }
 }

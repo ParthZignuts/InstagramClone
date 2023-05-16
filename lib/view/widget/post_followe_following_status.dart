@@ -1,8 +1,7 @@
-
 import 'package:flutter/material.dart';
 
-class PostFolloweFollowingStatus extends StatelessWidget {
-  const PostFolloweFollowingStatus({
+class PostFollowerFollowingStatus extends StatelessWidget {
+  const PostFollowerFollowingStatus({
     required this.title,
     required this.values,
     required this.onPressed,

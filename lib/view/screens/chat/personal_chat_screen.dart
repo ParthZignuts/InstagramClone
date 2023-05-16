@@ -17,16 +17,14 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
   bool isEnableToSend = false;
 
   changeStateOfSentMsg(String value) {
-    @override
-    void setState(VoidCallback fn) {
-      super.setState(fn);
-      if (value.length > 0) {
+    if (value.isNotEmpty) {
+      setState(() {
         isEnableToSend = true;
-        print('false');
-      } else {
+      });
+    } else {
+      setState(() {
         isEnableToSend = false;
-        print('true');
-      }
+      });
     }
   }
 
@@ -68,17 +66,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
               height: 50,
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextFormField(
-                onChanged: (value) {
-                  if (value.length > 0) {
-                    setState(() {
-                      isEnableToSend = true;
-                    });
-                  } else {
-                    setState(() {
-                      isEnableToSend = false;
-                    });
-                  }
-                },
+                onChanged: (value) => changeStateOfSentMsg(value),
                 style: const TextStyle(fontSize: 20),
                 textAlign: TextAlign.start,
                 controller: chatController,
@@ -105,9 +93,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                               IconButton(
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  print('mic button pressed');
-                                },
+                                onPressed: () {},
                                 icon: const Icon(
                                   Icons.mic,
                                   color: primaryColor,
@@ -116,9 +102,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                               IconButton(
                                 padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
                                 constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  print('photo button pressed');
-                                },
+                                onPressed: () {},
                                 icon: const Icon(
                                   Icons.photo,
                                   color: primaryColor,
@@ -127,9 +111,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                               IconButton(
                                 padding: const EdgeInsets.fromLTRB(2, 0, 10, 0),
                                 constraints: const BoxConstraints(),
-                                onPressed: () {
-                                  print('Emoji button pressed');
-                                },
+                                onPressed: () {},
                                 icon: const Icon(
                                   Icons.emoji_emotions,
                                   color: primaryColor,

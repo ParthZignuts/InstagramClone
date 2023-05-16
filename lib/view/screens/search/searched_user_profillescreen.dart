@@ -99,9 +99,19 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                     CircleAvatar(backgroundImage: NetworkImage(userData['photoUrl']), maxRadius: 40),
-                                    PostFolloweFollowingStatus(title: 'Posts', values: postLen,onPressed:()=> context.push('/ListOfFollowing')),
-                                    PostFolloweFollowingStatus(title: 'Followers', values: followers,onPressed:()=> context.push('/ListOfFollowing')),
-                                    PostFolloweFollowingStatus(title: 'Following', values: following,onPressed:()=> context.push('/ListOfFollowing')),
+                                    PostFollowerFollowingStatus(title: 'Posts', values: postLen, onPressed: () => () {}),
+                                    PostFollowerFollowingStatus(
+                                      title: 'Followers',
+                                      values: followers,
+                                      onPressed: () => context.pushNamed('FollowersAndFollowingList',
+                                          queryParameters: {'userName': userData['userName'], 'uid': widget.uid}),
+                                    ),
+                                    PostFollowerFollowingStatus(
+                                      title: 'Following',
+                                      values: following,
+                                      onPressed: () => context.pushNamed('FollowersAndFollowingList',
+                                          queryParameters: {'userName': userData['userName'], 'uid': widget.uid}),
+                                    ),
                                   ]),
                                 ),
 
@@ -119,12 +129,8 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                             textColor: primaryColor,
                                             borderColor: Colors.grey,
                                             function: () async {
+                                              context.go('/LoginScreen');
                                               await AuthMethods().signOut();
-                                              Navigator.of(context).pushReplacement(
-                                                MaterialPageRoute(
-                                                  builder: (context) => const LoginScreen(),
-                                                ),
-                                              );
                                             },
                                           )
                                         : isFollowing
@@ -138,7 +144,6 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                                     FirebaseAuth.instance.currentUser!.uid,
                                                     userData['uid'],
                                                   );
-
                                                   setState(() {
                                                     isFollowing = false;
                                                     followers--;
@@ -196,7 +201,7 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                           children: [
                             PersonalPostTab(uid: widget.uid, postLen: postLen),
                             const MyReelsTab(),
-                            const TagedMeTab(),
+                            const TaggedMeTab(),
                           ],
                         ),
                       ),

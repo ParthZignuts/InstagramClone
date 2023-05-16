@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../view.dart';
 import '../../../core/core.dart';
 
@@ -59,15 +58,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       showSnackbar(result, context);
     } else {
       // ignore: use_build_context_synchronously
-    context.go('/MainScreen');
+      context.go('/MainScreen');
       // ignore: use_build_context_synchronously
       showSnackbar('SignUp Successfully', context);
     }
   }
 
-  ///navigate to loginpage
+  ///navigate to loginPage
   void navigateToLoginPage() {
-  context.go('/LoginScreen');
+    context.go('/LoginScreen');
   }
 
   @override
@@ -75,13 +74,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.symmetric( vertical: 90),
+            padding: const EdgeInsets.symmetric(vertical: 90),
             child: Container(
               padding: MediaQuery.of(context).size.width > webScreenSize
-                  ? EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width / 3)
+                  ? EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 3)
                   : const EdgeInsets.symmetric(horizontal: 32),
               width: double.infinity,
               child: Column(

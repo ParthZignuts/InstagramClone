@@ -9,6 +9,14 @@ class PostDetailedView extends StatefulWidget {
   @override
   State<PostDetailedView> createState() => _PostDetailedViewState();
 }
+/// get all post as a stream that match postId
+Stream<List<QueryDocumentSnapshot>> getPostAsStream(String postId) {
+  return FirebaseFirestore.instance
+      .collection('posts')
+      .where('postId', isEqualTo: postId)
+      .snapshots()
+      .map((querySnapshot) => querySnapshot.docs);
+}
 
 class _PostDetailedViewState extends State<PostDetailedView> {
   @override
@@ -21,7 +29,7 @@ class _PostDetailedViewState extends State<PostDetailedView> {
         ),
         centerTitle: false,
         leading: IconButton(
-          onPressed: () =>Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(CupertinoIcons.left_chevron),
         ),
       ),
@@ -48,13 +56,5 @@ class _PostDetailedViewState extends State<PostDetailedView> {
         ],
       ),
     );
-  }
-
-  Stream<List<QueryDocumentSnapshot>> getPostAsStream(String postId) {
-    return FirebaseFirestore.instance
-        .collection('posts')
-        .where('postId', isEqualTo: postId)
-        .snapshots()
-        .map((querySnapshot) => querySnapshot.docs);
   }
 }

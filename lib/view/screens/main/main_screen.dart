@@ -1,15 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import '../../../utils/colors.dart';
-import '../../responsive/responsive.dart';
-import '../login/login_screen.dart';
+import 'package:instagram_clone/view/view.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  StreamBuilder(
+    return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
@@ -40,24 +37,31 @@ class MainScreen extends StatelessWidget {
     );
   }
 }
+
 Future<bool> _onWillPop(BuildContext context) async {
   return (await showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      backgroundColor: primaryColor,
-      title: const Text('Are you sure?',style: TextStyle(color: Colors.black),),
-      content: const Text('Do you want to exit the app?',style: TextStyle(color: Colors.black),),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('No'),
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: primaryColor,
+          title: const Text(
+            'Are you sure?',
+            style: TextStyle(color: Colors.black),
+          ),
+          content: const Text(
+            'Do you want to exit the app?',
+            style: TextStyle(color: Colors.black),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Yes'),
+            ),
+          ],
         ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Yes'),
-        ),
-      ],
-    ),
-  )) ??
+      )) ??
       false;
 }

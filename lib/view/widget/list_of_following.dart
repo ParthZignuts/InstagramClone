@@ -1,53 +1,66 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instagram_clone/view/view.dart';
+import 'package:go_router/go_router.dart';
 
-class ListOfFollowing extends StatefulWidget {
-  const ListOfFollowing({Key? key, required this.userId}) : super(key: key);
-  final String userId;
+class Following {
+  final String uid;
+  final String? username;
+  final String? photoUrl;
 
-  @override
-  State<ListOfFollowing> createState() => _ListOfFollowingState();
+  Following({required this.uid, this.username, this.photoUrl});
 }
 
-class _ListOfFollowingState extends State<ListOfFollowing> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+class FollowingList extends StatelessWidget {
+  final String uid;
+
+  FollowingList({required this.uid});
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: _firestore.collection('users').doc(widget.userId).snapshots(),
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+        if (!snapshot.hasData) {
+          return const CircularProgressIndicator();
         }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
+        var followersList = snapshot.data!.data()?['following'] as List<dynamic>;
 
-        if (!snapshot.hasData || !snapshot.data!.exists) {
-          return Text('User not found');
-        }
+        return ListView.builder(
+          itemCount: followersList.length,
+          itemBuilder: (context, index) {
+            var followerUid = followersList[index];
+            return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(followerUid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const SizedBox();
+                }
 
-        Map<String, dynamic>? userData = snapshot.data!.data();
+                var followerData = snapshot.data!.data();
+                var follower = Following(
+                  uid: followerUid,
+                  username: followerData?['userName'],
+                  photoUrl: followerData?['photoUrl'],
+                );
 
-        if (userData != null) {
-          List<String> followers = List<String>.from(userData['following'] ?? []);
-          List<String> photoUrl = List<String>.from(userData['photoUrl'] ?? []);
-          List<String> userName = List<String>.from(userData['userName'] ?? []);
-
-          // Use the 'followers' and 'following' lists as needed
-          return   ListView.builder(
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(userName[index]),
-                leading: CircleAvatar(backgroundImage: NetworkImage(photoUrl[index])),
-              );
-            },
-          );
-        }
-
-        return Text('User data is empty');
+                return ListTile(
+                  onTap: ()=>  context.push('/SearchedUser/${followerData?['uid']}'),
+                  title: Text(follower.username ?? ''),
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(follower.photoUrl ?? ''),
+                  ),
+                );
+              },
+            );
+          },
+        );
       },
     );
   }

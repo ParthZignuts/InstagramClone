@@ -21,7 +21,7 @@ class _TextFieldInputState extends State<TextFieldInput> {
       borderSide: Divider.createBorderSide(context),
     );
     return Padding(
-      padding: const EdgeInsets.only(top: 12.0,bottom: 12.0),
+      padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
       child: TextField(
         decoration: InputDecoration(
           hintText: widget.hintText,

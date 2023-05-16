@@ -43,7 +43,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
         showSnackbar(res, context);
       }
     } catch (err) {
-      print(err.toString());
       showSnackbar(err.toString(), context);
     }
   }
@@ -101,6 +100,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     ///if image not selected then it show's for the select image other wise post screen
     return _postFile == null
         ? Center(

@@ -11,4 +11,5 @@ export 'package:instagram_clone/view/screens/comments/comments_screen.dart';
 export './chat/chat_screen.dart';
 export './chat/personal_chat_screen.dart';
 export './feed/feed_screen_page_view.dart';
-export './listoffollowandfollowers/list_of_followers_and_following.dart';
+export './listoffollowandfollowers/followers_and_following_list.dart';
+export './editprofile/edit_profile.dart';

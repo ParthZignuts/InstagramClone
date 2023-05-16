@@ -50,6 +50,41 @@ class AuthMethods {
     return res;
   }
 
+  ///Update user profile
+  Future<String> updateUser({
+    required String uid,
+    required String userName,
+    required String bio,
+    required Uint8List file,
+  }) async {
+    String res = 'Please Fill All The Form Field!!';
+    try {
+      if (userName.isNotEmpty && bio.isNotEmpty && file != null) {
+        // Update user data
+        String photoUrl = await StorageMthods().uploadImageToStorage('profilePics', file, false);
+
+        // Retrieve the user document from the database
+        DocumentReference userRef = _firestore.collection('users').doc(uid);
+        DocumentSnapshot userSnapshot = await userRef.get();
+
+        if (userSnapshot.exists) {
+          // Update the user document
+          await userRef.update({
+            'bio': bio,
+            'photoUrl': photoUrl,
+            'userName': userName,
+          });
+          res = 'Success';
+        } else {
+          res = 'User not found';
+        }
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
   ///Logging User
   Future<String> loginUser({
     required String email,
@@ -74,8 +109,8 @@ class AuthMethods {
     }
     return isValid;
   }
+
   Future<void> signOut() async {
     await _auth.signOut();
   }
-
 }

@@ -12,5 +12,9 @@ pickImage(ImageSource source) async {
 }
 
 showSnackbar(String content, BuildContext context) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)));
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+    content,
+    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  )));
 }

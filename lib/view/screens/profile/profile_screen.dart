@@ -27,11 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getData();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
+  ///fetch the userdata to show in profile based on particular uid
   getData() async {
     setState(() {
       isLoading = true;
@@ -84,11 +80,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
-                    child: Text(
-                      'Create',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
                   ),
                   const Divider(),
                   ListTile(
@@ -112,51 +103,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ///to show bottomSheet that include option to upload socialMedia  activities
   showBottomSheet() {
     showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          // <-- SEE HERE
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(25.0),
-          ),
+      context: context,
+      shape: const RoundedRectangleBorder(
+        // <-- SEE HERE
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
         ),
-        builder: (context) {
-          return SizedBox(
-            height: 200,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                    height: 2,
-                    width: 50,
-                    decoration: const BoxDecoration(color: primaryColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
+      ),
+      builder: (context) {
+        return SizedBox(
+          height: 200,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  height: 2,
+                  width: 50,
+                  decoration: const BoxDecoration(color: primaryColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
+                  child: Text(
+                    'Create',
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
-                    child: Text(
-                      'Create',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const Divider(),
-                  ListTile(
-                    onTap: () => () {},
-                    leading: Image.asset('assets/images/reel.png', height: 30, color: primaryColor),
-                    title: const Text('Reel'),
-                  ),
-                  ListTile(
-                    onTap: () {},
-                    leading: Image.asset('assets/images/post.png', height: 30, color: primaryColor),
-                    title: const Text('Post'),
-                  ),
-                ],
-              ),
+                ),
+                const Divider(),
+                ListTile(
+                  onTap: () {},
+                  leading: Image.asset('assets/images/reel.png', height: 30, color: primaryColor),
+                  title: const Text('Reel'),
+                ),
+                ListTile(
+                  onTap: () {},
+                  leading: Image.asset('assets/images/post.png', height: 30, color: primaryColor),
+                  title: const Text('Post'),
+                ),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -180,6 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              /// appbar with username and some other options
                               Row(
                                 children: [
                                   Text(
@@ -198,9 +196,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                   CircleAvatar(backgroundImage: NetworkImage(userData['photoUrl']), maxRadius: 40),
-                                  PostFolloweFollowingStatus(title: 'Posts', values: postLen,onPressed:()=> context.push('/ListOfFollowing')),
-                                  PostFolloweFollowingStatus(title: 'Followers', values: followers,onPressed:()=> context.push('/ListOfFollowing')),
-                                  PostFolloweFollowingStatus(title: 'Following', values: following,onPressed:()=> context.push('/ListOfFollowing')),
+                                  PostFollowerFollowingStatus(title: 'Posts', values: postLen, onPressed: () => () {}),
+                                  PostFollowerFollowingStatus(
+                                    title: 'Followers',
+                                    values: followers,
+                                    onPressed: () => context.pushNamed('FollowersAndFollowingList',
+                                        queryParameters: {'userName': userData['userName'], 'uid': widget.uid}),
+                                  ),
+                                  PostFollowerFollowingStatus(
+                                    title: 'Following',
+                                    values: following,
+                                    onPressed: () => context.pushNamed('FollowersAndFollowingList',
+                                        queryParameters: {'userName': userData['userName'], 'uid': widget.uid}),
+                                  ),
                                 ]),
                               ),
 
@@ -216,7 +224,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   EditShareProfileButton(
-                                    onPressed: () {},
+                                    onPressed: () => context.pushNamed('UpdateProfile', queryParameters: {
+                                      'photoUrl': userData['photoUrl'],
+                                      'uid': userData['uid'],
+                                      'userName': userData['userName'],
+                                      'bio': userData['bio']
+                                    }),
                                     btnTitle: 'Edit Profile',
                                   ),
                                   EditShareProfileButton(
@@ -246,6 +259,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ];
                 },
                 scrollDirection: Axis.vertical,
+
+                /// tab controller to show post, reels and tagged post
                 body: DefaultTabController(
                   length: 3,
                   child: Column(
@@ -273,7 +288,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               postLen: postLen,
                             ),
                             const MyReelsTab(),
-                            const TagedMeTab(),
+                            const TaggedMeTab(),
                           ],
                         ),
                       ),
