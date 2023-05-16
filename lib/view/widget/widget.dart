@@ -15,3 +15,4 @@ export './follow_button.dart';
 export './list_of_followers.dart';
 export './list_of_following.dart';
 export 'package:lottie/lottie.dart';
+export './reels_like_icon.dart';

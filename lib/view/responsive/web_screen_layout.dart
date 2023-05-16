@@ -93,7 +93,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
           const FeedScreen(),
           const SearchScreen(),
           const AddPostScreen(),
-          const ReelsScreen(),
+           ReelsScreen(),
           ProfileScreen(
             uid: FirebaseAuth.instance.currentUser!.uid,
           ),

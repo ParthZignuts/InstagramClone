@@ -13,7 +13,7 @@ class Following {
 class FollowingList extends StatelessWidget {
   final String uid;
 
-  FollowingList({required this.uid});
+  const FollowingList({super.key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
