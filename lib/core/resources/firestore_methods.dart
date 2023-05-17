@@ -124,4 +124,23 @@ class FireStoreMethods {
       print(e.toString());
     }
   }
+
+  /// for creating chatRoom For Every Users conversation
+  createChatRoom(String chatRoomId, Map<String, dynamic> chatRoomMap) {
+    _firestore.collection('ChatRoom').doc(chatRoomId).set(chatRoomMap).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  ///add all the chats into our chat room
+  addConversationsMessages(String chatRoomId, Map<String, dynamic> messageMap) {
+    _firestore.collection('ChatRoom').doc(chatRoomId).collection('chats').add(messageMap).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  ///get all chats from chatRoom
+  getConversationsMessages(String chatRoomId) {
+    _firestore.collection('ChatRoom').doc(chatRoomId).collection('chats').snapshots();
+  }
 }

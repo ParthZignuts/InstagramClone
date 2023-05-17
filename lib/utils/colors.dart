@@ -11,3 +11,5 @@ const secondaryColor = Colors.grey;
  const purpleLinear1 = Color(0xFFEE504A);
  const purpleLinear2 = Color(0xFFC72C9D);
  const purpleLinear3 = Color(0xFF851E92);
+ const senderMsgBubbleColor= Color(0xFF1a759f);
+ const receiverMsgBubbleColor= Color(0xFF52b69a);

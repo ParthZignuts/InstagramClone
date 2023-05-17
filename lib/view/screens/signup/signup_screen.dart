@@ -76,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 90),
+            padding: const EdgeInsets.symmetric(vertical: 60),
             child: Container(
               padding: MediaQuery.of(context).size.width > webScreenSize
                   ? EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width / 3)

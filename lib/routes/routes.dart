@@ -77,6 +77,7 @@ final router = GoRouter(
         userName: state.queryParameters['userName']!,
         photoUrl: state.queryParameters['photoUrl']!,
         uid: state.queryParameters['uid']!,
+        chatRoomId: state.queryParameters['chatRoomId']!,
       ),
     ),
 

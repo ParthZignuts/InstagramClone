@@ -4,6 +4,7 @@ import 'package:instagram_clone/view/view.dart';
 
 class ContentScreen extends StatefulWidget {
   final String? src;
+
   const ContentScreen({Key? key, this.src}) : super(key: key);
 
   @override
