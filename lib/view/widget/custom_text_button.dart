@@ -19,7 +19,7 @@ class CustomTextButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           title,
-          style: const TextStyle(color: primaryColor, fontWeight: FontWeight.w500, fontSize: 18),
+          style: const TextStyle(color: mobileBackgroundColor, fontWeight: FontWeight.w500, fontSize: 18),
         ),
       ),
     );

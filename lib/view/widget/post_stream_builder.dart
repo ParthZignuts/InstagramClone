@@ -7,10 +7,13 @@ class PostStreamBuilder extends StatelessWidget {
     super.key,
   });
 
+  static final Stream<QuerySnapshot<Map<String, dynamic>>> stream =
+      FirebaseFirestore.instance.collection('posts').orderBy('datePublished', descending: true).snapshots();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('posts').orderBy('datePublished', descending: true).snapshots(),
+      stream: stream,
       builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(

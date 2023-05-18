@@ -76,12 +76,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Container(
                     height: 2,
                     width: 50,
-                    decoration: const BoxDecoration(color: primaryColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    decoration: const BoxDecoration(color: mobileBackgroundColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
                   ),
-                  const Divider(),
+                  const Divider(color: mobileBackgroundColor,),
                   ListTile(
                     onTap: () {
                       AuthMethods().signOut();
@@ -89,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     leading: const Icon(
                       Icons.logout,
-                      color: primaryColor,
+                      color: mobileBackgroundColor,
                     ),
                     title: const Text('SignOut'),
                   ),
@@ -122,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Container(
                   height: 2,
                   width: 50,
-                  decoration: const BoxDecoration(color: primaryColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  decoration: const BoxDecoration(color: mobileBackgroundColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
@@ -132,15 +132,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                const Divider(),
+                const Divider(color: mobileBackgroundColor),
                 ListTile(
                   onTap: () {},
-                  leading: Image.asset('assets/images/reel.png', height: 30, color: primaryColor),
+                  leading: Image.asset('assets/images/reel.png', height: 30, color: mobileBackgroundColor),
                   title: const Text('Reel'),
                 ),
                 ListTile(
                   onTap: () {},
-                  leading: Image.asset('assets/images/post.png', height: 30, color: primaryColor),
+                  leading: Image.asset('assets/images/post.png', height: 30, color: mobileBackgroundColor),
                   title: const Text('Post'),
                 ),
               ],
@@ -169,7 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
-                      backgroundColor: mobileBackgroundColor,
+                      backgroundColor: scaffoldBackgroundColor,
                       expandedHeight: 325,
                       flexibleSpace: FlexibleSpaceBar(
                         background: Padding(
@@ -182,7 +182,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 children: [
                                   Text(
                                     userData['userName'],
-                                    style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 25),
+                                    style: const TextStyle(color: mobileBackgroundColor, fontWeight: FontWeight.bold, fontSize: 25),
                                   ),
                                   const Spacer(),
                                   IconButton(onPressed: () => showBottomSheet(), icon: const Icon(Icons.add_box_outlined)),
@@ -246,6 +246,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         onPressed: () {},
                                         icon: const Icon(
                                           Icons.add_reaction_outlined,
+                                          color: primaryColor,
                                           size: 20,
                                         ),
                                       )),
@@ -266,15 +267,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     children: [
                       TabBar(
+                        indicatorColor: mobileBackgroundColor,
                         tabs: [
                           Tab(
-                            icon: Image.asset('assets/images/post.png', color: primaryColor, width: 24),
+                            icon: Image.asset('assets/images/post.png', color: mobileBackgroundColor, width: 24),
                           ),
                           Tab(
-                            icon: Image.asset('assets/images/reel.png', color: primaryColor, width: 24),
+                            icon: Image.asset('assets/images/reel.png', color: mobileBackgroundColor, width: 24),
                           ),
                           Tab(
-                            icon: Image.asset('assets/images/tagpeople.png', color: primaryColor, width: 24),
+                            icon: Image.asset('assets/images/tagpeople.png', color: mobileBackgroundColor, width: 24),
                           ),
                         ],
                         indicatorSize: TabBarIndicatorSize.tab,

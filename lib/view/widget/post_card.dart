@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
@@ -25,6 +26,26 @@ class _PostCardState extends State<PostCard> {
   bool isAnimating = false;
   User? user;
   int commentLength = 0;
+  double _scale = 1.0;
+  double _previousScale = 1.0;
+
+  ///for zooming effect in photos
+  void _onScaleStart(ScaleStartDetails details) {
+    _previousScale = _scale;
+    setState(() {});
+  }
+
+  void _onScaleUpdate(ScaleUpdateDetails details) {
+    setState(() {
+      _scale = _previousScale * details.scale;
+    });
+  }
+
+  void _onScaleEnd(ScaleEndDetails details) {
+    setState(() {
+      _scale = 1.0;
+    });
+  }
 
   @override
   void initState() {
@@ -121,6 +142,20 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 GestureDetector(
+                  onTapUp: (_) {
+                    HapticFeedback.mediumImpact(); // Provide haptic feedback when long press occurs
+                    setState(() {
+                      _scale = 2.0; // Set the initial zoom scale when long press occurs
+                    });
+                  },
+                  onTapDown: (_) {
+                    setState(() {
+                      _scale = 1.0; // Reset the zoom scale when the long press ends
+                    });
+                  },
+                  onScaleStart: _onScaleStart,
+                  onScaleUpdate: _onScaleUpdate,
+                  onScaleEnd: _onScaleEnd,
                   onDoubleTap: () async {
                     await FireStoreMethods().likePost(widget._snap['postId'], user!.uid, widget._snap['likes'], true);
                     setState(() {
@@ -130,7 +165,16 @@ class _PostCardState extends State<PostCard> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Image.network(widget._snap['photoUrl'], fit: BoxFit.fill),
+                      ClipRect(
+                        child: Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.diagonal3Values(_scale, _scale, 1.0),
+                          child: Image.network(
+                            widget._snap['photoUrl'],
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
                       AnimatedOpacity(
                         duration: const Duration(milliseconds: 200),
                         opacity: isAnimating ? 1 : 0,
@@ -188,7 +232,7 @@ class _PostCardState extends State<PostCard> {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 3.0, bottom: 3.0, left: 15.0),
+                  padding: const EdgeInsets.only(bottom: 3.0, left: 15.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

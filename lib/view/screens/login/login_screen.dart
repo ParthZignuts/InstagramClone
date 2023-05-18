@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ///svg image
               Padding(
                 padding: const EdgeInsets.only(bottom: 50.0),
-                child: SvgPicture.asset('assets/images/ic_instagram.svg', color: primaryColor, height: 64),
+                child: SvgPicture.asset('assets/images/ic_instagram.svg', color: mobileBackgroundColor, height: 64,),
               ),
 
               /// textfield input for username
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(4)),
                       ),
-                      color: blueColor,
+                      color: senderMsgBubbleColor,
                     ),
                     child: _isLoading
                         ? const Center(
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 )))
                         : const Text(
                             'Login',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,color: primaryColor),
                           ),
                   ),
                 ),
@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () => navigateToSignUp(),
                       child: const Text(
                         'Sign Up',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: blueColor, fontSize: 16),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: senderMsgBubbleColor, fontSize: 16),
                       ),
                     ),
                   ],

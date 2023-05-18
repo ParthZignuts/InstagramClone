@@ -18,15 +18,11 @@ class FollowingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      stream: FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .snapshots(),
+      stream: FirebaseFirestore.instance.collection('users').doc(uid).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
         }
-
         var followersList = snapshot.data!.data()?['following'] as List<dynamic>;
 
         return ListView.builder(
@@ -34,10 +30,7 @@ class FollowingList extends StatelessWidget {
           itemBuilder: (context, index) {
             var followerUid = followersList[index];
             return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(followerUid)
-                  .snapshots(),
+              stream: FirebaseFirestore.instance.collection('users').doc(followerUid).snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const SizedBox();
@@ -51,7 +44,7 @@ class FollowingList extends StatelessWidget {
                 );
 
                 return ListTile(
-                  onTap: ()=>  context.push('/SearchedUser/${followerData?['uid']}'),
+                  onTap: () => context.push('/SearchedUser/${followerData?['uid']}'),
                   title: Text(follower.username ?? ''),
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(follower.photoUrl ?? ''),

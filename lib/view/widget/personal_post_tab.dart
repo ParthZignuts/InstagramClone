@@ -49,6 +49,7 @@ class PersonalPostTab extends StatelessWidget {
               children: [
                 Lottie.asset(
                   'assets/animation/nophotosuploaded.json',
+                  repeat: false,
                 ),
                 const Text(
                   'No post yet',

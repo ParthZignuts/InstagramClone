@@ -74,11 +74,23 @@ class FireStoreMethods {
   }
 
   /// for deleting comments on post
-  Future<String> deleteComments(String postId, String commentId) async {
+
+  Future<String> deleteComments(String postId, String commentId, String uid) async {
     String res = "Some error occurred";
     try {
-      await _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).delete();
-      res = 'success';
+      DocumentSnapshot<Map<String, dynamic>> commentSnapshot = await _firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .doc(commentId)
+          .get();
+
+      if (commentSnapshot.exists && commentSnapshot.data()?['uid'] == uid) {
+        await _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).delete();
+        res = 'success';
+      } else {
+        res = 'You are not authorized to delete this comment.';
+      }
     } catch (err) {
       res = err.toString();
     }
@@ -143,4 +155,6 @@ class FireStoreMethods {
   getConversationsMessages(String chatRoomId) {
     _firestore.collection('ChatRoom').doc(chatRoomId).collection('chats').snapshots();
   }
+
+
 }

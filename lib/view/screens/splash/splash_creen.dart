@@ -35,12 +35,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
-          Center(child: Image.asset('assets/images/instalogo.png', alignment: Alignment.center, height: 100)),
+          Center(child: Image.asset('assets/images/instalogo.png', alignment: Alignment.center, height: 100,)),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.only(bottom: 50.0),

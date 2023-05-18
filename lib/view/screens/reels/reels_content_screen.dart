@@ -31,6 +31,7 @@ class _ContentScreenState extends State<ContentScreen> {
       autoPlay: true,
       showControls: false,
       looping: true,
+      aspectRatio: 510/1000
     );
     setState(() {});
   }
@@ -59,8 +60,8 @@ class _ContentScreenState extends State<ContentScreen> {
                 ),
               )
             : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [CircularProgressIndicator(), SizedBox(height: 10), Text('Loading...')],
+          mainAxisAlignment: MainAxisAlignment.center,
+                children: const [Center(child: CircularProgressIndicator()), SizedBox(height: 10), Text('Loading...')],
               ),
         (_liked)
             ? Center(

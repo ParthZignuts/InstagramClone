@@ -44,9 +44,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
   }
 
   ///delete selected comment
-  void deleteComment(String postId, String commentId) {
-    FireStoreMethods().deleteComments(postId, commentId);
-    print('delete method call');
+  void deleteComment(String postId, String commentId, String uid) {
+    FireStoreMethods().deleteComments(postId, commentId, uid);
   }
 
   ///comments stream
@@ -62,16 +61,20 @@ class _CommentsScreenState extends State<CommentsScreen> {
     final User? user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
+        backgroundColor: scaffoldBackgroundColor,
         title: const Text(
           'Comments',
+          style: TextStyle(color: mobileBackgroundColor),
         ),
         centerTitle: false,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(CupertinoIcons.left_chevron),
+          icon: const Icon(
+            CupertinoIcons.left_chevron,
+            color: mobileBackgroundColor,
+          ),
         ),
       ),
       body: StreamBuilder(
@@ -95,14 +98,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (ctx, index) => CommentCard(
                       snap: snapshot.data!.docs[index],
-                      onDelete: () => deleteComment(widget.postId, snapshot.data!.docs[index].data()['commentId']),
+                      onDelete: () => deleteComment(widget.postId, snapshot.data!.docs[index].data()['commentId'], user!.uid),
                     ),
                   ),
                 )
               : const Center(
                   child: Text(
                     'No Any Comments!',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: secondaryColor),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: mobileBackgroundColor),
                   ),
                 );
         },

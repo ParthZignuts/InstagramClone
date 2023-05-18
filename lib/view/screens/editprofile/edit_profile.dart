@@ -69,9 +69,10 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        backgroundColor: mobileBackgroundColor,
-        leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close)),
-        title: const Text('Edit Profile'),
+        elevation: 0,
+        backgroundColor: scaffoldBackgroundColor,
+        leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close,color: mobileBackgroundColor,)),
+        title: const Text('Edit Profile',style: TextStyle(color: mobileBackgroundColor),),
         actions: [
           IconButton(
               onPressed: () => updateProfile(),
@@ -107,18 +108,18 @@ class _EditProfileState extends State<EditProfile> {
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
-                labelStyle: TextStyle(color: primaryColor, fontSize: 18),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                labelStyle: TextStyle(color: mobileBackgroundColor, fontSize: 18),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
                 label: Text('UserName'),
               ),
             ),
             TextField(
               controller: _bioController,
               decoration: const InputDecoration(
-                labelStyle: TextStyle(color: primaryColor, fontSize: 18),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                labelStyle: TextStyle(color: mobileBackgroundColor, fontSize: 18),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
                 label: Text('Bio'),
               ),
             ),

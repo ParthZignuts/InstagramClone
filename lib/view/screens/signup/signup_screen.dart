@@ -88,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ///svg image
                   Padding(
                     padding: const EdgeInsets.only(bottom: 50.0),
-                    child: SvgPicture.asset('assets/images/ic_instagram.svg', color: primaryColor, height: 64),
+                    child: SvgPicture.asset('assets/images/ic_instagram.svg', color: mobileBackgroundColor, height: 64),
                   ),
 
                   ///profile picture
@@ -145,6 +145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: InkWell(
                       onTap: () => signUp(),
                       child: Container(
+
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         width: double.infinity,
                         alignment: Alignment.center,
@@ -152,7 +153,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(4)),
                           ),
-                          color: blueColor,
+                          color: senderMsgBubbleColor,
                         ),
                         child: _isLoading
                             ? const Center(
@@ -164,7 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     )))
                             : const Text(
                                 'Signup',
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,color:primaryColor),
                               ),
                       ),
                     ),
@@ -190,7 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               onTap: () => navigateToLoginPage(),
               child: const Text(
                 'Login',
-                style: TextStyle(fontWeight: FontWeight.bold, color: blueColor, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.bold, color: senderMsgBubbleColor, fontSize: 16),
               ),
             ),
           ],

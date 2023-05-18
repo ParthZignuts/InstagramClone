@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/utils/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -74,11 +75,10 @@ class CommentCard extends StatelessWidget {
                         children: [
                           TextSpan(
                               text: snap.data()['name'],
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              )),
+                              style: const TextStyle(fontWeight: FontWeight.bold, color: mobileBackgroundColor)),
                           TextSpan(
                             text: ' ${snap.data()['text']}',
+                            style: const TextStyle(fontWeight: FontWeight.w500, color: mobileBackgroundColor),
                           ),
                         ],
                       ),
@@ -90,7 +90,7 @@ class CommentCard extends StatelessWidget {
                           snap.data()['datePublished'].toDate(),
                         ),
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
                       ),

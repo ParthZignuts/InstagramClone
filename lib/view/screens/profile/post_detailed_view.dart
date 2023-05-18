@@ -23,14 +23,16 @@ class _PostDetailedViewState extends State<PostDetailedView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        title: const Text(
+        backgroundColor: scaffoldBackgroundColor,
+        elevation: 0,
+        title: Text(
           'Posts',
+          style: TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),
         ),
         centerTitle: false,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(CupertinoIcons.left_chevron),
+          icon: const Icon(CupertinoIcons.left_chevron,color: mobileBackgroundColor,),
         ),
       ),
       body: Column(

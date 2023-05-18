@@ -17,7 +17,7 @@ class EditShareProfileButton extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.35,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: darkGray,
+            primary: mobileBackgroundColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           ),
           onPressed: onPressed,

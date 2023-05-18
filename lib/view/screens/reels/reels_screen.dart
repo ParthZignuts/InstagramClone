@@ -15,37 +15,17 @@ class ReelsScreen extends StatelessWidget {
    ReelsScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            //We need swiper for every content
-            Swiper(
-              itemBuilder: (BuildContext context, int index) {
-                return ContentScreen(
-                  src: videos[index],
-                );
-              },
-              itemCount: videos.length,
-              scrollDirection: Axis.vertical,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    'Flutter Shorts',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Icon(Icons.camera_alt),
-                ],
-              ),
-            ),
-          ],
+    return SafeArea(
+      child: Scaffold(
+
+        body: Swiper(
+          itemBuilder: (BuildContext context, int index) {
+            return ContentScreen(
+              src: videos[index],
+            );
+          },
+          itemCount: videos.length,
+          scrollDirection: Axis.vertical,
         ),
       ),
     );

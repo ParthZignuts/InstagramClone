@@ -109,8 +109,19 @@ class AuthMethods {
     }
     return isValid;
   }
-
+/// For SignOut To user account
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+//   ///push notifications
+//   static FirebaseMessaging messaging=FirebaseMessaging.instance;
+// late String fcmToken;
+//   ///for getting firebase messaging token
+//   static Future<void> getFirebaseMessagingToken()async {
+//     await messaging.requestPermission();
+//      messaging.getToken().then((value) {if(value !=null){
+//       print(value);
+//     }} );
+//   }
 }

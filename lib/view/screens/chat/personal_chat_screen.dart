@@ -73,7 +73,9 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
+        backgroundColor: scaffoldBackgroundColor,
+        centerTitle: false,
+        elevation: 0,
         title: GestureDetector(
           onTap: () => context.push('/SearchedUser/${widget.uid}'),
           child: Row(
@@ -81,15 +83,15 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
               CircleAvatar(backgroundImage: NetworkImage(widget.photoUrl)),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: Text(widget.userName),
+                child: Text(widget.userName,style: TextStyles.h3Bold.copyWith(color: mobileBackgroundColor),),
               ),
             ],
           ),
         ),
-        leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(CupertinoIcons.left_chevron)),
+        leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(CupertinoIcons.left_chevron,color: mobileBackgroundColor,)),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.call)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.videocam_rounded)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.call,color: mobileBackgroundColor,)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.videocam_rounded,color: mobileBackgroundColor,)),
         ],
       ),
       body: Padding(
@@ -170,7 +172,6 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
       ),
       bottomSheet: Container(
         height: 80,
-        color: Colors.black,
         child: Padding(
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4),
           child: Container(
@@ -191,7 +192,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                     contentPadding: const EdgeInsets.only(bottom: 20),
                     prefixIcon: const Icon(
                       Icons.camera_alt_outlined,
-                      color: primaryColor,
+                      color: mobileBackgroundColor,
                     ),
                     suffixIcon: isEnableToSend
                         ? TextButton(
@@ -211,7 +212,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                                   onPressed: () {},
                                   icon: const Icon(
                                     Icons.mic,
-                                    color: primaryColor,
+                                    color: mobileBackgroundColor,
                                   ),
                                 ),
                                 IconButton(
@@ -220,7 +221,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                                   onPressed: () {},
                                   icon: const Icon(
                                     Icons.photo,
-                                    color: primaryColor,
+                                    color: mobileBackgroundColor,
                                   ),
                                 ),
                                 IconButton(
@@ -229,7 +230,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                                   onPressed: () {},
                                   icon: const Icon(
                                     Icons.emoji_emotions,
-                                    color: primaryColor,
+                                    color: mobileBackgroundColor,
                                   ),
                                 ),
                               ],

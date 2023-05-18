@@ -108,12 +108,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
           )
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: mobileBackgroundColor,
+              backgroundColor: scaffoldBackgroundColor,
+              centerTitle: false,
               leading: IconButton(
                 onPressed: () => clearFile(),
-                icon: const Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back,color: mobileBackgroundColor,),
               ),
-              title: const Text('Post to'),
+              title:  Text('Post to',style: TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),),
               actions: [
                 TextButton(
                   onPressed: () =>
@@ -181,11 +182,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   ListTile(
                     title: const Text(
                       'Advance settings',
-                      style: TextStyle(color: primaryColor, fontWeight: FontWeight.w500, fontSize: 18),
+                      style: TextStyle(color: mobileBackgroundColor, fontWeight: FontWeight.w500, fontSize: 18),
                     ),
                     trailing: IconButton(
                       onPressed: () {},
-                      icon: const Icon(Icons.chevron_right),
+                      icon: const Icon(Icons.chevron_right,color: mobileBackgroundColor,),
                     ),
                   )
                 ],

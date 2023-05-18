@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:instagram_clone/view/view.dart';
 
@@ -14,22 +15,29 @@ class FollowersAndFollowingList extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             centerTitle: false,
-            backgroundColor: mobileBackgroundColor,
-            title:  Text(userName),
+            backgroundColor: scaffoldBackgroundColor,
+            elevation: 0,
+            title:  Text(userName,style: const TextStyle(color: mobileBackgroundColor),),
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(CupertinoIcons.left_chevron,color: mobileBackgroundColor,),
+            ),
             bottom: const TabBar(
-              indicatorColor: primaryColor,
+              indicatorColor: mobileBackgroundColor,
               indicatorSize: TabBarIndicatorSize.label,
               tabs: [
                 Tab(
                   icon: Text(
                     "followers",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18,color: mobileBackgroundColor),
                   ),
                 ),
                 Tab(
                   icon: Text(
                     'following',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18,color: mobileBackgroundColor),
                   ),
                 ),
               ],

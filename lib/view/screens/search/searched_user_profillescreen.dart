@@ -72,14 +72,15 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
-                      backgroundColor: mobileBackgroundColor,
+                      backgroundColor: scaffoldBackgroundColor,
+                      elevation: 0,
                       expandedHeight: 352,
                       centerTitle: false,
                       leading:
-                          IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(CupertinoIcons.left_chevron)),
+                          IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(CupertinoIcons.left_chevron,color: mobileBackgroundColor,)),
                       title: Text(
                         userData['userName'],
-                        style: const TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 25),
+                        style:  TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),
                       ),
                       actions: [
                         IconButton(onPressed: () => () {}, icon: const Icon(Icons.menu)),
@@ -127,7 +128,7 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                             text: 'Sign Out',
                                             backgroundColor: mobileBackgroundColor,
                                             textColor: primaryColor,
-                                            borderColor: Colors.grey,
+                                            borderColor: mobileBackgroundColor,
                                             function: () async {
                                               context.go('/LoginScreen');
                                               await AuthMethods().signOut();
@@ -138,7 +139,7 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                                 text: 'Unfollow',
                                                 backgroundColor: Colors.white,
                                                 textColor: Colors.black,
-                                                borderColor: Colors.grey,
+                                                borderColor: mobileBackgroundColor,
                                                 function: () async {
                                                   await FireStoreMethods().followUser(
                                                     FirebaseAuth.instance.currentUser!.uid,
@@ -182,15 +183,16 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                   child: Column(
                     children: [
                       TabBar(
+                        indicatorColor: mobileBackgroundColor,
                         tabs: [
                           Tab(
-                            icon: Image.asset('assets/images/post.png', color: primaryColor, width: 24),
+                            icon: Image.asset('assets/images/post.png', color: mobileBackgroundColor, width: 24),
                           ),
                           Tab(
-                            icon: Image.asset('assets/images/reel.png', color: primaryColor, width: 24),
+                            icon: Image.asset('assets/images/reel.png', color: mobileBackgroundColor, width: 24),
                           ),
                           Tab(
-                            icon: Image.asset('assets/images/tagpeople.png', color: primaryColor, width: 24),
+                            icon: Image.asset('assets/images/tagpeople.png', color: mobileBackgroundColor, width: 24),
                           ),
                         ],
                         indicatorSize: TabBarIndicatorSize.tab,

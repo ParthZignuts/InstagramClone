@@ -17,7 +17,7 @@ class FeedScreen extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     'assets/images/ic_instagram.svg',
-                    color: primaryColor,
+                    color: mobileBackgroundColor,
                     height: 40,
                   ),
                   const Spacer(),

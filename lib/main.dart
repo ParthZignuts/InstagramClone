@@ -35,7 +35,8 @@ class MyApp extends StatelessWidget {
         routerConfig: router,
         debugShowCheckedModeBanner: false,
         title: 'Instagram',
-        theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
+        theme: ThemeData.light().copyWith(scaffoldBackgroundColor:primaryColor),
+
       ),
     );
   }

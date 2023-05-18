@@ -67,23 +67,23 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.home,
-                    color: _page == 0 ? primaryColor : secondaryColor,
+                    color: _page == 0 ? purpleLinear3 : mobileBackgroundColor ,
                   ),
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.search,
-                    color: _page == 1 ? primaryColor : secondaryColor,
+                    color: _page == 1 ?  purpleLinear3 : mobileBackgroundColor ,
                   ),
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.add_circle, color: _page == 2 ? primaryColor : secondaryColor),
+                  icon: Icon(Icons.add_circle, color: _page == 2 ?   purpleLinear3 : mobileBackgroundColor ),
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(
-                  icon: Image.asset('assets/images/reel.png', color: _page == 3 ? primaryColor : secondaryColor, width: 24),
+                  icon: Image.asset('assets/images/reel.png', color: _page == 3 ?  purpleLinear3 : mobileBackgroundColor , width: 24),
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(

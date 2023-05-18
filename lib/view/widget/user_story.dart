@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/utils/colors.dart';
 
 class UserStory extends StatelessWidget {
   const UserStory({
@@ -24,7 +25,7 @@ class UserStory extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 4.0),
-                child: Text(snap['userName']),
+                child: Text(snap['userName'],style: const TextStyle(fontWeight: FontWeight.w700,),),
               ),
             ],
           ),
