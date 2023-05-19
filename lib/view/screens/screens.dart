@@ -1,4 +1,5 @@
 export './addpost/add_post_screen.dart';
+export './sociomap/socio_map.dart';
 export './feed/feed_screen.dart';
 export './login/login_screen.dart';
 export './reels/reels_screen.dart';

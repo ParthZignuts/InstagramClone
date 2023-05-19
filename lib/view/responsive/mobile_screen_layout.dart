@@ -19,7 +19,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   void initState() {
     super.initState();
     pageController = PageController();
-
   }
 
   @override
@@ -56,7 +55,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 const FeedScreenPageView(),
                 const SearchScreen(),
                 const AddPostScreen(),
-                 ReelsScreen(),
+                const SocioMap(),
+                ReelsScreen(),
                 ProfileScreen(
                   uid: FirebaseAuth.instance.currentUser!.uid,
                 ),
@@ -67,23 +67,29 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.home,
-                    color: _page == 0 ? purpleLinear3 : mobileBackgroundColor ,
+                    color: _page == 0 ? purpleLinear3 : mobileBackgroundColor,
                   ),
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.search,
-                    color: _page == 1 ?  purpleLinear3 : mobileBackgroundColor ,
+                    color: _page == 1 ? purpleLinear3 : mobileBackgroundColor,
                   ),
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.add_circle, color: _page == 2 ?   purpleLinear3 : mobileBackgroundColor ),
+                  icon: Icon(Icons.add_circle, color: _page == 2 ? purpleLinear3 : mobileBackgroundColor),
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(
-                  icon: Image.asset('assets/images/reel.png', color: _page == 3 ?  purpleLinear3 : mobileBackgroundColor , width: 24),
+                  icon: Image.asset('assets/images/sociomap.png',
+                      color: _page == 3 ? purpleLinear3 : mobileBackgroundColor, width: 24),
+                  backgroundColor: primaryColor,
+                ),
+                BottomNavigationBarItem(
+                  icon:
+                      Image.asset('assets/images/reel.png', color: _page == 4 ? purpleLinear3 : mobileBackgroundColor, width: 24),
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(

@@ -55,6 +55,8 @@ dependencies:
   go_router: ^7.0.1
   card_swiper: ^2.0.4
   chewie: ^1.5.0
+  flutter_map: ^4.0.0
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:

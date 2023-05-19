@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/global_variables.dart';
 
+import '../../../utils/utils.dart';
+
 class OptionsScreen extends StatelessWidget {
   const OptionsScreen({super.key});
 
