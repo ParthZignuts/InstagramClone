@@ -55,7 +55,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 const FeedScreenPageView(),
                 const SearchScreen(),
                 const AddPostScreen(),
-                const SocioMap(),
+                 SocioMap(uid: FirebaseAuth.instance.currentUser!.uid,),
                 ReelsScreen(),
                 ProfileScreen(
                   uid: FirebaseAuth.instance.currentUser!.uid,

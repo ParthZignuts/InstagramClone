@@ -73,9 +73,8 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
             onPressed: () => navigationTapped(2),
           ),
           IconButton(
-            icon: Image.asset('assets/images/sociomap.png',
-                color: _page == 3 ? primaryColor : secondaryColor, width: 24),
-            onPressed:()=>navigationTapped(3) ,
+            icon: Image.asset('assets/images/sociomap.png', color: _page == 3 ? primaryColor : secondaryColor, width: 24),
+            onPressed: () => navigationTapped(3),
           ),
           IconButton(
             icon: Image.asset('assets/images/reel.png', color: _page == 4 ? primaryColor : secondaryColor, width: 24),
@@ -98,8 +97,8 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
           const FeedScreen(),
           const SearchScreen(),
           const AddPostScreen(),
-           const SocioMap(),
-           ReelsScreen(),
+          SocioMap(uid: FirebaseAuth.instance.currentUser!.uid,),
+          ReelsScreen(),
           ProfileScreen(
             uid: FirebaseAuth.instance.currentUser!.uid,
           ),

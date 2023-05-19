@@ -11,7 +11,6 @@ class UserProvider extends ChangeNotifier {
   Future<void> fetchUserData() async {
     try {
       _user = await _authMethods.getUserDetail();
-
       notifyListeners();
     } catch (e) {
       print(e.toString());
