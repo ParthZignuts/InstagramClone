@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/utils/colors.dart';
 
 class UserStory extends StatelessWidget {
   const UserStory({

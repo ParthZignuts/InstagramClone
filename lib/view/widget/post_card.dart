@@ -76,8 +76,9 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     user = Provider.of<UserProvider>(context).getUser;
+    bool isDataLoaded = widget._snap.containsKey('photoUrl') && widget._snap.containsKey('profImage');
     return SafeArea(
-      child: widget._snap['photoUrl'] == null
+      child: !isDataLoaded
           ? const Center(
               child: CircularProgressIndicator(),
             )

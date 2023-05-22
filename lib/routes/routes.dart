@@ -24,6 +24,18 @@ final router = GoRouter(
                 return FadeTransition(opacity: CurveTween(curve: Curves.easeIn).animate(animation), child: child);
               });
         }),
+    ///check internet connectivity
+    GoRoute(
+        path: "/ConnectivityCheck",
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+              transitionDuration: const Duration(milliseconds: 450),
+              key: state.pageKey,
+              child:  ConnectivityCheck(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: CurveTween(curve: Curves.easeIn).animate(animation), child: child);
+              });
+        }),
 
     ///AddPost Screen
     GoRoute(

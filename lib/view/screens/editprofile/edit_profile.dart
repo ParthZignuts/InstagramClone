@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:instagram_clone/view/view.dart';
 import '../../../core/resources/auth_methods.dart';
@@ -49,19 +50,20 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       _isLoading = true;
     });
+
     String result =
         await AuthMethods().updateUser(uid: widget.uid, userName: _nameController.text, bio: _bioController.text, file: imgFile!);
-    setState(() {
-      _isLoading = false;
-    });
 
-    if (result != 'Success') {
+    if (result != 'Success' && imgFile == null) {
       // ignore: use_build_context_synchronously
       showSnackbar(result, context);
     } else {
       // ignore: use_build_context_synchronously
       showSnackbar('Profile Update Successfully', context);
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -75,7 +77,13 @@ class _EditProfileState extends State<EditProfile> {
         title: const Text('Edit Profile',style: TextStyle(color: mobileBackgroundColor),),
         actions: [
           IconButton(
-              onPressed: () => updateProfile(),
+              onPressed: () {
+                if (imgFile != null) {
+                  updateProfile();
+                } else {
+                  showSnackbar('Select New Profile Photo to Update Profile', context);
+                }
+              },
               icon: _isLoading
                   ? const SizedBox(
                       height: 20,

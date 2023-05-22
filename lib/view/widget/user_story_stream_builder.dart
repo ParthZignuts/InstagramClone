@@ -38,6 +38,7 @@ class UserStoryStreamBuilder extends StatelessWidget {
             userStories!.removeAt(currentUserIndex!);
             userStories!.insert(0, snapshot.data!.docs[currentUserIndex!]);
 
+
             return ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,

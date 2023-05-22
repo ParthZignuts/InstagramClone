@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
         AuthMethods().getUserDetail();
         FirebaseAuth.instance.authStateChanges();
         // Navigate to the next screen
-        context.go('/MainScreen');
+        context.go('/ConnectivityCheck');
       });
     } catch (e) {
       print(e);
@@ -39,19 +40,25 @@ class _SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
-          Center(child: Image.asset('assets/images/instalogo.png', alignment: Alignment.center, height: 100,)),
+          Center(
+              child: Image.asset(
+            'assets/images/instalogo-removebg-preview.png',
+            alignment: Alignment.center,
+            height: 200,
+          )),
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 50.0),
+            padding: const EdgeInsets.only(bottom: 80.0),
             child: ShaderMask(
               shaderCallback: (Rect bounds) {
                 return const LinearGradient(
                   colors: [purpleLinear1, purpleLinear2, purpleLinear3],
                 ).createShader(bounds);
               },
-              child: const Text(
-                'Instagram',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Colors.pinkAccent),
+              child: SvgPicture.asset(
+                'assets/images/ic_instagram.svg',
+                color: Colors.pink,
+                height: 40,
               ),
             ),
           ),

@@ -16,3 +16,4 @@ export './listoffollowandfollowers/followers_and_following_list.dart';
 export './editprofile/edit_profile.dart';
 export './reels/reels_content_screen.dart';
 export './reels/reels_options_screen.dart';
+export './checknetworkconnectivity/check_network_connectivity.dart';

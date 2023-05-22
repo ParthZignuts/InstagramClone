@@ -69,7 +69,7 @@ class AuthMethods {
   }) async {
     String res = 'Please Fill All The Form Field!!';
     try {
-      if (userName.isNotEmpty && bio.isNotEmpty && file != null) {
+      if (userName.isNotEmpty && bio.isNotEmpty && file != null){
         // Update user data
         String photoUrl = await StorageMthods().uploadImageToStorage('profilePics', file, false);
 
@@ -86,7 +86,7 @@ class AuthMethods {
           });
           res = 'Success';
         } else {
-          res = 'User not found';
+          res = 'Please Select Photo to Update Profile';
         }
       }
     } catch (err) {

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:instagram_clone/core/core.dart';
 import '../../view.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -84,8 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Divider(color: mobileBackgroundColor,),
                   ListTile(
                     onTap: () {
-                      AuthMethods().signOut();
-                      context.go('/LoginScreen');
+                      showMyDialog(context);
                     },
                     leading: const Icon(
                       Icons.logout,
