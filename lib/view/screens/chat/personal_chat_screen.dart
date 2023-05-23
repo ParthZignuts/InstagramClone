@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:instagram_clone/core/resources/resources.dart';
 import 'package:instagram_clone/view/view.dart';
+import 'package:uuid/uuid.dart';
 
 class PersonalChatScreen extends StatefulWidget {
   const PersonalChatScreen(
@@ -22,6 +23,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
   late ScrollController _scrollController;
   bool isEnableToSend = false;
   bool _hasBuiltOnce = false;
+  String? pChatId;
 
   @override
   void initState() {
@@ -34,7 +36,8 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
     _scrollController.dispose();
     super.dispose();
   }
-/// is used to scroll up messages list
+
+  /// is used to scroll up messages list
   void _scrollToBottom() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
@@ -58,15 +61,53 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
 
   ///to send messages
   sendMessaged(String sendBy) {
+    setState(() {
+      pChatId = const Uuid().v1();
+    });
+
     if (chatController.text.isNotEmpty) {
       Map<String, dynamic> messageMap = {
         'message': chatController.text,
         'sendBy': sendBy,
         'timeStamp': DateTime.now(),
+        'pChatId': pChatId,
       };
-      FireStoreMethods().addConversationsMessages(widget.chatRoomId, messageMap);
+      FireStoreMethods().addConversationsMessages(widget.chatRoomId, messageMap, pChatId!);
     }
     chatController.clear();
+  }
+
+  ///unSend messages
+  unSendMessage(String chatId) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          actions: [
+            TextButton(
+                onPressed: () {
+                  print('chatRoomId:${widget.chatRoomId} , pChatId:$chatId , userName : ${widget.userName}');
+                  FireStoreMethods().deleteChat(widget.chatRoomId, chatId, widget.userName);
+                  Navigator.pop(context);
+                },
+                child: Center(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'UnSend',
+                      style: TextStyles.h3Normal.copyWith(color: Colors.red),
+                    ),
+                    const Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                  ],
+                )))
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -83,15 +124,33 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
               CircleAvatar(backgroundImage: NetworkImage(widget.photoUrl)),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: Text(widget.userName,style: TextStyles.h3Bold.copyWith(color: mobileBackgroundColor),),
+                child: Text(
+                  widget.userName,
+                  style: TextStyles.h3Bold.copyWith(color: mobileBackgroundColor),
+                ),
               ),
             ],
           ),
         ),
-        leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(CupertinoIcons.left_chevron,color: mobileBackgroundColor,)),
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              CupertinoIcons.left_chevron,
+              color: mobileBackgroundColor,
+            )),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.call,color: mobileBackgroundColor,)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.videocam_rounded,color: mobileBackgroundColor,)),
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.call,
+                color: mobileBackgroundColor,
+              )),
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.videocam_rounded,
+                color: mobileBackgroundColor,
+              )),
         ],
       ),
       body: Padding(
@@ -129,7 +188,8 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                     );
                   }
 
-                  WidgetsBinding.instance?.addPostFrameCallback((_) => _scrollToBottom());
+                  WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => _scrollToBottom()); // to scroll automatically in up direction when messages send
 
                   return ListView.builder(
                     controller: _scrollController,
@@ -156,9 +216,12 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                               bottomRight: isSender ? const Radius.circular(0) : const Radius.circular(16.0),
                             ),
                           ),
-                          child: Text(
-                            message['message'],
-                            style: const TextStyle(color: Colors.white),
+                          child: GestureDetector(
+                            onLongPress: () => unSendMessage(message['pChatId']),
+                            child: Text(
+                              message['message'],
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       );
@@ -170,7 +233,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
           ],
         ),
       ),
-      bottomSheet: Container(
+      bottomSheet: SizedBox(
         height: 80,
         child: Padding(
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 4),

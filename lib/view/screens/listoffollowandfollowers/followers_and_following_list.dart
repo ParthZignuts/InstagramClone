@@ -3,15 +3,17 @@ import 'package:flutter/gestures.dart';
 import 'package:instagram_clone/view/view.dart';
 
 class FollowersAndFollowingList extends StatelessWidget {
-  const FollowersAndFollowingList({Key? key, required this.uid,required this.userName}) : super(key: key);
+  const FollowersAndFollowingList({Key? key, required this.uid,required this.userName,required this.currentTabIndex}) : super(key: key);
   final String uid;
   final String userName;
+  final String currentTabIndex;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
         length: 2,
+        initialIndex: int.parse(currentTabIndex) ,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: false,
@@ -27,6 +29,7 @@ class FollowersAndFollowingList extends StatelessWidget {
             bottom: const TabBar(
               indicatorColor: mobileBackgroundColor,
               indicatorSize: TabBarIndicatorSize.label,
+
               tabs: [
                 Tab(
                   icon: Text(

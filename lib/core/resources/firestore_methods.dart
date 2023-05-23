@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:instagram_clone/core/resources/storage_mthods.dart';
 import 'package:uuid/uuid.dart';
 import '../model/model.dart';
@@ -44,7 +45,7 @@ class FireStoreMethods {
         });
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -96,6 +97,29 @@ class FireStoreMethods {
     }
     return res;
   }
+  ///delete chat
+  Future<String> deleteChat(String chatId, String pChatId, String sendBy) async {
+    print('delete Chat Call');
+    String res = "Some error occurred";
+    try {
+      DocumentSnapshot<Map<String, dynamic>> commentSnapshot = await _firestore
+          .collection('ChatRoom')
+          .doc(chatId)
+          .collection('chats')
+          .doc(pChatId)
+          .get();
+
+      if (commentSnapshot.exists && commentSnapshot.data()?['sendBy'] == sendBy) {
+        await _firestore.collection('ChatRoom').doc(chatId).collection('chats').doc(pChatId).delete();
+        res = 'success';
+      } else {
+        res = 'You are not authorized to delete this comment.';
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 
   ///to delete the post
   Future<String> deletePost(String postId) async {
@@ -133,21 +157,23 @@ class FireStoreMethods {
         });
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
   /// for creating chatRoom For Every Users conversation
   createChatRoom(String chatRoomId, Map<String, dynamic> chatRoomMap) {
     _firestore.collection('ChatRoom').doc(chatRoomId).set(chatRoomMap).catchError((e) {
-      print(e.toString());
+      debugPrint(e.toString());
     });
   }
 
   ///add all the chats into our chat room
-  addConversationsMessages(String chatRoomId, Map<String, dynamic> messageMap) {
-    _firestore.collection('ChatRoom').doc(chatRoomId).collection('chats').add(messageMap).catchError((e) {
-      print(e.toString());
+  addConversationsMessages(String chatRoomId, Map<String, dynamic> messageMap, String pChatId) {
+    _firestore.collection('ChatRoom').doc(chatRoomId).collection('chats').doc(pChatId).set(messageMap).catchError((e)
+    // ignore: body_might_complete_normally_catch_error
+    {
+      debugPrint(e.toString());
     });
   }
 

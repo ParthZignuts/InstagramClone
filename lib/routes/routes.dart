@@ -31,7 +31,7 @@ final router = GoRouter(
           return CustomTransitionPage(
               transitionDuration: const Duration(milliseconds: 450),
               key: state.pageKey,
-              child:  ConnectivityCheck(),
+              child:  const ConnectivityCheck(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(opacity: CurveTween(curve: Curves.easeIn).animate(animation), child: child);
               });
@@ -100,6 +100,7 @@ final router = GoRouter(
       builder: (context, state) => FollowersAndFollowingList(
         userName: state.queryParameters['userName']!,
         uid: state.queryParameters['uid']!,
+        currentTabIndex: state.queryParameters['currentTabIndex']!,
       ),
     ),
 

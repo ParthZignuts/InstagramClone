@@ -11,10 +11,9 @@ class AuthMethods {
   ///get the CurrentUser details
   Future<model.User> getUserDetail() async {
     User? currentUser = _auth.currentUser;
-    print(currentUser);
     if (currentUser != null) {
       DocumentSnapshot? snap = await _firestore.collection('users').doc(currentUser.uid).get();
-      if (snap != null && snap.exists) {
+      if (snap.exists) {
         return model.User.fromSnap(snap);
       } else {
         throw Exception("User snapshot is null or does not exist");

@@ -13,7 +13,7 @@ class UserProvider extends ChangeNotifier {
       _user = await _authMethods.getUserDetail();
       notifyListeners();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

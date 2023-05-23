@@ -12,7 +12,7 @@ pickImage(ImageSource source) async {
   if (file != null) {
     return await file.readAsBytes();
   }
-  print('No Image Selected');
+  debugPrint('No Image Selected');
 }
 
 /// to show snack-bar based on situations
