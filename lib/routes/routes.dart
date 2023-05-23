@@ -4,7 +4,7 @@ import '../view/view.dart';
 
 /// The route configuration.
 
-final router = GoRouter(
+final  router = GoRouter(
   routes: [
     ///initial
     GoRoute(

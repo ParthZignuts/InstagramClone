@@ -68,7 +68,7 @@ class ChatScreen extends StatelessWidget {
             return const Text('Loading...');
           }
 
-          final documents = snapshot.data!.docs;
+          final documents = snapshot.data!.docs;//get all the data from stream builder snapshot
 
           return ListView.builder(
             physics: const BouncingScrollPhysics(),

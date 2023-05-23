@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../utils/colors.dart';
+import '../../utils/text_styles.dart';
+
 class Following {
   final String uid;
   final String? username;
@@ -25,35 +28,42 @@ class FollowingList extends StatelessWidget {
         }
         var followersList = snapshot.data!.data()?['following'] as List<dynamic>;
 
-        return ListView.builder(
-          itemCount: followersList.length,
-          itemBuilder: (context, index) {
-            var followerUid = followersList[index];
-            return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-              stream: FirebaseFirestore.instance.collection('users').doc(followerUid).snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const SizedBox();
-                }
+        return followersList.isEmpty
+            ? Center(
+                child: Text(
+                  'No Users Found!',
+                  style: TextStyles.h2Normal.copyWith(color: mobileBackgroundColor),
+                ),
+              )
+            : ListView.builder(
+                itemCount: followersList.length,
+                itemBuilder: (context, index) {
+                  var followerUid = followersList[index];
+                  return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                    stream: FirebaseFirestore.instance.collection('users').doc(followerUid).snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const SizedBox();
+                      }
 
-                var followerData = snapshot.data!.data();
-                var follower = Following(
-                  uid: followerUid,
-                  username: followerData?['userName'],
-                  photoUrl: followerData?['photoUrl'],
-                );
+                      var followerData = snapshot.data!.data();
+                      var follower = Following(
+                        uid: followerUid,
+                        username: followerData?['userName'],
+                        photoUrl: followerData?['photoUrl'],
+                      );
 
-                return ListTile(
-                  onTap: () => context.push('/SearchedUser/${followerData?['uid']}'),
-                  title: Text(follower.username ?? ''),
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(follower.photoUrl ?? ''),
-                  ),
-                );
-              },
-            );
-          },
-        );
+                      return ListTile(
+                        onTap: () => context.push('/SearchedUser/${followerData?['uid']}'),
+                        title: Text(follower.username ?? ''),
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(follower.photoUrl ?? ''),
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
       },
     );
   }

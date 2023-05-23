@@ -99,7 +99,6 @@ class FireStoreMethods {
   }
   ///delete chat
   Future<String> deleteChat(String chatId, String pChatId, String sendBy) async {
-    print('delete Chat Call');
     String res = "Some error occurred";
     try {
       DocumentSnapshot<Map<String, dynamic>> commentSnapshot = await _firestore

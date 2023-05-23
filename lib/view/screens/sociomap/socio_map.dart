@@ -3,22 +3,25 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
-import '../../../core/model/user_location.dart';
 import '../../../core/providers/providers.dart';
 import '../../../core/model/user.dart' as model;
 import '../../../utils/global_variables.dart';
+import '../../../core/model/model.dart';
+
+
+
 
 class SocioMap extends StatefulWidget {
   const SocioMap({Key? key, required this.uid}) : super(key: key);
   final String uid;
 
   @override
+  // ignore: library_private_types_in_public_api
   _SocioMapState createState() => _SocioMapState();
 }
 
 class _SocioMapState extends State<SocioMap> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final MapController _mapController = MapController();
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   LocationData? _currentLocation;
   bool isLoading = true;
   double? latitude;
@@ -30,40 +33,19 @@ class _SocioMapState extends State<SocioMap> {
     _getLocation();
   }
 
+  /// for getting the users current location to show in map
   Future<void> _getLocation() async {
     setState(() {
       isLoading = true;
     });
     Location location = Location();
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        // Location service is not enabled, handle it accordingly
-        return;
-      }
-    }
-
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        // Location permission not granted, handle it accordingly
-        return;
-      }
-    }
-
     _currentLocation = await location.getLocation();
-    print('Updated Lat : ${_currentLocation!.latitude} , Updated Long: ${_currentLocation!.longitude}');
 
     final userLocationData = {
       'latitude': _currentLocation!.latitude,
       'longitude': _currentLocation!.longitude,
     };
-    await _firestore.collection('users').doc(widget.uid).set(userLocationData, SetOptions(merge: true));
+    await _fireStore.collection('users').doc(widget.uid).set(userLocationData, SetOptions(merge: true));
     setState(() {
       isLoading = false;
     });
@@ -98,14 +80,12 @@ class _SocioMapState extends State<SocioMap> {
                     final double longitude = data['longitude'] ?? -122.03053391;
                     final location = LatLng(latitude, longitude);
                     final photoUrl = data['photoUrl'] ?? user!.photoUrl;
-                    print('Users location:$location');
                     return UserLocation(
                       username: username as String,
                       location: location,
                       photoUrl: photoUrl as String,
                     );
                   }).toList();
-
                   return FlutterMap(
                     options: MapOptions(
                         minZoom: 5,

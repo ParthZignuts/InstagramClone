@@ -1,4 +1,7 @@
 import 'dart:typed_data';
+import 'package:get/get.dart';
+
+import '../../../core/controller/add_post_controller.dart';
 import '../../../core/core.dart';
 import '../../view.dart';
 
@@ -11,8 +14,8 @@ class AddPostScreen extends StatefulWidget {
 
 class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _postFile;
-  bool _isLoading = false;
   TextEditingController captionController = TextEditingController();
+  final AddPostController _myController = Get.put(AddPostController());
 
   /// to post image
   postImage(
@@ -21,24 +24,18 @@ class _AddPostScreenState extends State<AddPostScreen> {
     String profImage,
   ) async {
     try {
-      setState(() {
-        _isLoading = true;
-      });
+      _myController.setLoading(true);
       String res = await FireStoreMethods().uploadPost(captionController.text, uid, userName, _postFile!, profImage);
       clearFile();
       if (res == "success") {
-        setState(() {
-          _isLoading = false;
-        });
+        _myController.setLoading(false);
         // ignore: use_build_context_synchronously
         showSnackbar(
           'Posted!',
           context,
         );
       } else {
-        setState(() {
-          _isLoading = false;
-        });
+        _myController.setLoading(false);
         // ignore: use_build_context_synchronously
         showSnackbar(res, context);
       }
@@ -78,6 +75,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               onPressed: () async {
                 Navigator.pop(context);
                 Uint8List file = await pickImage(ImageSource.gallery);
+
                 setState(() {
                   _postFile = file;
                 });
@@ -112,9 +110,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
               centerTitle: false,
               leading: IconButton(
                 onPressed: () => clearFile(),
-                icon: const Icon(Icons.arrow_back,color: mobileBackgroundColor,),
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: mobileBackgroundColor,
+                ),
               ),
-              title:  Text('Post to',style: TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),),
+              title: Text(
+                'Post to',
+                style: TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),
+              ),
               actions: [
                 TextButton(
                   onPressed: () =>
@@ -128,68 +132,73 @@ class _AddPostScreenState extends State<AddPostScreen> {
             ),
             body: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _isLoading
-                      ? const Padding(
-                          padding: EdgeInsets.only(top: 2.0, bottom: 5.0),
-                          child: LinearProgressIndicator(),
-                        )
-                      : const Padding(padding: EdgeInsets.only(top: 2.0, bottom: 5.0)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 75,
-                        width: 75,
-                        child: AspectRatio(
-                          aspectRatio: 478 / 451,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: MemoryImage(_postFile!), fit: BoxFit.fill, alignment: FractionalOffset.topCenter)),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.65,
-                        child: TextField(
-                          controller: captionController,
-                          decoration: const InputDecoration(
-                            hintStyle: TextStyle(color: secondaryColor),
-                            hintText: 'Enter caption here...',
-                            border: InputBorder.none,
-                          ),
-                          maxLines: 3,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
+              child: Obx(
+                () => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _myController.isLoading.value
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: 2.0, bottom: 5.0),
+                            child: LinearProgressIndicator(),
+                          )
+                        : const Padding(padding: EdgeInsets.only(top: 2.0, bottom: 5.0)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextButton(title: 'Tag People', onPressed: () {}),
-                        CustomTextButton(title: 'Add location', onPressed: () {}),
-                        CustomTextButton(title: 'Add music', onPressed: () {}),
-                        CustomTextButton(title: 'Also post to', onPressed: () {}),
+                        SizedBox(
+                          height: 75,
+                          width: 75,
+                          child: AspectRatio(
+                            aspectRatio: 478 / 451,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: MemoryImage(_postFile!), fit: BoxFit.fill, alignment: FractionalOffset.topCenter)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.65,
+                          child: TextField(
+                            controller: captionController,
+                            decoration: const InputDecoration(
+                              hintStyle: TextStyle(color: secondaryColor),
+                              hintText: 'Enter caption here...',
+                              border: InputBorder.none,
+                            ),
+                            maxLines: 3,
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  ListTile(
-                    title: const Text(
-                      'Advance settings',
-                      style: TextStyle(color: mobileBackgroundColor, fontWeight: FontWeight.w500, fontSize: 18),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextButton(title: 'Tag People', onPressed: () {}),
+                          CustomTextButton(title: 'Add location', onPressed: () {}),
+                          CustomTextButton(title: 'Add music', onPressed: () {}),
+                          CustomTextButton(title: 'Also post to', onPressed: () {}),
+                        ],
+                      ),
                     ),
-                    trailing: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.chevron_right,color: mobileBackgroundColor,),
-                    ),
-                  )
-                ],
+                    ListTile(
+                      title: const Text(
+                        'Advance settings',
+                        style: TextStyle(color: mobileBackgroundColor, fontWeight: FontWeight.w500, fontSize: 18),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.chevron_right,
+                          color: mobileBackgroundColor,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );

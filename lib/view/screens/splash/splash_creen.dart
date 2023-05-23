@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   ///fetch current user's photo to show in bottomNavigationBar
   Future<void> fetchData() async {
     try {
-      // Fetch the current user's data from Firebase Auth and Firestore
+      // Fetch the current user's data from Firebase Auth and FireStore
       Future.delayed(const Duration(seconds: 3), () {
         AuthMethods().getUserDetail();
         FirebaseAuth.instance.authStateChanges();
@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
         context.go('/ConnectivityCheck');
       });
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
           )),
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 80.0),
+            padding: const EdgeInsets.only(bottom: 50.0),
             child: ShaderMask(
               shaderCallback: (Rect bounds) {
                 return const LinearGradient(
