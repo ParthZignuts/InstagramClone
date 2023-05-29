@@ -1,32 +1,30 @@
 import 'dart:typed_data';
+
 import 'package:get/get.dart';
 
 import '../../../core/controller/add_post_controller.dart';
 import '../../../core/core.dart';
 import '../../view.dart';
 
-class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({Key? key}) : super(key: key);
+class AddPostScreen extends StatelessWidget {
+   AddPostScreen({Key? key}) : super(key: key);
 
-  @override
-  State<AddPostScreen> createState() => _AddPostScreenState();
-}
-
-class _AddPostScreenState extends State<AddPostScreen> {
-  Uint8List? _postFile;
   TextEditingController captionController = TextEditingController();
-  final AddPostController _myController = Get.put(AddPostController());
+
+  static final AddPostController _myController = Get.put(AddPostController());
 
   /// to post image
   postImage(
     String uid,
     String userName,
     String profImage,
+      BuildContext context,
   ) async {
     try {
       _myController.setLoading(true);
-      String res = await FireStoreMethods().uploadPost(captionController.text, uid, userName, _postFile!, profImage);
-      clearFile();
+      String res =
+          await FireStoreMethods().uploadPost(captionController.text, uid, userName, _myController.postFile.value!, profImage);
+      _myController.clearFile();
       if (res == "success") {
         _myController.setLoading(false);
         // ignore: use_build_context_synchronously
@@ -44,13 +42,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
     }
   }
 
-  /// for clearing the image show upload screen will be appear
-  clearFile() {
-    setState(() {
-      _postFile = null;
-    });
-  }
-
   /// to select image from gallery
   _selectImage(BuildContext context) async {
     return showDialog(
@@ -64,9 +55,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               onPressed: () async {
                 Navigator.pop(context);
                 Uint8List file = await pickImage(ImageSource.camera);
-                setState(() {
-                  _postFile = file;
-                });
+                _myController.selectedPostFile(file);
               },
               child: const Text('Take Photo'),
             ),
@@ -75,10 +64,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               onPressed: () async {
                 Navigator.pop(context);
                 Uint8List file = await pickImage(ImageSource.gallery);
-
-                setState(() {
-                  _postFile = file;
-                });
+                _myController.selectedPostFile(file);
               },
               child: const Text('Choose from Gallery'),
             ),
@@ -100,107 +86,113 @@ class _AddPostScreenState extends State<AddPostScreen> {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
 
     ///if image not selected then it show's for the select image other wise post screen
-    return _postFile == null
-        ? Center(
-            child: IconButton(icon: const Icon(Icons.upload), onPressed: () => _selectImage(context)),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              backgroundColor: scaffoldBackgroundColor,
-              centerTitle: false,
-              leading: IconButton(
-                onPressed: () => clearFile(),
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: mobileBackgroundColor,
-                ),
-              ),
-              title: Text(
-                'Post to',
-                style: TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () =>
-                      postImage(userProvider.getUser!.uid, userProvider.getUser!.userName, userProvider.getUser!.photoUrl),
-                  child: const Text(
-                    'Post',
-                    style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 16),
+    return Obx(
+      () {
+        return _myController.postFile.value == null
+            ? Center(
+                child: IconButton(icon: const Icon(Icons.upload), onPressed: () => _selectImage(context)),
+              )
+            : Scaffold(
+                appBar: AppBar(
+                  backgroundColor: scaffoldBackgroundColor,
+                  centerTitle: false,
+                  leading: IconButton(
+                    onPressed: () => _myController.clearFile(),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: mobileBackgroundColor,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Obx(
-                () => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _myController.isLoading.value
-                        ? const Padding(
-                            padding: EdgeInsets.only(top: 2.0, bottom: 5.0),
-                            child: LinearProgressIndicator(),
-                          )
-                        : const Padding(padding: EdgeInsets.only(top: 2.0, bottom: 5.0)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 75,
-                          width: 75,
-                          child: AspectRatio(
-                            aspectRatio: 478 / 451,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: MemoryImage(_postFile!), fit: BoxFit.fill, alignment: FractionalOffset.topCenter)),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.65,
-                          child: TextField(
-                            controller: captionController,
-                            decoration: const InputDecoration(
-                              hintStyle: TextStyle(color: secondaryColor),
-                              hintText: 'Enter caption here...',
-                              border: InputBorder.none,
-                            ),
-                            maxLines: 3,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomTextButton(title: 'Tag People', onPressed: () {}),
-                          CustomTextButton(title: 'Add location', onPressed: () {}),
-                          CustomTextButton(title: 'Add music', onPressed: () {}),
-                          CustomTextButton(title: 'Also post to', onPressed: () {}),
-                        ],
+                  title: Text(
+                    'Post to',
+                    style: TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () =>
+                          postImage(userProvider.getUser!.uid, userProvider.getUser!.userName, userProvider.getUser!.photoUrl,context),
+                      child: const Text(
+                        'Post',
+                        style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
-                    ListTile(
-                      title: const Text(
-                        'Advance settings',
-                        style: TextStyle(color: mobileBackgroundColor, fontWeight: FontWeight.w500, fontSize: 18),
-                      ),
-                      trailing: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.chevron_right,
-                          color: mobileBackgroundColor,
-                        ),
-                      ),
-                    )
                   ],
                 ),
-              ),
-            ),
-          );
+                body: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Obx(
+                    () => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _myController.isLoading.value
+                            ? const Padding(
+                                padding: EdgeInsets.only(top: 2.0, bottom: 5.0),
+                                child: LinearProgressIndicator(),
+                              )
+                            : const Padding(padding: EdgeInsets.only(top: 2.0, bottom: 5.0)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 75,
+                              width: 75,
+                              child: AspectRatio(
+                                aspectRatio: 478 / 451,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: MemoryImage(_myController.postFile.value!),
+                                          fit: BoxFit.fill,
+                                          alignment: FractionalOffset.topCenter)),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.65,
+                              child: TextField(
+                                controller: captionController,
+                                decoration: const InputDecoration(
+                                  hintStyle: TextStyle(color: secondaryColor),
+                                  hintText: 'Enter caption here...',
+                                  border: InputBorder.none,
+                                ),
+                                maxLines: 3,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextButton(title: 'Tag People', onPressed: () {}),
+                              CustomTextButton(title: 'Add location', onPressed: () {}),
+                              CustomTextButton(title: 'Add music', onPressed: () {}),
+                              CustomTextButton(title: 'Also post to', onPressed: () {}),
+                            ],
+                          ),
+                        ),
+                        ListTile(
+                          title: const Text(
+                            'Advance settings',
+                            style: TextStyle(color: mobileBackgroundColor, fontWeight: FontWeight.w500, fontSize: 18),
+                          ),
+                          trailing: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.chevron_right,
+                              color: mobileBackgroundColor,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+      },
+    );
   }
 }

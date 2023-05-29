@@ -2,23 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:instagram_clone/view/view.dart';
 
-class PostDetailedView extends StatefulWidget {
+class PostDetailedView extends StatelessWidget {
   const PostDetailedView({Key? key, required this.postId}) : super(key: key);
   final String postId;
 
-  @override
-  State<PostDetailedView> createState() => _PostDetailedViewState();
-}
-/// get all post as a stream that match postId
-Stream<List<QueryDocumentSnapshot>> getPostAsStream(String postId) {
-  return FirebaseFirestore.instance
-      .collection('posts')
-      .where('postId', isEqualTo: postId)
-      .snapshots()
-      .map((querySnapshot) => querySnapshot.docs);
-}
-
-class _PostDetailedViewState extends State<PostDetailedView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +19,10 @@ class _PostDetailedViewState extends State<PostDetailedView> {
         centerTitle: false,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(CupertinoIcons.left_chevron,color: mobileBackgroundColor,),
+          icon: const Icon(
+            CupertinoIcons.left_chevron,
+            color: mobileBackgroundColor,
+          ),
         ),
       ),
       body: Column(
@@ -42,7 +32,7 @@ class _PostDetailedViewState extends State<PostDetailedView> {
               scrollDirection: Axis.vertical,
               physics: const BouncingScrollPhysics(),
               child: StreamBuilder<List<QueryDocumentSnapshot>>(
-                stream: getPostAsStream(widget.postId),
+                stream: getPostAsStream(postId),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const CircularProgressIndicator();
@@ -59,4 +49,13 @@ class _PostDetailedViewState extends State<PostDetailedView> {
       ),
     );
   }
+}
+
+/// get all post as a stream that match postId
+Stream<List<QueryDocumentSnapshot>> getPostAsStream(String postId) {
+  return FirebaseFirestore.instance
+      .collection('posts')
+      .where('postId', isEqualTo: postId)
+      .snapshots()
+      .map((querySnapshot) => querySnapshot.docs);
 }

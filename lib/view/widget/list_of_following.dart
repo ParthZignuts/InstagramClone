@@ -53,11 +53,15 @@ class FollowingList extends StatelessWidget {
                         photoUrl: followerData?['photoUrl'],
                       );
 
-                      return ListTile(
-                        onTap: () => context.push('/SearchedUser/${followerData?['uid']}'),
-                        title: Text(follower.username ?? ''),
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(follower.photoUrl ?? ''),
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
+                        child: ListTile(
+                          onTap: () => context.push('/SearchedUser/${followerData?['uid']}'),
+                          title: Text(follower.username ?? ''),
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(follower.photoUrl ?? ''),
+                            radius: 28,
+                          ),
                         ),
                       );
                     },

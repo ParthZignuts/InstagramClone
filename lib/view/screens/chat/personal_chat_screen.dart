@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:instagram_clone/core/controller/chat_controller.dart';
 import 'package:instagram_clone/core/resources/resources.dart';
 import 'package:instagram_clone/view/view.dart';
 import 'package:uuid/uuid.dart';
 
-class PersonalChatScreen extends StatefulWidget {
+class PersonalChatScreen extends StatelessWidget {
   const PersonalChatScreen(
       {Key? key, required this.userName, required this.photoUrl, required this.uid, required this.chatRoomId})
       : super(key: key);
@@ -13,72 +15,28 @@ class PersonalChatScreen extends StatefulWidget {
   final String photoUrl;
   final String uid;
   final String chatRoomId;
-
-  @override
-  State<PersonalChatScreen> createState() => _PersonalChatScreenState();
-}
-
-class _PersonalChatScreenState extends State<PersonalChatScreen> {
-  TextEditingController chatController = TextEditingController();
-  late ScrollController _scrollController;
-  bool isEnableToSend = false;
-  bool _hasBuiltOnce = false;
-  String? pChatId;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  /// is used to scroll up messages list
-  void _scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
-  }
-
-  ///enable or disable send button to send message
-  changeStateOfSentMsg(String value) {
-    if (value.isNotEmpty) {
-      setState(() {
-        isEnableToSend = true;
-      });
-    } else {
-      setState(() {
-        isEnableToSend = false;
-      });
-    }
-  }
+  static final ChatController _chatController = Get.put(ChatController());
 
   ///to send messages
   sendMessaged(String sendBy) {
-    setState(() {
-      pChatId = const Uuid().v1();
-    });
+    _chatController.updatePchatId(const Uuid().v1());
 
-    if (chatController.text.isNotEmpty) {
+    if (_chatController.chatController.value.text.isNotEmpty) {
       Map<String, dynamic> messageMap = {
-        'message': chatController.text,
+        'message': _chatController.chatController.value.text,
         'sendBy': sendBy,
         'timeStamp': DateTime.now(),
-        'pChatId': pChatId,
+        'pChatId': _chatController.pChatId.value,
       };
-      FireStoreMethods().addConversationsMessages(widget.chatRoomId, messageMap, pChatId!);
+      FireStoreMethods().addConversationsMessages(chatRoomId, messageMap, _chatController.pChatId.value!);
     }
-    chatController.clear();
+
+    _chatController.changeStateOfSentMsg('');
+    _chatController.updateControllerValue('');
   }
 
   ///unSend messages
-  unSendMessage(String chatId) {
+  unSendMessage(String chatId, BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -86,8 +44,8 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
           actions: [
             TextButton(
                 onPressed: () {
-                  print('chatRoomId:${widget.chatRoomId} , pChatId:$chatId , userName : ${widget.userName}');
-                  FireStoreMethods().deleteChat(widget.chatRoomId, chatId, widget.userName);
+                  print('chatRoomId:$chatRoomId , pChatId:$chatId , userName : $userName');
+                  FireStoreMethods().deleteChat(chatRoomId, chatId, userName);
                   Navigator.pop(context);
                 },
                 child: Center(
@@ -118,14 +76,14 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
         centerTitle: false,
         elevation: 0,
         title: GestureDetector(
-          onTap: () => context.push('/SearchedUser/${widget.uid}'),
+          onTap: () => context.push('/SearchedUser/$uid'),
           child: Row(
             children: [
-              CircleAvatar(backgroundImage: NetworkImage(widget.photoUrl)),
+              CircleAvatar(backgroundImage: NetworkImage(photoUrl)),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  widget.userName,
+                  userName,
                   style: TextStyles.h3Bold.copyWith(color: mobileBackgroundColor),
                 ),
               ),
@@ -162,7 +120,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('ChatRoom')
-                    .doc(widget.chatRoomId)
+                    .doc(chatRoomId)
                     .collection('chats')
                     .orderBy('timeStamp', descending: false)
                     .snapshots(),
@@ -173,13 +131,13 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                     );
                   }
 
-                  if (!_hasBuiltOnce) {
+                  if (!_chatController.hasBuiltOnce.value) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
-                    _hasBuiltOnce = true;
+                    _chatController.changeValueOfHasBuiltOnce(true);
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -189,15 +147,15 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                   }
 
                   WidgetsBinding.instance.addPostFrameCallback(
-                      (_) => _scrollToBottom()); // to scroll automatically in up direction when messages send
+                      (_) => _chatController.scrollToBottom()); // to scroll automatically in up direction when messages send
 
                   return ListView.builder(
-                    controller: _scrollController,
+                    controller: _chatController.scrollController,
                     physics: const BouncingScrollPhysics(),
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot message = snapshot.data!.docs[index];
-                      bool isSender = message['sendBy'] == widget.userName; // Replace 'sender' with your sender identifier
+                      bool isSender = message['sendBy'] == userName; // Replace 'sender' with your sender identifier
 
                       return Align(
                         alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
@@ -217,7 +175,7 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                             ),
                           ),
                           child: GestureDetector(
-                            onLongPress: () => unSendMessage(message['pChatId']),
+                            onLongPress: () => unSendMessage(message['pChatId'], context),
                             child: Text(
                               message['message'],
                               style: const TextStyle(color: Colors.white),
@@ -245,10 +203,10 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
               child: SizedBox(
                 height: 50,
                 child: TextFormField(
-                  onChanged: (value) => changeStateOfSentMsg(value),
+                  onChanged: (value) => _chatController.changeStateOfSentMsg(value),
                   style: const TextStyle(fontSize: 20),
                   textAlign: TextAlign.start,
-                  controller: chatController,
+                  controller: _chatController.chatController.value,
                   autofocus: true,
                   decoration: InputDecoration(
                     hintText: 'Message....',
@@ -257,48 +215,52 @@ class _PersonalChatScreenState extends State<PersonalChatScreen> {
                       Icons.camera_alt_outlined,
                       color: mobileBackgroundColor,
                     ),
-                    suffixIcon: isEnableToSend
-                        ? TextButton(
-                            onPressed: () => sendMessaged(widget.userName),
-                            child: const Text(
-                              'Send',
-                              style: TextStyle(fontSize: 20, color: Colors.blueAccent),
-                            ))
-                        : SizedBox(
-                            width: 100,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.mic,
-                                    color: mobileBackgroundColor,
-                                  ),
+                    suffixIcon: Obx(
+                      () {
+                        return _chatController.isEnableToSend.value
+                            ? TextButton(
+                                onPressed: () => sendMessaged(userName),
+                                child: const Text(
+                                  'Send',
+                                  style: TextStyle(fontSize: 20, color: Colors.blueAccent),
+                                ))
+                            : SizedBox(
+                                width: 100,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.mic,
+                                        color: mobileBackgroundColor,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
+                                      constraints: const BoxConstraints(),
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.photo,
+                                        color: mobileBackgroundColor,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      padding: const EdgeInsets.fromLTRB(2, 0, 10, 0),
+                                      constraints: const BoxConstraints(),
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.emoji_emotions,
+                                        color: mobileBackgroundColor,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                IconButton(
-                                  padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
-                                  constraints: const BoxConstraints(),
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.photo,
-                                    color: mobileBackgroundColor,
-                                  ),
-                                ),
-                                IconButton(
-                                  padding: const EdgeInsets.fromLTRB(2, 0, 10, 0),
-                                  constraints: const BoxConstraints(),
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.emoji_emotions,
-                                    color: mobileBackgroundColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                              );
+                      },
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: darkGray),
                       borderRadius: BorderRadius.circular(50.0),

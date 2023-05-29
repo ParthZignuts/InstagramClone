@@ -53,8 +53,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               onPageChanged: (value) => onPageChanged(value),
               children: [
                 const FeedScreenPageView(),
-                const SearchScreen(),
-                const AddPostScreen(),
+                  SearchScreen(),
+                 AddPostScreen(),
                  SocioMap(uid: FirebaseAuth.instance.currentUser!.uid,),
                 ReelsScreen(),
                 ProfileScreen(

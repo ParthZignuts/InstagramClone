@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:instagram_clone/core/controller/socio_map_controller.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
@@ -8,36 +11,26 @@ import '../../../core/model/user.dart' as model;
 import '../../../utils/global_variables.dart';
 import '../../../core/model/model.dart';
 
-
-
-
-class SocioMap extends StatefulWidget {
-  const SocioMap({Key? key, required this.uid}) : super(key: key);
+class SocioMap extends StatelessWidget {
+   SocioMap({Key? key, required this.uid}) : super(key: key){
+     _getLocation();
+   }
   final String uid;
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _SocioMapState createState() => _SocioMapState();
-}
-
-class _SocioMapState extends State<SocioMap> {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
-  LocationData? _currentLocation;
-  bool isLoading = true;
-  double? latitude;
-  double? longitude;
 
-  @override
-  void initState() {
-    super.initState();
-    _getLocation();
-  }
+  final SocioMapController _socioMapController = Get.put(SocioMapController());
+
+  LocationData? _currentLocation;
+
+  double? latitude;
+
+  double? longitude;
 
   /// for getting the users current location to show in map
   Future<void> _getLocation() async {
-    setState(() {
-      isLoading = true;
-    });
+    _socioMapController.setIsLoading(true);
+
     Location location = Location();
     _currentLocation = await location.getLocation();
 
@@ -45,10 +38,8 @@ class _SocioMapState extends State<SocioMap> {
       'latitude': _currentLocation!.latitude,
       'longitude': _currentLocation!.longitude,
     };
-    await _fireStore.collection('users').doc(widget.uid).set(userLocationData, SetOptions(merge: true));
-    setState(() {
-      isLoading = false;
-    });
+    await _fireStore.collection('users').doc(uid).set(userLocationData, SetOptions(merge: true));
+    _socioMapController.setIsLoading(false);
   }
 
   @override
@@ -59,7 +50,7 @@ class _SocioMapState extends State<SocioMap> {
         body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
             stream: FirebaseFirestore.instance.collection('users').snapshots(),
             builder: (context, snapshot) {
-              if (isLoading) {
+              if (_socioMapController.isLoading.value) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );

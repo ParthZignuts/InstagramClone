@@ -1,29 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:instagram_clone/core/controller/comments_controller.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
 
-class CommentsScreen extends StatefulWidget {
+class CommentsScreen extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final postId;
 
-  const CommentsScreen({Key? key, required this.postId}) : super(key: key);
+  CommentsScreen({Key? key, required this.postId}) : super(key: key);
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _CommentsScreenState createState() => _CommentsScreenState();
-}
-
-class _CommentsScreenState extends State<CommentsScreen> {
-  TextEditingController commentEditingController = TextEditingController();
-  bool _hasBuiltOnce = false;
+  // TextEditingController commentEditingController = TextEditingController();
+  final CommentsController _commentsController = Get.put(CommentsController());
 
   /// to add comment on post
-  void postComment(String uid, String name, String profilePic) async {
+  void postComment(String uid, String name, String profilePic, BuildContext context) async {
     try {
       String res = await FireStoreMethods().postComment(
-        widget.postId,
-        commentEditingController.text,
+        postId,
+        _commentsController.commentEditingController.value.text,
         uid,
         name,
         profilePic,
@@ -32,9 +28,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
         // ignore: use_build_context_synchronously
         showSnackbar(res, context);
       }
-      setState(() {
-        commentEditingController.text = "";
-      });
+
+      _commentsController.updateControllerValue('');
     } catch (err) {
       showSnackbar(
         err.toString(),
@@ -51,7 +46,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
   ///comments stream
   Stream<QuerySnapshot<Map<String, dynamic>>> commentsStream() => FirebaseFirestore.instance
       .collection('posts')
-      .doc(widget.postId)
+      .doc(postId)
       .collection('comments')
       .orderBy('datePublished', descending: true)
       .snapshots();
@@ -80,13 +75,16 @@ class _CommentsScreenState extends State<CommentsScreen> {
       body: StreamBuilder(
         stream: commentsStream(),
         builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (!_hasBuiltOnce) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!_commentsController.hasBuiltOnce.value) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            _hasBuiltOnce = true;
+            _commentsController.changeValueOfHasBuiltOnce(true);
           }
           return (snapshot.data!.docs.isNotEmpty)
               ? GestureDetector(
@@ -98,7 +96,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (ctx, index) => CommentCard(
                       snap: snapshot.data!.docs[index],
-                      onDelete: () => deleteComment(widget.postId, snapshot.data!.docs[index].data()['commentId'], user!.uid),
+                      onDelete: () => deleteComment(postId, snapshot.data!.docs[index].data()['commentId'], user!.uid),
                     ),
                   ),
                 )
@@ -127,7 +125,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   padding: const EdgeInsets.only(left: 16, right: 8),
                   child: TextField(
                     autofocus: true,
-                    controller: commentEditingController,
+                    controller: _commentsController.commentEditingController.value,
                     decoration: InputDecoration(
                       hintText: 'Comment as ${user.userName}',
                       border: InputBorder.none,
@@ -136,11 +134,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 ),
               ),
               TextButton(
-                  onPressed: () => postComment(
-                        user.uid,
-                        user.userName,
-                        user.photoUrl,
-                      ),
+                  onPressed: () => postComment(user.uid, user.userName, user.photoUrl, context),
                   child: const Text(
                     'Post',
                     style: TextStyle(color: Colors.blue),

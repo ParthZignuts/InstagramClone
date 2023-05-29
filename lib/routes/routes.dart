@@ -4,7 +4,7 @@ import '../view/view.dart';
 
 /// The route configuration.
 
-final  router = GoRouter(
+final router = GoRouter(
   routes: [
     ///initial
     GoRoute(
@@ -24,6 +24,7 @@ final  router = GoRouter(
                 return FadeTransition(opacity: CurveTween(curve: Curves.easeIn).animate(animation), child: child);
               });
         }),
+
     ///check internet connectivity
     GoRoute(
         path: "/ConnectivityCheck",
@@ -31,7 +32,7 @@ final  router = GoRouter(
           return CustomTransitionPage(
               transitionDuration: const Duration(milliseconds: 450),
               key: state.pageKey,
-              child:  const ConnectivityCheck(),
+              child: const ConnectivityCheck(),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(opacity: CurveTween(curve: Curves.easeIn).animate(animation), child: child);
               });
@@ -44,7 +45,7 @@ final  router = GoRouter(
         return CustomTransitionPage(
           transitionDuration: const Duration(milliseconds: 450),
           key: state.pageKey,
-          child: const AddPostScreen(),
+          child: AddPostScreen(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: CurveTween(curve: Curves.easeIn).animate(animation), child: child);
           },
@@ -79,7 +80,7 @@ final  router = GoRouter(
     GoRoute(path: "/LoginScreen", builder: (context, state) => const LoginScreen()),
 
     ///Signup Screen
-    GoRoute(path: "/SignUpScreen", builder: (context, state) => const SignUpScreen()),
+    GoRoute(path: "/SignUpScreen", builder: (context, state) => SignUpScreen()),
 
     /// Personal Chat
     GoRoute(
@@ -111,7 +112,7 @@ final  router = GoRouter(
         return CustomTransitionPage(
             transitionDuration: const Duration(milliseconds: 450),
             key: state.pageKey,
-            child: const SearchScreen(),
+            child: SearchScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(0.0, 1.0);
               const end = Offset.zero;

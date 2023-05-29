@@ -1,57 +1,36 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:instagram_clone/core/controller/signup_controller.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatelessWidget {
+  SignUpScreen({Key? key}) : super(key: key);
 
-  @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
-}
+  final SignUpController _signUpController = Get.put(SignUpController());
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  ///decalre texteditcontroller or local variable
+  ///declare textEditController or local variable
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passController = TextEditingController();
+
   TextEditingController bioController = TextEditingController();
+
   TextEditingController usernameController = TextEditingController();
-  Uint8List? imgFile;
-  bool _isLoading = false;
-
-  @override
-  void dispose() {
-    super.dispose();
-    emailController.dispose();
-    passController.dispose();
-    bioController.dispose();
-    usernameController.dispose();
-  }
-
-  ///to pick image from gallery
-  void selectImage() async {
-    Uint8List im = await pickImage(ImageSource.gallery);
-    setState(() {
-      imgFile = im;
-    });
-  }
 
   ///SignUp Method
-  void signUp() async {
-    setState(() {
-      _isLoading = true;
-    });
+  void signUp(BuildContext context) async {
+    _signUpController.setValuesOfIsLoading(true);
+
     String result = await AuthMethods().signUpUser(
       email: emailController.text,
       password: passController.text,
       userName: usernameController.text,
       bio: bioController.text,
-      file: imgFile!,
+      file: _signUpController.imgFile.value!,
     );
-    setState(() {
-      _isLoading = false;
-    });
+    _signUpController.setValuesOfIsLoading(false);
 
     if (result != 'Success') {
       // ignore: use_build_context_synchronously
@@ -65,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   ///navigate to loginPage
-  void navigateToLoginPage() {
+  void navigateToLoginPage(BuildContext context) {
     context.go('/LoginScreen');
   }
 
@@ -96,8 +75,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Stack(
                       children: [
-                        imgFile != null
-                            ? CircleAvatar(maxRadius: 60, backgroundImage: MemoryImage(imgFile!))
+                        _signUpController.imgFile.value != null
+                            ? CircleAvatar(maxRadius: 60, backgroundImage: MemoryImage(_signUpController.imgFile.value!))
                             : const CircleAvatar(
                                 maxRadius: 60,
                                 backgroundImage: NetworkImage(
@@ -106,7 +85,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Positioned(
                             bottom: -10,
                             left: 80,
-                            child: IconButton(onPressed: () => selectImage(), icon: const Icon(Icons.add_a_photo)))
+                            child:
+                                IconButton(onPressed: () => _signUpController.selectImage(), icon: const Icon(Icons.add_a_photo)))
                       ],
                     ),
                   ),
@@ -143,31 +123,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
                     child: InkWell(
-                      onTap: () => signUp(),
+                      onTap: () => signUp(context),
                       child: Container(
-
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: const ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          decoration: const ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(4)),
+                            ),
+                            color: senderMsgBubbleColor,
                           ),
-                          color: senderMsgBubbleColor,
-                        ),
-                        child: _isLoading
-                            ? const Center(
-                                child: SizedBox(
-                                    height: 18,
-                                    width: 18,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )))
-                            : const Text(
-                                'Signup',
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,color:primaryColor),
-                              ),
-                      ),
+                          child: Obx(
+                            () {
+                              return _signUpController.isLoading.value
+                                  ? const Center(
+                                      child: SizedBox(
+                                          height: 18,
+                                          width: 18,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                          )))
+                                  : const Text(
+                                      'Signup',
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: primaryColor),
+                                    );
+                            },
+                          )),
                     ),
                   ),
 
@@ -188,7 +170,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             GestureDetector(
-              onTap: () => navigateToLoginPage(),
+              onTap: () => navigateToLoginPage(context),
               child: const Text(
                 'Login',
                 style: TextStyle(fontWeight: FontWeight.bold, color: senderMsgBubbleColor, fontSize: 16),

@@ -1,66 +1,45 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:instagram_clone/core/controller/search_user_controller.dart';
 import '../../../core/resources/auth_methods.dart';
 import '../../../core/resources/firestore_methods.dart';
 import '../../../view/view.dart';
 
-class SearchedUserProfileScreen extends StatefulWidget {
+class SearchedUserProfileScreen extends StatelessWidget {
   final String uid;
 
-  const SearchedUserProfileScreen({Key? key, required this.uid}) : super(key: key);
-
-  @override
-  State<SearchedUserProfileScreen> createState() => _SearchedUserProfileScreenState();
-}
-
-class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
-  var userData = {};
-  int postLen = 0;
-  int followers = 0;
-  int following = 0;
-  bool isFollowing = false;
-  bool isLoading = false;
-  bool isRequested = false;
-
-  @override
-  void initState() {
-    super.initState();
+  SearchedUserProfileScreen({Key? key, required this.uid}) : super(key: key) {
     getData();
   }
 
+  final SearchUserController _searchUserController = Get.put(SearchUserController());
+
   getData() async {
-    setState(() {
-      isLoading = true;
-    });
+    _searchUserController.setLoadingValues(false);
     try {
-      var userSnap = await FirebaseFirestore.instance.collection('users').doc(widget.uid).get();
+      var userSnap = await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       // get post length
-      var postSnap = await FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: widget.uid).get();
+      var postSnap = await FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: uid).get();
 
-      postLen = postSnap.docs.length;
-      userData = userSnap.data()!;
-      followers = userSnap.data()!['followers'].length;
-      following = userSnap.data()!['following'].length;
-      isFollowing = userSnap.data()!['followers'].contains(FirebaseAuth.instance.currentUser!.uid);
-
-      setState(() {});
+      _searchUserController.updatePostLen(postSnap.docs.length);
+      _searchUserController.updateUserData(userSnap.data()!);
+      _searchUserController.updateFollowers(userSnap.data()!['followers'].length);
+      _searchUserController.updateFollowing(userSnap.data()!['following'].length);
+      _searchUserController
+          .checkWhetherIsFollowing(userSnap.data()!['followers'].contains(FirebaseAuth.instance.currentUser!.uid));
     } catch (e) {
-      showSnackbar(
-        e.toString(),
-        context,
-      );
+      debugPrint(e.toString());
     }
-    setState(() {
-      isLoading = false;
-    });
+    _searchUserController.setLoadingValues(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
+    return _searchUserController.isLoading.value
         ? const Center(
             child: CircularProgressIndicator(),
           )
@@ -76,11 +55,15 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                       elevation: 0,
                       expandedHeight: 352,
                       centerTitle: false,
-                      leading:
-                          IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(CupertinoIcons.left_chevron,color: mobileBackgroundColor,)),
+                      leading: IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: const Icon(
+                            CupertinoIcons.left_chevron,
+                            color: mobileBackgroundColor,
+                          )),
                       title: Text(
-                        userData['userName'],
-                        style:  TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),
+                        _searchUserController.userData['userName'],
+                        style: TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),
                       ),
                       actions: [
                         IconButton(onPressed: () => () {}, icon: const Icon(Icons.menu)),
@@ -99,31 +82,39 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                    CircleAvatar(backgroundImage: NetworkImage(userData['photoUrl']), maxRadius: 40),
-                                    PostFollowerFollowingStatus(title: 'Posts', values: postLen, onPressed: () => () {}),
+                                    CircleAvatar(
+                                        backgroundImage: NetworkImage(_searchUserController.userData['photoUrl']), maxRadius: 40),
+                                    PostFollowerFollowingStatus(
+                                        title: 'Posts', values: _searchUserController.postLen.value, onPressed: () => () {}),
                                     PostFollowerFollowingStatus(
                                       title: 'Followers',
-                                      values: followers,
-                                      onPressed: () => context.pushNamed('FollowersAndFollowingList',
-                                          queryParameters: {'userName': userData['userName'], 'uid': widget.uid,'currentTabIndex':'0'}),
+                                      values: _searchUserController.followers.value,
+                                      onPressed: () => context.pushNamed('FollowersAndFollowingList', queryParameters: {
+                                        'userName': _searchUserController.userData['userName'],
+                                        'uid': uid,
+                                        'currentTabIndex': '0'
+                                      }),
                                     ),
                                     PostFollowerFollowingStatus(
                                       title: 'Following',
-                                      values: following,
-                                      onPressed: () => context.pushNamed('FollowersAndFollowingList',
-                                          queryParameters: {'userName': userData['userName'], 'uid': widget.uid,'currentTabIndex':'1'}),
+                                      values: _searchUserController.following.value,
+                                      onPressed: () => context.pushNamed('FollowersAndFollowingList', queryParameters: {
+                                        'userName': _searchUserController.userData['userName'],
+                                        'uid': uid,
+                                        'currentTabIndex': '1'
+                                      }),
                                     ),
                                   ]),
                                 ),
 
                                 ///Bio
                                 Text(
-                                  '${userData['bio']}  \n........\n.......\n........\n........\n........',
+                                  '${_searchUserController.userData['bio']}  \n........\n.......\n........\n........\n........',
                                   style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
                                 ),
                                 Row(
                                   children: [
-                                    FirebaseAuth.instance.currentUser!.uid == widget.uid
+                                    FirebaseAuth.instance.currentUser!.uid == uid
                                         ? FollowButton(
                                             text: 'Sign Out',
                                             backgroundColor: mobileBackgroundColor,
@@ -134,7 +125,7 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                               await AuthMethods().signOut();
                                             },
                                           )
-                                        : isFollowing
+                                        : _searchUserController.isFollowing.value
                                             ? FollowButton(
                                                 text: 'Unfollow',
                                                 backgroundColor: Colors.white,
@@ -143,12 +134,10 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                                 function: () async {
                                                   await FireStoreMethods().followUser(
                                                     FirebaseAuth.instance.currentUser!.uid,
-                                                    userData['uid'],
+                                                    _searchUserController.userData['uid'],
                                                   );
-                                                  setState(() {
-                                                    isFollowing = false;
-                                                    followers--;
-                                                  });
+                                                  _searchUserController.isFollowing(false);
+                                                  _searchUserController.following.value--;
                                                 },
                                               )
                                             : FollowButton(
@@ -159,13 +148,10 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                                                 function: () async {
                                                   await FireStoreMethods().followUser(
                                                     FirebaseAuth.instance.currentUser!.uid,
-                                                    userData['uid'],
+                                                    _searchUserController.userData['uid'],
                                                   );
-
-                                                  setState(() {
-                                                    isFollowing = true;
-                                                    followers++;
-                                                  });
+                                                  _searchUserController.isFollowing(false);
+                                                  _searchUserController.followers.value--;
                                                 },
                                               )
                                   ],
@@ -201,7 +187,7 @@ class _SearchedUserProfileScreenState extends State<SearchedUserProfileScreen> {
                         child: TabBarView(
                           physics: const BouncingScrollPhysics(),
                           children: [
-                            PersonalPostTab(uid: widget.uid, postLen: postLen),
+                            PersonalPostTab(uid: uid, postLen: _searchUserController.postLen.value),
                             const MyReelsTab(),
                             const TaggedMeTab(),
                           ],

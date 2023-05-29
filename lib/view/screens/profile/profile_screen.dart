@@ -1,60 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:instagram_clone/core/controller/profile_controller.dart';
 import '../../view.dart';
 
-class ProfileScreen extends StatefulWidget {
+// ignore: must_be_immutable
+class ProfileScreen extends StatelessWidget {
   final String uid;
 
-  const ProfileScreen({Key? key, required this.uid}) : super(key: key);
-
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  var userData = {};
-  int postLen = 0;
-  int followers = 0;
-  int following = 0;
-  bool isFollowing = false;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
+  ProfileScreen({Key? key, required this.uid}) : super(key: key) {
     getData();
   }
 
+  final ProfileController _profileController = Get.put(ProfileController());
+
   ///fetch the userdata to show in profile based on particular uid
   getData() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      var userSnap = await FirebaseFirestore.instance.collection('users').doc(widget.uid).get();
-      // get post length
-      var postSnap = await FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: widget.uid).get();
+    _profileController.setLoadingValues(false);
 
-      postLen = postSnap.docs.length;
-      userData = userSnap.data()!;
-      followers = userSnap.data()!['followers'].length;
-      following = userSnap.data()!['following'].length;
-      isFollowing = userSnap.data()!['followers'].contains(FirebaseAuth.instance.currentUser!.uid);
-      setState(() {});
+    try {
+      var userSnap = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      // get post length
+      var postSnap = await FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: uid).get();
+
+      _profileController.updatePostLen(postSnap.docs.length);
+      _profileController.updateUserData(userSnap.data()!);
+      _profileController.updateFollowers(userSnap.data()!['followers'].length);
+      _profileController.updateFollowing(userSnap.data()!['following'].length);
+      _profileController.checkWhetherIsFollowing(userSnap.data()!['followers'].contains(FirebaseAuth.instance.currentUser!.uid));
     } catch (e) {
-      showSnackbar(
-        e.toString(),
-        context,
-      );
+      debugPrint(e.toString());
     }
-    setState(() {
-      isLoading = false;
-    });
+    _profileController.setLoadingValues(true);
   }
 
   /// when menu button  press then this method will be call
-  onMenuPress() {
+  onMenuPress(BuildContext context) {
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -75,12 +57,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Container(
                     height: 2,
                     width: 50,
-                    decoration: const BoxDecoration(color: mobileBackgroundColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                    decoration:
+                        const BoxDecoration(color: mobileBackgroundColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
                   ),
-                  const Divider(color: mobileBackgroundColor,),
+                  const Divider(
+                    color: mobileBackgroundColor,
+                  ),
                   ListTile(
                     onTap: () {
                       showMyDialog(context);
@@ -99,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   ///to show bottomSheet that include option to upload socialMedia  activities
-  showBottomSheet() {
+  showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -120,7 +105,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Container(
                   height: 2,
                   width: 50,
-                  decoration: const BoxDecoration(color: mobileBackgroundColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  decoration:
+                      const BoxDecoration(color: mobileBackgroundColor, borderRadius: BorderRadius.all(Radius.circular(15.0))),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 12.0, bottom: 8.0),
@@ -150,13 +136,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return isLoading
+    return _profileController.isLoading.value
         ? const Center(
             child: CircularProgressIndicator(),
           )
@@ -179,12 +160,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Row(
                                 children: [
                                   Text(
-                                    userData['userName'],
-                                    style: const TextStyle(color: mobileBackgroundColor, fontWeight: FontWeight.bold, fontSize: 25),
+                                    _profileController.userData['userName'],
+                                    style:
+                                        const TextStyle(color: mobileBackgroundColor, fontWeight: FontWeight.bold, fontSize: 25),
                                   ),
                                   const Spacer(),
-                                  IconButton(onPressed: () => showBottomSheet(), icon: const Icon(Icons.add_box_outlined)),
-                                  IconButton(onPressed: () => onMenuPress(), icon: const Icon(Icons.menu)),
+                                  IconButton(onPressed: () => showBottomSheet(context), icon: const Icon(Icons.add_box_outlined)),
+                                  IconButton(onPressed: () => onMenuPress(context), icon: const Icon(Icons.menu)),
                                 ],
                               ),
                               const Divider(color: secondaryColor),
@@ -193,26 +175,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                  CircleAvatar(backgroundImage: NetworkImage(userData['photoUrl']), maxRadius: 40),
-                                  PostFollowerFollowingStatus(title: 'Posts', values: postLen, onPressed: () => () {}),
+                                  CircleAvatar(
+                                      backgroundImage: NetworkImage(_profileController.userData['photoUrl']), maxRadius: 40),
+                                  PostFollowerFollowingStatus(
+                                      title: 'Posts', values: _profileController.postLen.value, onPressed: () => () {}),
                                   PostFollowerFollowingStatus(
                                     title: 'Followers',
-                                    values: followers,
-                                    onPressed: () => context.pushNamed('FollowersAndFollowingList',
-                                        queryParameters: {'userName': userData['userName'], 'uid': widget.uid,'currentTabIndex':'0'}),
+                                    values: _profileController.followers.value,
+                                    onPressed: () => context.pushNamed('FollowersAndFollowingList', queryParameters: {
+                                      'userName': _profileController.userData['userName'],
+                                      'uid': uid,
+                                      'currentTabIndex': '0'
+                                    }),
                                   ),
                                   PostFollowerFollowingStatus(
                                     title: 'Following',
-                                    values: following,
-                                    onPressed: () => context.pushNamed('FollowersAndFollowingList',
-                                        queryParameters: {'userName': userData['userName'], 'uid': widget.uid,'currentTabIndex':'1'}),
+                                    values: _profileController.following.value,
+                                    onPressed: () => context.pushNamed('FollowersAndFollowingList', queryParameters: {
+                                      'userName': _profileController.userData['userName'],
+                                      'uid': uid,
+                                      'currentTabIndex': '1'
+                                    }),
                                   ),
                                 ]),
                               ),
 
                               ///Bio
                               Text(
-                                '${userData['bio']}  \n........\n.......\n........\n........\n........',
+                                '${_profileController.userData['bio']}  \n........\n.......\n........\n........\n........',
                                 style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
                               ),
 
@@ -223,10 +213,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 children: [
                                   EditShareProfileButton(
                                     onPressed: () => context.pushNamed('UpdateProfile', queryParameters: {
-                                      'photoUrl': userData['photoUrl'],
-                                      'uid': userData['uid'],
-                                      'userName': userData['userName'],
-                                      'bio': userData['bio']
+                                      'photoUrl': _profileController.userData['photoUrl'],
+                                      'uid': _profileController.userData['uid'],
+                                      'userName': _profileController.userData['userName'],
+                                      'bio': _profileController.userData['bio']
                                     }),
                                     btnTitle: 'Edit Profile',
                                   ),
@@ -284,8 +274,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           physics: const BouncingScrollPhysics(),
                           children: [
                             PersonalPostTab(
-                              uid: widget.uid,
-                              postLen: postLen,
+                              uid: uid,
+                              postLen: _profileController.postLen.value,
                             ),
                             const MyReelsTab(),
                             const TaggedMeTab(),

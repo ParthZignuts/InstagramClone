@@ -95,8 +95,8 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         onPageChanged: onPageChanged,
         children: [
           const FeedScreen(),
-          const SearchScreen(),
-          const AddPostScreen(),
+            SearchScreen(),
+           AddPostScreen(),
           SocioMap(uid: FirebaseAuth.instance.currentUser!.uid,),
           ReelsScreen(),
           ProfileScreen(
