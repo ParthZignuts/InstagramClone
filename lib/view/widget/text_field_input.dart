@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TextFieldInput extends StatefulWidget {
+class TextFieldInput extends StatelessWidget {
   final TextEditingController textEditingController;
   final bool isPass;
   final String hintText;
@@ -11,29 +11,24 @@ class TextFieldInput extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<TextFieldInput> createState() => _TextFieldInputState();
-}
-
-class _TextFieldInputState extends State<TextFieldInput> {
-  @override
   Widget build(BuildContext context) {
     final inputBorder = OutlineInputBorder(
       borderSide: Divider.createBorderSide(context),
     );
     return Padding(
-      padding: const EdgeInsets.only(top: 12.0,bottom: 12.0),
+      padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
       child: TextField(
         decoration: InputDecoration(
-          hintText: widget.hintText,
+          hintText: hintText,
           border: inputBorder,
           focusedBorder: inputBorder,
           enabledBorder: inputBorder,
           filled: true,
           contentPadding: const EdgeInsets.all(8),
         ),
-        controller: widget.textEditingController,
-        keyboardType: widget.textInputType,
-        obscureText: widget.isPass,
+        controller: textEditingController,
+        keyboardType: textInputType,
+        obscureText: isPass,
       ),
     );
   }
