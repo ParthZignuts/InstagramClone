@@ -3,6 +3,7 @@ import '../../view.dart';
 import '../../../core/core.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({Key? key}) : super(key: key);
 

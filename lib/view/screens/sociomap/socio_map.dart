@@ -6,6 +6,7 @@ import '../../../core/model/user.dart' as model;
 import '../../../utils/global_variables.dart';
 import '../../../core/core.dart';
 
+// ignore: must_be_immutable
 class SocioMap extends StatelessWidget {
   SocioMap({Key? key, required this.uid}) : super(key: key);
 
@@ -38,7 +39,7 @@ class SocioMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       getLocation();
     });
     model.User? user = Provider.of<UserProvider>(context).getUser;

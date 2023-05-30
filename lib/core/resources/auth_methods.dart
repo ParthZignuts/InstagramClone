@@ -32,7 +32,7 @@ class AuthMethods {
   }) async {
     String res = 'Please Fill All The Form Field!!';
     try {
-      if (email.isNotEmpty && password.isNotEmpty && userName.isNotEmpty && bio.isNotEmpty && file != null) {
+      if (email.isNotEmpty && password.isNotEmpty && userName.isNotEmpty && bio.isNotEmpty && file.isNotEmpty) {
         ///register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
@@ -66,7 +66,7 @@ class AuthMethods {
   }) async {
     String res = 'Please Fill All The Form Field!!';
     try {
-      if (userName.isNotEmpty && bio.isNotEmpty && file != null){
+      if (userName.isNotEmpty && bio.isNotEmpty && file.isNotEmpty){
         // Update user data
         String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
 

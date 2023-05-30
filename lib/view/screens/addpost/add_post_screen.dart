@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/core.dart';
 import '../../view.dart';
 
+// ignore: must_be_immutable
 class AddPostScreen extends StatelessWidget {
    AddPostScreen({Key? key}) : super(key: key);
 

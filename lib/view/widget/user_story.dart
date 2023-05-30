@@ -6,7 +6,7 @@ class UserStory extends StatelessWidget {
     super.key,
   });
 
-  final snap;
+  final dynamic snap;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,12 @@ class UserStory extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 4.0),
-                child: Text(snap['userName'],style: const TextStyle(fontWeight: FontWeight.w700,),),
+                child: Text(
+                  snap['userName'],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ],
           ),

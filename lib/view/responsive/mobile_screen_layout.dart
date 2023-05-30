@@ -96,7 +96,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(
-                  icon: CircleAvatar(backgroundImage: NetworkImage(user!.photoUrl), radius: 16),
+                  icon: CircleAvatar(backgroundImage: NetworkImage(user.photoUrl), radius: 16),
                   backgroundColor: primaryColor,
                 ),
               ],

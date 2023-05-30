@@ -42,7 +42,7 @@ class PersonalChatScreen extends StatelessWidget {
           actions: [
             TextButton(
                 onPressed: () {
-                  print('chatRoomId:$chatRoomId , pChatId:$chatId , userName : $userName');
+                  debugPrint('chatRoomId:$chatRoomId , pChatId:$chatId , userName : $userName');
                   FireStoreMethods().deleteChat(chatRoomId, chatId, userName);
                   Navigator.pop(context);
                 },

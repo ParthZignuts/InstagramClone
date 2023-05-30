@@ -4,7 +4,7 @@ import '../view.dart';
 import 'package:flutter/material.dart';
 
 class CommentCard extends StatelessWidget {
-  final snap;
+  final dynamic snap;
   final void Function()? onDelete;
 
   const CommentCard({Key? key, required this.snap, required this.onDelete}) : super(key: key);
