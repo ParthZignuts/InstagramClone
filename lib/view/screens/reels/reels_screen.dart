@@ -1,6 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:instagram_clone/view/view.dart';
-
+import 'package:flutter/material.dart';
 class ReelsScreen extends StatelessWidget {
   final List<String> videos = [
     'https://assets.mixkit.co/videos/preview/mixkit-taking-photos-from-different-angles-of-a-model-34421-large.mp4',

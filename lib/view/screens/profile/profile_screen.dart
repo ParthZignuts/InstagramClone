@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:instagram_clone/core/controller/profile_controller.dart';
 import '../../view.dart';
-
+import '../../../core/core.dart';
+import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class ProfileScreen extends StatelessWidget {
   final String uid;

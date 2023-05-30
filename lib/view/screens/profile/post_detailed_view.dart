@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:instagram_clone/view/view.dart';
-
+import 'package:flutter/material.dart';
 class PostDetailedView extends StatelessWidget {
   const PostDetailedView({Key? key, required this.postId}) : super(key: key);
   final String postId;

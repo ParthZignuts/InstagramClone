@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
-
-import '../../view/view.dart';
+import 'package:flutter/material.dart';
 
 class CommentsController extends GetxController{
 

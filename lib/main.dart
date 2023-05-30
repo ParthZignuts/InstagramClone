@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:instagram_clone/routes/routes.dart';
 import './view/view.dart';
 import './core/core.dart';
+import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

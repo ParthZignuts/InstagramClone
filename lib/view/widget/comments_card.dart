@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:instagram_clone/utils/colors.dart';
+
 import 'package:intl/intl.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import '../view.dart';
+import 'package:flutter/material.dart';
 
 class CommentCard extends StatelessWidget {
   final snap;

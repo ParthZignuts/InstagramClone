@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
-import 'package:uuid/uuid.dart';
+import './resources.dart';
 
-class StorageMthods {
+class StorageMethods {
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import '../view.dart';
 import '../../core/core.dart';
+import 'package:flutter/material.dart';
 import '../../core/model/user.dart' as model;
 
 class MobileScreenLayout extends StatefulWidget {
@@ -40,8 +41,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-
     model.User? user = userProvider.getUser;
+
     return (user == null)
         ? const Center(
             child: CircularProgressIndicator(),
@@ -53,9 +54,11 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               onPageChanged: (value) => onPageChanged(value),
               children: [
                 const FeedScreenPageView(),
-                  SearchScreen(),
-                 AddPostScreen(),
-                 SocioMap(uid: FirebaseAuth.instance.currentUser!.uid,),
+                SearchScreen(),
+                AddPostScreen(),
+                SocioMap(
+                  uid: FirebaseAuth.instance.currentUser!.uid,
+                ),
                 ReelsScreen(),
                 ProfileScreen(
                   uid: FirebaseAuth.instance.currentUser!.uid,
@@ -93,7 +96,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                   backgroundColor: primaryColor,
                 ),
                 BottomNavigationBarItem(
-                  icon: CircleAvatar(backgroundImage: NetworkImage(user.photoUrl), radius: 16),
+                  icon: CircleAvatar(backgroundImage: NetworkImage(user!.photoUrl), radius: 16),
                   backgroundColor: primaryColor,
                 ),
               ],

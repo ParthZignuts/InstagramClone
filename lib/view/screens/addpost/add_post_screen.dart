@@ -1,8 +1,5 @@
-import 'dart:typed_data';
 
-import 'package:get/get.dart';
-
-import '../../../core/controller/add_post_controller.dart';
+import 'package:flutter/material.dart';
 import '../../../core/core.dart';
 import '../../view.dart';
 

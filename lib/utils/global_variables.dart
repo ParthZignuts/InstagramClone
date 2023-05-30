@@ -1,10 +1,10 @@
 import 'package:latlong2/latlong.dart';
+
+
+/// for differentiating webView and mobileView
 const webScreenSize = 600;
 
-
-
-
-
+/// apps  constant
 class AppConstants {
   static const String mapBoxAccessToken = 'pk.eyJ1IjoicGFydGhha2JhcmkiLCJhIjoiY2xodTMzdGh6MDJ1cDNrbWJuMHJma3JyciJ9.gySDtABkG-ohC-CkqFRy-Q';
 

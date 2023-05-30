@@ -16,3 +16,8 @@ export './list_of_followers.dart';
 export './list_of_following.dart';
 export 'package:lottie/lottie.dart';
 export './reels_like_icon.dart';
+export 'package:flutter_svg/flutter_svg.dart';
+export 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
+export 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
+export 'package:location/location.dart';
+export 'package:flutter_slidable/flutter_slidable.dart';

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:instagram_clone/view/screens/search/searched_user_profillescreen.dart';
 import '../view/view.dart';

@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:instagram_clone/core/controller/comments_controller.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
+import 'package:flutter/material.dart';
 
 class CommentsScreen extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables

@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
 import '../view.dart';
 
 class WebScreenLayout extends StatefulWidget {
@@ -82,7 +82,7 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
           ),
           IconButton(
             icon: Icon(
-              Icons.person,
+                Icons.person,
               color: _page == 5 ? primaryColor : secondaryColor,
             ),
             onPressed: () => navigationTapped(5),
@@ -95,9 +95,11 @@ class _WebScreenLayoutState extends State<WebScreenLayout> {
         onPageChanged: onPageChanged,
         children: [
           const FeedScreen(),
-            SearchScreen(),
-           AddPostScreen(),
-          SocioMap(uid: FirebaseAuth.instance.currentUser!.uid,),
+          SearchScreen(),
+          AddPostScreen(),
+          SocioMap(
+            uid: FirebaseAuth.instance.currentUser!.uid,
+          ),
           ReelsScreen(),
           ProfileScreen(
             uid: FirebaseAuth.instance.currentUser!.uid,

@@ -1,9 +1,6 @@
-import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:instagram_clone/core/resources/storage_mthods.dart';
-import 'package:uuid/uuid.dart';
 import '../model/model.dart';
+import './resources.dart';
 
 class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -12,7 +9,7 @@ class FireStoreMethods {
   Future<String> uploadPost(String caption, String uid, String userName, Uint8List file, String profImage) async {
     String result = 'Can\'t post now ';
     try {
-      String postUrl = await StorageMthods().uploadImageToStorage('post', file, true);
+      String postUrl = await StorageMethods().uploadImageToStorage('post', file, true);
       String postId = const Uuid().v1();
       PostModel post = PostModel(
           caption: caption.trim(),

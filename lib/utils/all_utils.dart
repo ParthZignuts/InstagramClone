@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
-
 import '../core/resources/auth_methods.dart';
+import 'package:flutter/material.dart';
+import 'package:instagram_clone/view/view.dart';
 
 ///to chose image from gallery or direct click photo based on given source
 pickImage(ImageSource source) async {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:instagram_clone/view/view.dart';
+import 'package:flutter/material.dart';
 
 class ConnectivityCheck extends StatefulWidget {
   const ConnectivityCheck({super.key});

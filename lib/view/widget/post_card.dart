@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
 import '../view.dart';
 import '../../core/core.dart';
+import 'package:flutter/material.dart';
 
 class PostCard extends StatefulWidget {
   const PostCard({

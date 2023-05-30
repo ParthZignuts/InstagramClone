@@ -1,8 +1,6 @@
-import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:instagram_clone/core/resources/storage_mthods.dart';
 import '../model/user.dart' as model;
+import './resources.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -38,7 +36,7 @@ class AuthMethods {
         ///register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
-        String photoUrl = await StorageMthods().uploadImageToStorage('profilePics', file, false);
+        String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
 
         ///use User Model to store data
         model.User user = model.User(
@@ -70,7 +68,7 @@ class AuthMethods {
     try {
       if (userName.isNotEmpty && bio.isNotEmpty && file != null){
         // Update user data
-        String photoUrl = await StorageMthods().uploadImageToStorage('profilePics', file, false);
+        String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
 
         // Retrieve the user document from the database
         DocumentReference userRef = _firestore.collection('users').doc(uid);

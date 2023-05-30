@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../../view/view.dart';
+import 'package:flutter/material.dart';
 
 class ChatController extends GetxController {
   final Rx<TextEditingController> chatController = TextEditingController().obs;

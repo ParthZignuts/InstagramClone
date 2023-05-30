@@ -1,5 +1,6 @@
 
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:instagram_clone/view/view.dart';
 import '../../../core/resources/auth_methods.dart';
 

@@ -1,7 +1,6 @@
-
-
+import 'package:flutter/material.dart';
 import '../view/view.dart';
-
+///All Text Styles used in app
 class TextStyles {
   static const h1Bold = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
   static const h1Normal = TextStyle(fontSize: 22, fontWeight: FontWeight.normal);

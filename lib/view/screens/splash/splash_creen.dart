@@ -1,25 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
+import 'package:flutter/material.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
   ///fetch current user's photo to show in bottomNavigationBar
-  Future<void> fetchData() async {
+  Future<void> fetchData(BuildContext context) async {
     try {
       // Fetch the current user's data from Firebase Auth and FireStore
       Future.delayed(const Duration(seconds: 3), () {
@@ -35,6 +24,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      fetchData(context);
+    });
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -42,10 +34,10 @@ class _SplashScreenState extends State<SplashScreen> {
           const Spacer(),
           Center(
               child: Image.asset(
-            'assets/images/instalogo-removebg-preview.png',
-            alignment: Alignment.center,
-            height: 200,
-          )),
+                'assets/images/instalogo-removebg-preview.png',
+                alignment: Alignment.center,
+                height: 200,
+              )),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.only(bottom: 50.0),
@@ -67,3 +59,5 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+

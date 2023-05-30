@@ -1,7 +1,7 @@
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 import 'package:instagram_clone/view/view.dart';
-
+import 'package:flutter/material.dart';
 class ContentScreen extends StatefulWidget {
   final String? src;
 

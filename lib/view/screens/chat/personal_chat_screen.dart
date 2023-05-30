@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:instagram_clone/core/controller/chat_controller.dart';
-import 'package:instagram_clone/core/resources/resources.dart';
 import 'package:instagram_clone/view/view.dart';
-import 'package:uuid/uuid.dart';
+import '../../../core/core.dart';
+import 'package:flutter/material.dart';
 
 class PersonalChatScreen extends StatelessWidget {
   const PersonalChatScreen(

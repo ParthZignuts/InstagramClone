@@ -1,5 +1,5 @@
 import '../../view.dart';
-
+import 'package:flutter/material.dart';
 class FeedScreenPageView extends StatelessWidget {
   const FeedScreenPageView({Key? key}) : super(key: key);
 

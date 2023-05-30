@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:instagram_clone/view/view.dart';
-
+import 'package:flutter/material.dart';
 class FollowersAndFollowingList extends StatelessWidget {
   const FollowersAndFollowingList({Key? key, required this.uid,required this.userName,required this.currentTabIndex}) : super(key: key);
   final String uid;

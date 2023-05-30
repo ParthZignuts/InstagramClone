@@ -1,7 +1,6 @@
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:instagram_clone/view/view.dart';
-
+import 'package:flutter/material.dart';
 class FeedScreen extends StatelessWidget {
   const FeedScreen({Key? key}) : super(key: key);
 
