@@ -40,171 +40,182 @@ class SearchedUserProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ( _searchUserController.isLoading.value )
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : Scaffold(
-            body: Obx(() {
-              return (_searchUserController.userData['userName'] == null) ? const Center(child: CircularProgressIndicator(),) :SafeArea(
-                child: NestedScrollView(
-                  scrollDirection: Axis.vertical,
-                  physics: const BouncingScrollPhysics(),
-                  headerSliverBuilder: (context, innerBoxIsScrolled) {
-                    return [
-                      SliverAppBar(
-                          backgroundColor: scaffoldBackgroundColor,
-                          elevation: 0,
-                          expandedHeight: 352,
-                          centerTitle: false,
-                          leading: IconButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              icon: const Icon(
-                                CupertinoIcons.left_chevron,
-                                color: mobileBackgroundColor,
-                              )),
-                          title: Text(
-                            _searchUserController.userData['userName'],
-                            style: TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),
-                          ),
-                          actions: [
-                            IconButton(onPressed: () => () {}, icon: const Icon(Icons.menu)),
-                          ],
-                          flexibleSpace: Obx(
-                                () => FlexibleSpaceBar(
-                              background: Padding(
-                                padding: const EdgeInsets.only(top: 55.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+      width: double.infinity,
+      child: (_searchUserController.isLoading.value)
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Scaffold(body: Obx(
+              () {
+                return (_searchUserController.userData['userName'] == null)
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : SafeArea(
+                        child: NestedScrollView(
+                          scrollDirection: Axis.vertical,
+                          physics: const BouncingScrollPhysics(),
+                          headerSliverBuilder: (context, innerBoxIsScrolled) {
+                            return [
+                              SliverAppBar(
+                                  backgroundColor: scaffoldBackgroundColor,
+                                  elevation: 0,
+                                  expandedHeight: 352,
+                                  centerTitle: false,
+                                  leading: IconButton(
+                                      onPressed: () => Navigator.of(context).pop(),
+                                      icon: const Icon(
+                                        CupertinoIcons.left_chevron,
+                                        color: mobileBackgroundColor,
+                                      )),
+                                  title: Text(
+                                    _searchUserController.userData['userName'],
+                                    style: TextStyles.h2Bold.copyWith(color: mobileBackgroundColor),
+                                  ),
+                                  actions: [
+                                    IconButton(onPressed: () => () {}, icon: const Icon(Icons.menu)),
+                                  ],
+                                  flexibleSpace: Obx(
+                                    () => FlexibleSpaceBar(
+                                      background: Padding(
+                                        padding: const EdgeInsets.only(top: 55.0),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Divider(color: secondaryColor),
+
+                                              ///Post, followers, following count
+                                              Padding(
+                                                padding: const EdgeInsets.only(bottom: 8.0),
+                                                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                                  CircleAvatar(
+                                                      backgroundImage: NetworkImage(_searchUserController.userData['photoUrl']),
+                                                      maxRadius: 40),
+                                                  PostFollowerFollowingStatus(
+                                                      title: 'Posts',
+                                                      values: _searchUserController.postLen.value,
+                                                      onPressed: () => () {}),
+                                                  PostFollowerFollowingStatus(
+                                                    title: 'Followers',
+                                                    values: _searchUserController.followers.value,
+                                                    onPressed: () => context.pushNamed('FollowersAndFollowingList',
+                                                        queryParameters: {
+                                                          'userName': _searchUserController.userData['userName'],
+                                                          'uid': uid,
+                                                          'currentTabIndex': '0'
+                                                        }),
+                                                  ),
+                                                  PostFollowerFollowingStatus(
+                                                    title: 'Following',
+                                                    values: _searchUserController.following.value,
+                                                    onPressed: () => context.pushNamed('FollowersAndFollowingList',
+                                                        queryParameters: {
+                                                          'userName': _searchUserController.userData['userName'],
+                                                          'uid': uid,
+                                                          'currentTabIndex': '1'
+                                                        }),
+                                                  ),
+                                                ]),
+                                              ),
+
+                                              ///Bio
+                                              Text(
+                                                '${_searchUserController.userData['bio']}  \n........\n.......\n........\n........\n........',
+                                                style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  FirebaseAuth.instance.currentUser!.uid == uid
+                                                      ? FollowButton(
+                                                          text: 'Sign Out',
+                                                          backgroundColor: mobileBackgroundColor,
+                                                          textColor: primaryColor,
+                                                          borderColor: mobileBackgroundColor,
+                                                          function: () async {
+                                                            context.go('/LoginScreen');
+                                                            await AuthMethods().signOut();
+                                                          },
+                                                        )
+                                                      : _searchUserController.isFollowing.value
+                                                          ? FollowButton(
+                                                              text: 'Unfollow',
+                                                              backgroundColor: Colors.white,
+                                                              textColor: Colors.black,
+                                                              borderColor: mobileBackgroundColor,
+                                                              function: () async {
+                                                                await FireStoreMethods().followUser(
+                                                                  FirebaseAuth.instance.currentUser!.uid,
+                                                                  _searchUserController.userData['uid'],
+                                                                );
+                                                                _searchUserController.isFollowing(false);
+                                                                _searchUserController.followers.value--;
+                                                              },
+                                                            )
+                                                          : FollowButton(
+                                                              text: 'Follow',
+                                                              backgroundColor: Colors.blue,
+                                                              textColor: Colors.white,
+                                                              borderColor: Colors.blue,
+                                                              function: () async {
+                                                                await FireStoreMethods().followUser(
+                                                                  FirebaseAuth.instance.currentUser!.uid,
+                                                                  _searchUserController.userData['uid'],
+                                                                );
+                                                                _searchUserController.isFollowing(true);
+                                                                _searchUserController.followers.value++;
+                                                              },
+                                                            ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                            ];
+                          },
+                          body: DefaultTabController(
+                            length: 3,
+                            child: Column(
+                              children: [
+                                TabBar(
+                                  indicatorColor: mobileBackgroundColor,
+                                  tabs: [
+                                    Tab(
+                                      icon: Image.asset('assets/images/post.png', color: mobileBackgroundColor, width: 24),
+                                    ),
+                                    Tab(
+                                      icon: Image.asset('assets/images/reel.png', color: mobileBackgroundColor, width: 24),
+                                    ),
+                                    Tab(
+                                      icon: Image.asset('assets/images/tagpeople.png', color: mobileBackgroundColor, width: 24),
+                                    ),
+                                  ],
+                                  indicatorSize: TabBarIndicatorSize.tab,
+                                ),
+                                Expanded(
+                                  child: TabBarView(
+                                    physics: const BouncingScrollPhysics(),
                                     children: [
-                                      const Divider(color: secondaryColor),
-
-                                      ///Post, followers, following count
-                                      Padding(
-                                        padding: const EdgeInsets.only(bottom: 8.0),
-                                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                          CircleAvatar(
-                                              backgroundImage: NetworkImage(_searchUserController.userData['photoUrl']),
-                                              maxRadius: 40),
-                                          PostFollowerFollowingStatus(
-                                              title: 'Posts',
-                                              values: _searchUserController.postLen.value,
-                                              onPressed: () => () {}),
-                                          PostFollowerFollowingStatus(
-                                            title: 'Followers',
-                                            values: _searchUserController.followers.value,
-                                            onPressed: () => context.pushNamed('FollowersAndFollowingList', queryParameters: {
-                                              'userName': _searchUserController.userData['userName'],
-                                              'uid': uid,
-                                              'currentTabIndex': '0'
-                                            }),
-                                          ),
-                                          PostFollowerFollowingStatus(
-                                            title: 'Following',
-                                            values: _searchUserController.following.value,
-                                            onPressed: () => context.pushNamed('FollowersAndFollowingList', queryParameters: {
-                                              'userName': _searchUserController.userData['userName'],
-                                              'uid': uid,
-                                              'currentTabIndex': '1'
-                                            }),
-                                          ),
-                                        ]),
-                                      ),
-
-                                      ///Bio
-                                      Text(
-                                        '${_searchUserController.userData['bio']}  \n........\n.......\n........\n........\n........',
-                                        style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
-                                      ),
-                                      Row(
-                                        children: [
-                                          FirebaseAuth.instance.currentUser!.uid == uid
-                                              ? FollowButton(
-                                            text: 'Sign Out',
-                                            backgroundColor: mobileBackgroundColor,
-                                            textColor: primaryColor,
-                                            borderColor: mobileBackgroundColor,
-                                            function: () async {
-                                              context.go('/LoginScreen');
-                                              await AuthMethods().signOut();
-                                            },
-                                          )
-                                              : _searchUserController.isFollowing.value
-                                              ? FollowButton(
-                                            text: 'Unfollow',
-                                            backgroundColor: Colors.white,
-                                            textColor: Colors.black,
-                                            borderColor: mobileBackgroundColor,
-                                            function: () async {
-                                              await FireStoreMethods().followUser(
-                                                FirebaseAuth.instance.currentUser!.uid,
-                                                _searchUserController.userData['uid'],
-                                              );
-                                              _searchUserController.isFollowing(false);
-                                              _searchUserController.followers.value--;
-                                            },
-                                          )
-                                              : FollowButton(
-                                            text: 'Follow',
-                                            backgroundColor: Colors.blue,
-                                            textColor: Colors.white,
-                                            borderColor: Colors.blue,
-                                            function: () async {
-                                              await FireStoreMethods().followUser(
-                                                FirebaseAuth.instance.currentUser!.uid,
-                                                _searchUserController.userData['uid'],
-                                              );
-                                              _searchUserController.isFollowing(true);
-                                              _searchUserController.followers.value++;
-                                            },
-                                          ),
-                                        ],
-                                      ),
+                                      PersonalPostTab(uid: uid, postLen: _searchUserController.postLen.value),
+                                      const MyReelsTab(),
+                                      const TaggedMeTab(),
                                     ],
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          )),
-                    ];
-                  },
-                  body: DefaultTabController(
-                    length: 3,
-                    child: Column(
-                      children: [
-                        TabBar(
-                          indicatorColor: mobileBackgroundColor,
-                          tabs: [
-                            Tab(
-                              icon: Image.asset('assets/images/post.png', color: mobileBackgroundColor, width: 24),
-                            ),
-                            Tab(
-                              icon: Image.asset('assets/images/reel.png', color: mobileBackgroundColor, width: 24),
-                            ),
-                            Tab(
-                              icon: Image.asset('assets/images/tagpeople.png', color: mobileBackgroundColor, width: 24),
-                            ),
-                          ],
-                          indicatorSize: TabBarIndicatorSize.tab,
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              PersonalPostTab(uid: uid, postLen: _searchUserController.postLen.value),
-                              const MyReelsTab(),
-                              const TaggedMeTab(),
-                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },)
-          );
+                      );
+              },
+            )),
+    );
   }
 }

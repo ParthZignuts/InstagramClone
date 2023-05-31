@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import '../../view.dart';
 import '../../../core/core.dart';
 import 'package:flutter/material.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 

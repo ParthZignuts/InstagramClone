@@ -53,20 +53,28 @@ class CommentsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final User? user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: scaffoldBackgroundColor,
-        title: const Text(
-          'Comments',
-          style: TextStyle(color: mobileBackgroundColor),
-        ),
-        centerTitle: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            CupertinoIcons.left_chevron,
-            color: mobileBackgroundColor,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50.0),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+          width: double.infinity,
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: scaffoldBackgroundColor,
+            title: const Text(
+              'Comments',
+              style: TextStyle(color: mobileBackgroundColor),
+            ),
+            centerTitle: false,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                CupertinoIcons.left_chevron,
+                color: mobileBackgroundColor,
+              ),
+            ),
           ),
         ),
       ),
@@ -84,60 +92,68 @@ class CommentsScreen extends StatelessWidget {
             }
             _commentsController.changeValueOfHasBuiltOnce(true);
           }
-          return (snapshot.data!.docs.isNotEmpty)
-              ? GestureDetector(
-                  onPanDown: (_) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  },
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (ctx, index) => CommentCard(
-                      snap: snapshot.data!.docs[index],
-                      onDelete: () => deleteComment(postId, snapshot.data!.docs[index].data()['commentId'], user!.uid),
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+            width: double.infinity,
+            child: (snapshot.data!.docs.isNotEmpty)
+                ? GestureDetector(
+                    onPanDown: (_) {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    },
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (ctx, index) => CommentCard(
+                        snap: snapshot.data!.docs[index],
+                        onDelete: () => deleteComment(postId, snapshot.data!.docs[index].data()['commentId'], user!.uid),
+                      ),
+                    ),
+                  )
+                : const Center(
+                    child: Text(
+                      'No Any Comments!',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: mobileBackgroundColor),
                     ),
                   ),
-                )
-              : const Center(
-                  child: Text(
-                    'No Any Comments!',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: mobileBackgroundColor),
-                  ),
-                );
+          );
         },
       ),
       // text input
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          height: kToolbarHeight,
-          margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          padding: const EdgeInsets.only(left: 16, right: 8),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(user!.photoUrl),
-                radius: 18,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 8),
-                  child: TextField(
-                    autofocus: true,
-                    controller: _commentsController.commentEditingController.value,
-                    decoration: InputDecoration(
-                      hintText: 'Comment as ${user.userName}',
-                      border: InputBorder.none,
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+        width: double.infinity,
+        child: SafeArea(
+          child: Container(
+            height: kToolbarHeight,
+            margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: const EdgeInsets.only(left: 16, right: 8),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage(user!.photoUrl),
+                  radius: 18,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 8),
+                    child: TextField(
+                      autofocus: true,
+                      controller: _commentsController.commentEditingController.value,
+                      decoration: InputDecoration(
+                        hintText: 'Comment as ${user.userName}',
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              TextButton(
-                  onPressed: () => postComment(user.uid, user.userName, user.photoUrl, context),
-                  child: const Text(
-                    'Post',
-                    style: TextStyle(color: Colors.blue),
-                  )),
-            ],
+                TextButton(
+                    onPressed: () => postComment(user.uid, user.userName, user.photoUrl, context),
+                    child: const Text(
+                      'Post',
+                      style: TextStyle(color: Colors.blue),
+                    )),
+              ],
+            ),
           ),
         ),
       ),

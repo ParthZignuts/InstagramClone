@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class SearchUserController extends GetxController {
-  final Rx<TextEditingController> searchController = TextEditingController().obs;
-  var isShowUsers = false.obs;
+  Rx<TextEditingController> searchController = TextEditingController().obs;
+  Rx<Stream<QuerySnapshot>?> searchResults = Rx<Stream<QuerySnapshot>?>(null);
+
+  RxBool isShowUsers = false.obs;
   var isFollowing = false.obs;
   var isLoading = false.obs;
   var uid = ''.obs;
@@ -12,14 +15,28 @@ class SearchUserController extends GetxController {
   var followers = 0.obs;
   var following = 0.obs;
 
-  void updateSearchControllerValues(String value) {
-    searchController.value.text = value;
+
+
+  @override
+  void onInit() {
+    super.onInit();
+    searchController.value = TextEditingController();
   }
 
-  ///used to show searched users
-  void setIsShowUser(bool values) {
-    isShowUsers.value = values;
+  @override
+  void onClose() {
+    searchController.value.dispose();
+    super.onClose();
   }
+  ///used to show searched user
+  void setIsShowUser(bool value) {
+    isShowUsers.value = value;
+  }
+
+  void setSearchResults(Stream<QuerySnapshot>? results) {
+    searchResults.value = results;
+  }
+
 
   ///it's used to set the loading values if some data will be loading then it's true otherwise it's false
   void setLoadingValues(bool values) {

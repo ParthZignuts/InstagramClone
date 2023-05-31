@@ -15,7 +15,7 @@ class SplashScreen extends StatelessWidget {
         AuthMethods().getUserDetail();
         FirebaseAuth.instance.authStateChanges();
         // Navigate to the next screen
-        context.go('/ConnectivityCheck');
+        MediaQuery.of(context).size.width > webScreenSize ? context.go('/MainScreen') : context.go('/ConnectivityCheck');
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -28,36 +28,38 @@ class SplashScreen extends StatelessWidget {
       fetchData(context);
     });
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(),
-          Center(
-              child: Image.asset(
-                'assets/images/instalogo-removebg-preview.png',
-                alignment: Alignment.center,
-                height: 200,
-              )),
-          const Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 50.0),
-            child: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return const LinearGradient(
-                  colors: [purpleLinear1, purpleLinear2, purpleLinear3],
-                ).createShader(bounds);
-              },
-              child: SvgPicture.asset(
-                'assets/images/ic_instagram.svg',
-                color: Colors.pink,
-                height: 40,
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Spacer(),
+            Center(
+                child: Image.asset(
+              'assets/images/instalogo-removebg-preview.png',
+              alignment: Alignment.center,
+              height: 200,
+            )),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50.0),
+              child: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return const LinearGradient(
+                    colors: [purpleLinear1, purpleLinear2, purpleLinear3],
+                  ).createShader(bounds);
+                },
+                child: SvgPicture.asset(
+                  'assets/images/ic_instagram.svg',
+                  color: Colors.pink,
+                  height: 40,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
-
-
