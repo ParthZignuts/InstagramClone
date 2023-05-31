@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/view/view.dart';
@@ -70,69 +69,88 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: scaffoldBackgroundColor,
-        leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close,color: mobileBackgroundColor,)),
-        title: const Text('Edit Profile',style: TextStyle(color: mobileBackgroundColor),),
-        actions: [
-          IconButton(
-              onPressed: () {
-                if (imgFile != null) {
-                  updateProfile();
-                } else {
-                  showSnackbar('Select New Profile Photo to Update Profile', context);
-                }
-              },
-              icon: _isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                      ))
-                  : const Icon(
-                      Icons.check_rounded,
-                      color: Colors.blueAccent,
-                    )),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 40.0),
-        child: Column(
-          children: [
-            imgFile != null
-                ? CircleAvatar(maxRadius: 35, backgroundImage: MemoryImage(imgFile!))
-                : CircleAvatar(
-                    maxRadius: 35,
-                    backgroundImage: NetworkImage(widget.photoUrl),
-                  ),
-            TextButton(
-                onPressed: () => selectImage(),
-                child: const Text(
-                  'Edit picture',
-                  style: TextStyle(color: Colors.blueAccent, fontSize: 18),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50.0),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+          width: double.infinity,
+          child: AppBar(
+            centerTitle: false,
+            elevation: 0,
+            backgroundColor: scaffoldBackgroundColor,
+            leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(
+                  Icons.close,
+                  color: mobileBackgroundColor,
                 )),
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelStyle: TextStyle(color: mobileBackgroundColor, fontSize: 18),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
-                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
-                label: Text('UserName'),
-              ),
+            title: const Text(
+              'Edit Profile',
+              style: TextStyle(color: mobileBackgroundColor),
             ),
-            TextField(
-              controller: _bioController,
-              decoration: const InputDecoration(
-                labelStyle: TextStyle(color: mobileBackgroundColor, fontSize: 18),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
-                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
-                label: Text('Bio'),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    if (imgFile != null) {
+                      updateProfile();
+                    } else {
+                      showSnackbar('Select New Profile Photo to Update Profile', context);
+                    }
+                  },
+                  icon: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ))
+                      : const Icon(
+                          Icons.check_rounded,
+                          color: Colors.blueAccent,
+                        )),
+            ],
+          ),
+        ),
+      ),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 40.0),
+          child: Column(
+            children: [
+              imgFile != null
+                  ? CircleAvatar(maxRadius: 35, backgroundImage: MemoryImage(imgFile!))
+                  : CircleAvatar(
+                      maxRadius: 35,
+                      backgroundImage: NetworkImage(widget.photoUrl),
+                    ),
+              TextButton(
+                  onPressed: () => selectImage(),
+                  child: const Text(
+                    'Edit picture',
+                    style: TextStyle(color: Colors.blueAccent, fontSize: 18),
+                  )),
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelStyle: TextStyle(color: mobileBackgroundColor, fontSize: 18),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
+                  label: Text('UserName'),
+                ),
               ),
-            ),
-          ],
+              TextField(
+                controller: _bioController,
+                decoration: const InputDecoration(
+                  labelStyle: TextStyle(color: mobileBackgroundColor, fontSize: 18),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: mobileBackgroundColor)),
+                  label: Text('Bio'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

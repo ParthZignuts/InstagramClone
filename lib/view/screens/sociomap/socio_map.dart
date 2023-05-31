@@ -76,44 +76,48 @@ class SocioMap extends StatelessWidget {
                         photoUrl: photoUrl as String,
                       );
                     }).toList();
-                    return FlutterMap(
-                      options: MapOptions(
-                          minZoom: 5,
-                          maxZoom: 18,
-                          zoom: 13,
-                          center: LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!)),
-                      children: [
-                        TileLayer(
-                          urlTemplate:
-                              "https://api.mapbox.com/styles/v1/parthakbari/clhudsgzo003p01pibu0r55cy/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoicGFydGhha2JhcmkiLCJhIjoiY2xodTMwaWJwMG5tNjNlcDVrMnM0ZmNyeiJ9.1hkpsINUNOi_KEbN2VUkGA",
-                          additionalOptions: const {
-                            'mapStyleId': AppConstants.mapBoxStyleId,
-                            'accessToken': AppConstants.mapBoxAccessToken,
-                          },
-                        ),
-                        MarkerLayer(
-                          markers: userLocations.map((userLocation) {
-                            return Marker(
-                              width: 100,
-                              height: 60,
-                              point: userLocation.location,
-                              builder: (context) {
-                                return Column(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundImage: NetworkImage(userLocation.photoUrl),
-                                    ),
-                                    Text(
-                                      userLocation.username,
-                                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      ],
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+                      width: double.infinity,
+                      child: FlutterMap(
+                        options: MapOptions(
+                            minZoom: 5,
+                            maxZoom: 18,
+                            zoom: 13,
+                            center: LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!)),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                "https://api.mapbox.com/styles/v1/parthakbari/clhudsgzo003p01pibu0r55cy/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoicGFydGhha2JhcmkiLCJhIjoiY2xodTMwaWJwMG5tNjNlcDVrMnM0ZmNyeiJ9.1hkpsINUNOi_KEbN2VUkGA",
+                            additionalOptions: const {
+                              'mapStyleId': AppConstants.mapBoxStyleId,
+                              'accessToken': AppConstants.mapBoxAccessToken,
+                            },
+                          ),
+                          MarkerLayer(
+                            markers: userLocations.map((userLocation) {
+                              return Marker(
+                                width: Get.width,
+                                height: 60,
+                                point: userLocation.location,
+                                builder: (context) {
+                                  return Column(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundImage: NetworkImage(userLocation.photoUrl),
+                                      ),
+                                      Text(
+                                        userLocation.username,
+                                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
                     );
                   }
                 }

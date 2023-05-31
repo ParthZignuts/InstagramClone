@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/view/view.dart';
+
+import '../../utils/global_variables.dart';
 
 class FollowButton extends StatelessWidget {
   final Function()? function;
@@ -31,7 +34,9 @@ class FollowButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
           ),
           alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width * 0.89,
+          width:  MediaQuery.of(context).size.width > webScreenSize
+              ?MediaQuery.of(context).size.width * 0.4
+              : MediaQuery.of(context).size.width * 0.89,
           height: 40,
           child: Text(
             text,

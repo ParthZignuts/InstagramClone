@@ -83,7 +83,7 @@ class _PostCardState extends State<PostCard> {
               child: CircularProgressIndicator(),
             )
           : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -166,15 +166,9 @@ class _PostCardState extends State<PostCard> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      ClipRect(
-                        child: Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.diagonal3Values(_scale, _scale, 1.0),
-                          child: Image.network(
-                            widget._snap['photoUrl'],
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                      Image.network(
+                        widget._snap['photoUrl'],
+                        fit: BoxFit.fill,
                       ),
                       AnimatedOpacity(
                         duration: const Duration(milliseconds: 200),
@@ -198,6 +192,8 @@ class _PostCardState extends State<PostCard> {
                   ),
                 ),
                 Row(
+                  // crossAxisAlignment:CrossAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     LikeAnimation(
                       isAnimating: widget._snap['likes'].contains(user!.uid),
@@ -234,41 +230,45 @@ class _PostCardState extends State<PostCard> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 3.0, left: 15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${widget._snap['likes'].length} likes',
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, right: 8.0),
-                        child: ReadMoreText(
-                          '${widget._snap['userName']} ${' '} ${widget._snap['caption']}',
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${widget._snap['likes'].length} likes',
                           style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                          trimLines: 2,
-                          colorClickableText: secondaryColor,
-                          trimMode: TrimMode.Line,
-                          trimCollapsedText: 'Show more',
-                          trimExpandedText: 'Show less',
-                          moreStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: secondaryColor),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 3.0),
-                        child: InkWell(
-                          onTap: () => context.push('/CommentScreen/${widget._snap['postId']}'),
-                          child: Text(
-                            'view all $commentLength comments',
-                            style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0, bottom: 5.0, right: 8.0),
+                          child: ReadMoreText(
+                            '${widget._snap['userName']} ${' '} ${widget._snap['caption']}',
+                            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                            trimLines: 2,
+                            colorClickableText: secondaryColor,
+                            trimMode: TrimMode.Line,
+                            trimCollapsedText: 'Show more',
+                            trimExpandedText: 'Show less',
+                            moreStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: secondaryColor),
                           ),
                         ),
-                      ),
-                      Text(
-                        DateFormat.yMMMd().format(widget._snap['datePublished'].toDate()),
-                        style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 3.0),
+                          child: InkWell(
+                            onTap: () => context.push('/CommentScreen/${widget._snap['postId']}'),
+                            child: Text(
+                              'view all $commentLength comments',
+                              style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          DateFormat.yMMMd().format(widget._snap['datePublished'].toDate()),
+                          style: const TextStyle(fontWeight: FontWeight.w400, color: secondaryColor),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

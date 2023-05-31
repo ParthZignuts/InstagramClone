@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:instagram_clone/view/view.dart';
@@ -26,37 +25,44 @@ class ChatScreen extends StatelessWidget {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
     model.User? user = userProvider.getUser;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          user!.userName,
-          style: const TextStyle(color: mobileBackgroundColor),
-        ),
-        centerTitle: false,
-        backgroundColor: scaffoldBackgroundColor,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () => context.go('/MainScreen'),
-          icon: const Icon(
-            CupertinoIcons.left_chevron,
-            color: mobileBackgroundColor,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50.0),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+          width: double.infinity,
+          child: AppBar(
+            title: Text(
+              user!.userName,
+              style: const TextStyle(color: mobileBackgroundColor),
+            ),
+            centerTitle: false,
+            backgroundColor: scaffoldBackgroundColor,
+            elevation: 0,
+            leading: IconButton(
+              onPressed: () => context.go('/MainScreen'),
+              icon: const Icon(
+                CupertinoIcons.left_chevron,
+                color: mobileBackgroundColor,
+              ),
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.video_call_outlined,
+                    size: 30,
+                    color: mobileBackgroundColor,
+                  )),
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.edit,
+                    size: 25,
+                    color: mobileBackgroundColor,
+                  )),
+            ],
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.video_call_outlined,
-                size: 30,
-                color: mobileBackgroundColor,
-              )),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.edit,
-                size: 25,
-                color: mobileBackgroundColor,
-              )),
-        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('users').where('userName', isNotEqualTo: user.userName).snapshots(),
@@ -69,45 +75,49 @@ class ChatScreen extends StatelessWidget {
             return const Text('Loading...');
           }
 
-          final documents = snapshot.data!.docs;//get all the data from stream builder snapshot
+          final documents = snapshot.data!.docs; //get all the data from stream builder snapshot
 
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: documents.length,
-            itemBuilder: (context, index) {
-              final userName = documents[index]['userName'] ?? '';
-              final photoUrl = documents[index]['photoUrl'] ?? '';
-              final uid = documents[index]['uid'] ?? '';
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: calculateHorizontalPadding(context)),
+            width: double.infinity,
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: documents.length,
+              itemBuilder: (context, index) {
+                final userName = documents[index]['userName'] ?? '';
+                final photoUrl = documents[index]['photoUrl'] ?? '';
+                final uid = documents[index]['uid'] ?? '';
 
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    final chatId = createChatRoom(user.userName, documents[index]['userName']);
-                    context.pushNamed('PersonalChat', queryParameters: {
-                      'userName': userName,
-                      'photoUrl': photoUrl,
-                      'uid': uid,
-                      'chatRoomId': chatId,
-                    });
-                  },
-                  child: ListTile(
-                    title: Text(
-                      userName,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    leading: CircleAvatar(
-                      maxRadius: 24,
-                      backgroundImage: NetworkImage(photoUrl),
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.camera_alt_outlined),
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      final chatId = createChatRoom(user.userName, documents[index]['userName']);
+                      context.pushNamed('PersonalChat', queryParameters: {
+                        'userName': userName,
+                        'photoUrl': photoUrl,
+                        'uid': uid,
+                        'chatRoomId': chatId,
+                      });
+                    },
+                    child: ListTile(
+                      title: Text(
+                        userName,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      leading: CircleAvatar(
+                        maxRadius: 24,
+                        backgroundImage: NetworkImage(photoUrl),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.camera_alt_outlined),
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         },
       ),
